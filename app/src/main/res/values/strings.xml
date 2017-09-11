@@ -1,0 +1,55 @@
+<resources>
+    <string name="app_name">HCP</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_signup">signupActivity</string>
+    <string name="title_activity_dash_board">DashBoardActivity</string>
+    <string name="title_activity_vital_signs">VitalSignsActivity</string>
+    <string name="shared_isUserLoged">isUserloged</string>
+    <string name="shared_userId">userId</string>
+    <string name="api_url_tempVital">http://www.mocky.io/v2/59b65a540f00004a047123d5</string>
+    <string name="api_url_login">http://www.mocky.io/v2/59b10dbf2600003604287e4d</string>
+    <string name="api_url_signup">http://hcp.cloudhub.io/register</string>
+    <string name="api_url_vital">http://www.mocky.io/v2/59b585c9250000741148d74f</string>
+    <string name="api_url_bloodVital">http://www.mocky.io/v2/59b65a540f00004a047123d5</string>
+    <string name="api_send_json_login_email">email</string>
+    <string name="api_send_json_login_password">password</string>
+    <string name="api_receive_json_status">status</string>
+    <string name="api_receive_json_login_status">status</string>
+    <string name="api_receive_json_login_userId">userid</string>
+    <string name="api_receive_json_login_errorMsg">error message</string>
+    <string name="api_receive_json_signup_status">status</string>
+    <string name="api_send_json_signup_email">email</string>
+    <string name="api_send_json_signup_password">password</string>
+    <string name="api_send_json_signup_gender">gender</string>
+    <string name="api_send_json_signup_dateOfBirth">birthday</string>
+    <string name="api_send_json_vital_userId">userid</string>
+    <string name="api_send_json_bloodVital_userId">userid</string>
+    <string name="api_send_json_bloodVital_date">date</string>
+    <string name="api_send_json_bloodVital_time">time</string>
+    <string name="api_send_json_bloodVital_sys">systolic</string>
+    <string name="api_send_json_bloodVital_dia">diastolic</string>
+    <string name="api_receive_json_vital_bloodPressure">blood</string>
+    <string name="api_receive_json_vital_bodyTemp">body temperature</string>
+    <string name="api_receive_json_vital_heartRate">heart rate</string>
+    <string name="api_receive_json_vital_RespRate">respiratary rate</string>
+    <string name="api_receive_json_vital_date">date</string>
+    <string name="api_receive_json_vital_bloodPressure_systolic">systolic</string>
+    <string name="api_receive_json_vital_bloodPressure_diastolic">diastolic</string>
+    <string name="api_receive_json_vital_bodyTemp_celsius">celsius</string>
+    <string name="api_receive_json_vital_heartRate_bpm">bpm</string>
+    <string name="api_receive_json_vital_RespRate_bpm">bpm</string>
+
+    <string name="api_send_json_tempVital_userId">userid</string>
+    <string name="api_send_json_tempVital_date">date</string>
+    <string name="api_send_json_tempVital_time">time</string>
+    <string name="api_send_json_tempVital_cel">celsius</string>
+
+
+    <string name="title_activity_blood_vital_signs">BloodVitalSignsActivity</string>
+    <string name="title_activity_temp_vital_signs">TempVitalSignsActivity</string>
+    <string name="title_activity_heart_vital_signs">HeartVitalSignsActivity</string>
+    <string name="title_activity_resp_vital_signs">RespVitalSignsActivity</string>
+    <string name="title_activity_list_blood_vital_signs">ListBloodVitalSignsActivity</string>
+    <string name="title_activity_listtemp_vital_signs">ListtempVitalSignsActivity</string>
+
+</resources>
