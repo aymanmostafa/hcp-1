@@ -6,11 +6,21 @@
     <string name="title_activity_vital_signs">VitalSignsActivity</string>
     <string name="shared_isUserLoged">isUserloged</string>
     <string name="shared_userId">userId</string>
-    <string name="api_url_tempVital">http://www.mocky.io/v2/59b65a540f00004a047123d5</string>
-    <string name="api_url_login">http://www.mocky.io/v2/59b10dbf2600003604287e4d</string>
+
+    <string name="api_url_login">http://hcp.cloudhub.io/login</string>
     <string name="api_url_signup">http://hcp.cloudhub.io/register</string>
-    <string name="api_url_vital">http://www.mocky.io/v2/59b585c9250000741148d74f</string>
-    <string name="api_url_bloodVital">http://www.mocky.io/v2/59b65a540f00004a047123d5</string>
+    <string name="api_url_vital">http://hcp.cloudhub.io/vital_signs</string>
+    <string name="api_url_bloodVital">http://hcp.cloudhub.io/blood_pressure/set</string>
+    <string name="api_url_heartVital">http://hcp.cloudhub.io/heart_rate/set</string>
+    <string name="api_url_tempVital">http://hcp.cloudhub.io/body_temperature/set</string>
+    <string name="api_url_respVital">http://hcp.cloudhub.io/respiratory_rate/set</string>
+
+    <string name="api_url_bloodVital_list">http://hcp.cloudhub.io/blood_pressure</string>
+    <string name="api_url_heartVital_list">http://hcp.cloudhub.io/heart_rate</string>
+    <string name="api_url_tempVital_list">http://hcp.cloudhub.io/body_temperature</string>
+    <string name="api_url_respVital_list">http://hcp.cloudhub.io/respiratory_rate</string>
+
+
     <string name="api_send_json_login_email">email</string>
     <string name="api_send_json_login_password">password</string>
     <string name="api_receive_json_status">status</string>
@@ -28,10 +38,14 @@
     <string name="api_send_json_bloodVital_time">time</string>
     <string name="api_send_json_bloodVital_sys">systolic</string>
     <string name="api_send_json_bloodVital_dia">diastolic</string>
-    <string name="api_receive_json_vital_bloodPressure">blood</string>
-    <string name="api_receive_json_vital_bodyTemp">body temperature</string>
-    <string name="api_receive_json_vital_heartRate">heart rate</string>
-    <string name="api_receive_json_vital_RespRate">respiratary rate</string>
+
+
+    <string name="api_receive_json_vital_bloodPressure">resultSet1</string>
+    <string name="api_receive_json_vital_bodyTemp">resultSet2</string>
+    <string name="api_receive_json_vital_heartRate">resultSet3</string>
+    <string name="api_receive_json_vital_RespRate">resultSet4</string>
+
+
     <string name="api_receive_json_vital_date">date</string>
     <string name="api_receive_json_vital_bloodPressure_systolic">systolic</string>
     <string name="api_receive_json_vital_bloodPressure_diastolic">diastolic</string>
@@ -44,6 +58,33 @@
     <string name="api_send_json_tempVital_time">time</string>
     <string name="api_send_json_tempVital_cel">celsius</string>
 
+    <string name="api_send_json_heartVital_userId">userid</string>
+    <string name="api_send_json_heartVital_date">date</string>
+    <string name="api_send_json_heartVital_time">time</string>
+    <string name="api_send_json_heartVital_cel">bpm</string>
+
+    <string name="api_send_json_respVital_userId">userid</string>
+    <string name="api_send_json_respVital_date">date</string>
+    <string name="api_send_json_respVital_time">time</string>
+    <string name="api_send_json_respVital_cel">bpm</string>
+
+
+
+
+
+
+    <string name="api_send_json_vital_list_arr_userid">userid</string>
+    <string name="api_receive_json_vital_list_arr_date">date</string>
+    <string name="api_receive_json_vital_list_arr_time">time</string>
+    <string name="api_receive_json_vital_bloodPressure_list_arr_systolic">systolic</string>
+    <string name="api_receive_json_vital_bloodPressure_list_arr_diastolic">diastolic</string>
+    <string name="api_receive_json_vital_heartRate_list_arr_bpm">bpm</string>
+    <string name="api_receive_json_vital_tempRate_list_arr_celsius">celsius</string>
+    <string name="api_receive_json_vital_RespRate_list_arr_bpm">bpm</string>
+
+
+
+
 
     <string name="title_activity_blood_vital_signs">BloodVitalSignsActivity</string>
     <string name="title_activity_temp_vital_signs">TempVitalSignsActivity</string>
@@ -51,5 +92,7 @@
     <string name="title_activity_resp_vital_signs">RespVitalSignsActivity</string>
     <string name="title_activity_list_blood_vital_signs">ListBloodVitalSignsActivity</string>
     <string name="title_activity_listtemp_vital_signs">ListtempVitalSignsActivity</string>
+    <string name="title_activity_listheart_vital_signs">ListheartVitalSignsActivity</string>
+    <string name="title_activity_listresp_vital_signs">ListrespVitalSignsActivity</string>
 
 </resources>

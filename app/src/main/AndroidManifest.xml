@@ -57,6 +57,14 @@
         <activity
             android:name=".ListtempVitalSignsActivity"
             android:label="@string/title_activity_listtemp_vital_signs"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ListheartVitalSignsActivity"
+            android:label="@string/title_activity_listheart_vital_signs"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ListrespVitalSignsActivity"
+            android:label="@string/title_activity_listresp_vital_signs"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

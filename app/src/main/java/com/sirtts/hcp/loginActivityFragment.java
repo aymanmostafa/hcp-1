@@ -129,7 +129,7 @@ public class loginActivityFragment extends Fragment implements View.OnClickListe
             int userId = ((JSONObject) response).optInt(getString(R.string.api_receive_json_login_userId));
             String errorMsg = ((JSONObject) response).optString(getString(R.string.api_receive_json_login_errorMsg));
 
-            if (userStatus && userId > 0 && !errorMsg.equals("")) {
+            if (userStatus && userId > 0 && errorMsg.equals("")) {
                 sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged),Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPre.edit();
                 editor.putBoolean(getString(R.string.shared_isUserLoged), true);

@@ -1,6 +1,7 @@
 package com.sirtts.hcp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.support.v4.app.Fragment;
@@ -13,9 +14,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-/**
- * A placeholder fragment containing a simple view.
- */
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -27,8 +25,12 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Logger;
 
-public class ListtempVitalSignsActivityFragment extends Fragment implements  Response.Listener<JSONArray>,
+/**
+ * A placeholder fragment containing a simple view.
+ */
+public class ListheartVitalSignsActivityFragment extends Fragment implements  Response.Listener<JSONArray>,
         Response.ErrorListener {
 
     private RequestQueue mQueue;
@@ -38,19 +40,19 @@ public class ListtempVitalSignsActivityFragment extends Fragment implements  Res
     ArrayList<String> time_ArrayList = new ArrayList<String>();
     ArrayList<String> val1_ArrayList = new ArrayList<String>();
     ProgressBar mProgressbar;
-    public static final String REQUEST_TAG = "ListtempVitalVolley";
+    public static final String REQUEST_TAG = "ListHeartVitalVolley";
 
 
-    public ListtempVitalSignsActivityFragment() {
+    public ListheartVitalSignsActivityFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_listtemp_vital_signs, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_listheart_vital_signs, container, false);
 
-        listview = (ListView) rootView.findViewById(R.id.ListtempVitalSigns_listView);
-        mProgressbar = (ProgressBar) rootView.findViewById(R.id.ListtempVitalSigns_progressBar);
+        listview = (ListView) rootView.findViewById(R.id.ListHeartVitalSigns_listView);
+        mProgressbar = (ProgressBar) rootView.findViewById(R.id.ListHeartVitalSigns_progressBar);
 
 
         return rootView;
@@ -66,16 +68,16 @@ public class ListtempVitalSignsActivityFragment extends Fragment implements  Res
             SharedPreferences sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
 
             mQueue = VolleyRequestQueue.getInstance(getContext().getApplicationContext())
-                    .getRequestQueue();
-            final JSONArrayRequest jsonRequest = new JSONArrayRequest(Request.Method
-                    .POST, getString(R.string.api_url_tempVital_list),
-                    sendData(sharedPre.getInt(getString(R.string.shared_userId),0)), this, this);
-            jsonRequest.setTag(REQUEST_TAG);
-            jsonRequest.setRetryPolicy(new DefaultRetryPolicy(
-                    0,
-                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-            mQueue.add(jsonRequest);
+                .getRequestQueue();
+        final JSONArrayRequest jsonRequest = new JSONArrayRequest(Request.Method
+                .POST, getString(R.string.api_url_heartVital_list),
+                sendData(sharedPre.getInt(getString(R.string.shared_userId),0)), this, this);
+        jsonRequest.setTag(REQUEST_TAG);
+        jsonRequest.setRetryPolicy(new DefaultRetryPolicy(
+                0,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        mQueue.add(jsonRequest);
         }
         else Toast.makeText(getActivity(), "Failed to Connect! Check your Connection", Toast.LENGTH_SHORT).show();
         super.onResume();
@@ -98,7 +100,7 @@ public class ListtempVitalSignsActivityFragment extends Fragment implements  Res
             for(int i=0;i<response.length();i++){
                 date_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_vital_list_arr_date))));
                 time_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_vital_list_arr_time))));
-                val1_ArrayList.add(String.valueOf(response.optJSONObject(i).optInt(getString(R.string.api_receive_json_vital_tempRate_list_arr_celsius)))
+                val1_ArrayList.add(String.valueOf(response.optJSONObject(i).optInt(getString(R.string.api_receive_json_vital_heartRate_list_arr_bpm)))
                 );
             }
 

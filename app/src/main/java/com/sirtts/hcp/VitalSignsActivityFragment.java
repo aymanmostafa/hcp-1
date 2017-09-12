@@ -22,6 +22,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -88,7 +89,7 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
         super.onStart();
         // Instantiate the RequestQueue.
         error.setText("");
-
+        mProgressbar.setVisibility(View.VISIBLE);
         sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged),Context.MODE_PRIVATE);
 
         mQueue = VolleyRequestQueue.getInstance(getContext().getApplicationContext())
@@ -123,38 +124,50 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
         try {
             mProgressbar.setVisibility(View.INVISIBLE);
 
-            JSONObject bloodJsonObj = ((JSONObject) response).optJSONObject(getString(R.string.api_receive_json_vital_bloodPressure));
-            JSONObject tempJsonObj = ((JSONObject) response).optJSONObject(getString(R.string.api_receive_json_vital_bodyTemp));
-            JSONObject heartJsonObj = ((JSONObject) response).optJSONObject(getString(R.string.api_receive_json_vital_heartRate));
-            JSONObject respJsonObj = ((JSONObject) response).optJSONObject(getString(R.string.api_receive_json_vital_RespRate));
+            JSONArray bloodJsonarr = ((JSONObject) response).optJSONArray(getString(R.string.api_receive_json_vital_bloodPressure));
+            JSONArray tempJsonarr = ((JSONObject) response).optJSONArray(getString(R.string.api_receive_json_vital_bodyTemp));
+            JSONArray heartJsonarr = ((JSONObject) response).optJSONArray(getString(R.string.api_receive_json_vital_heartRate));
+            JSONArray respJsonarr = ((JSONObject) response).optJSONArray(getString(R.string.api_receive_json_vital_RespRate));
 
-            lastBlood.setText("@"+bloodJsonObj.optString(getString(R.string.api_receive_json_vital_date))+" "+
-                    getString(R.string.api_receive_json_vital_bloodPressure_systolic)+"="+bloodJsonObj.opt(
-                    getString(R.string.api_receive_json_vital_bloodPressure_systolic))+" ,"+
-                    getString(R.string.api_receive_json_vital_bloodPressure_diastolic)+
-                    "="+bloodJsonObj.opt(getString(R.string.api_receive_json_vital_bloodPressure_diastolic))
-            );
+            if(bloodJsonarr.length()>0) {
+                JSONObject bloodJsonObj = bloodJsonarr.getJSONObject(0);
+                lastBlood.setText(bloodJsonObj.opt(
+                        getString(R.string.api_receive_json_vital_bloodPressure_systolic))
+                        + "/" + bloodJsonObj.opt(getString(R.string.api_receive_json_vital_bloodPressure_diastolic))
+                        + " on " + bloodJsonObj.optString(getString(R.string.api_receive_json_vital_date))
+                );
+            }
+            else lastBlood.setText("");
 
-            lastTemp.setText("@"+tempJsonObj.optString(getString(R.string.api_receive_json_vital_date))+" "+
-                    getString(R.string.api_receive_json_vital_bodyTemp_celsius)+"="+tempJsonObj.opt(
-                    getString(R.string.api_receive_json_vital_bodyTemp_celsius))
-            );
+            if(tempJsonarr.length()>0) {
+                JSONObject tempJsonObj = tempJsonarr.getJSONObject(0);
+                lastTemp.setText(tempJsonObj.opt(getString(R.string.api_receive_json_vital_bodyTemp_celsius)) +
+                        " °C on " + tempJsonObj.optString(getString(R.string.api_receive_json_vital_date))
+                );
+            }
+            else lastTemp.setText("");
 
-            lastHeart.setText("@"+heartJsonObj.optString(getString(R.string.api_receive_json_vital_date))+" "+
-                    getString(R.string.api_receive_json_vital_heartRate_bpm)+"="+heartJsonObj.opt(
-                    getString(R.string.api_receive_json_vital_heartRate_bpm))
-            );
+            if(heartJsonarr.length()>0) {
+                JSONObject heartJsonObj = heartJsonarr.getJSONObject(0);
+                lastHeart.setText(heartJsonObj.opt(getString(R.string.api_receive_json_vital_heartRate_bpm)) +
+                        " bpm on " + heartJsonObj.optString(getString(R.string.api_receive_json_vital_date))
+                );
+            }
+            else lastHeart.setText("");
 
-            lastResp.setText("@"+respJsonObj.optString(getString(R.string.api_receive_json_vital_date))+" "+
-                    getString(R.string.api_receive_json_vital_RespRate)+"="+respJsonObj.opt(
-                    getString(R.string.api_receive_json_vital_RespRate_bpm))
-            );
+            if(respJsonarr.length()>0) {
+                JSONObject respJsonObj = respJsonarr.getJSONObject(0);
+                lastResp.setText(respJsonObj.opt(getString(R.string.api_receive_json_vital_RespRate_bpm)) +
+                        " Breath/Min. on " + respJsonObj.optString(getString(R.string.api_receive_json_vital_date))
+                );
+            }
+            else lastResp.setText("");
 
 
         }
         catch(Exception e){
             mProgressbar.setVisibility(View.INVISIBLE);
-            error.setText("Can't fetch your data!dfsdf");
+            error.setText("Can't fetch your data!ff");
         }
     }
 

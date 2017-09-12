@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp" >
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/VitalList_textviewval1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/VitalList_textviewdate"
+                    android:layout_below="@+id/VitalList_textviewval2"
+                    android:layout_weight="1"
+                    android:text="val1"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#050505" />
+
+                <TextView
+                    android:id="@+id/VitalList_textviewtime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/VitalList_textviewval1"
+
+                    android:layout_toStartOf="@+id/VitalList_textviewval1"
+                    android:layout_weight="0.28"
+                    android:text="time"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#050505" />
+
+                <TextView
+                    android:id="@+id/VitalList_textviewdate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/VitalList_textviewtime"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_weight="0.25"
+                    android:text="date"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#050505" />
+        </LinearLayout>
+
+
+</RelativeLayout>
