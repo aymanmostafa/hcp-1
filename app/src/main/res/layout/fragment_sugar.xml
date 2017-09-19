@@ -7,7 +7,7 @@
     tools:context="com.sirtts.hcp.SugarActivityFragment"
     tools:showIn="@layout/activity_sugar">
     <RelativeLayout
-        android:id="@+id/dashboard_rel"
+        android:id="@+id/sugar_rel"
         android:layout_width="0dp"
         android:layout_height="0dp"
         tools:layout_editor_absoluteY="8dp"
@@ -22,7 +22,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dashboard_rel">
+        app:layout_constraintTop_toBottomOf="@id/sugar_rel">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
