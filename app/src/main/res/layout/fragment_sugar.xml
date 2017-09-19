@@ -6,6 +6,27 @@
     android:layout_height="match_parent"
     tools:context="com.sirtts.hcp.SugarActivityFragment"
     tools:showIn="@layout/activity_sugar">
+    <RelativeLayout
+        android:id="@+id/dashboard_rel"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        tools:layout_editor_absoluteY="8dp"
+        tools:layout_editor_absoluteX="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dashboard_rel">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/sugar_time2tvid"
@@ -13,11 +34,11 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="7dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="7dp"
         android:text="Enter Time"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintHorizontal_bias="0.703"
+        app:layout_constraintHorizontal_bias="0.544"
         app:layout_constraintLeft_toRightOf="@+id/dentist_date2tvid"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sugar_timetvid" />
@@ -55,7 +76,7 @@
     <TextView
         android:id="@+id/sugar_datetvid"
         android:layout_width="166dp"
-        android:layout_height="28dp"
+        android:layout_height="27dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="12dp"
         android:hint="Date"
@@ -70,7 +91,7 @@
         android:id="@+id/sugar_timetvid"
         android:layout_width="162dp"
         android:layout_height="28dp"
-        android:layout_marginLeft="51dp"
+        android:layout_marginLeft="28dp"
         android:layout_marginTop="12dp"
         android:hint="Time"
         android:textAlignment="center"
@@ -78,7 +99,10 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintLeft_toRightOf="@+id/sugar_datetvid"
-        app:layout_constraintTop_toBottomOf="@+id/sugar_Viewbtnid" />
+        app:layout_constraintTop_toBottomOf="@+id/sugar_Viewbtnid"
+        android:layout_marginRight="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="1.0" />
 
     <EditText
         android:id="@+id/sugar_mgtxtid"
@@ -137,7 +161,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="62dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="7dp"
         android:text="Enter Date"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -161,5 +185,7 @@
         app:layout_constraintHorizontal_bias="0.512"
         app:layout_constraintVertical_bias="0.0" />
 
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
 
 </android.support.constraint.ConstraintLayout>
