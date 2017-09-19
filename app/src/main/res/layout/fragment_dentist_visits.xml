@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.sirtts.hcp.DentistVisitsActivityFragment"
+    tools:showIn="@layout/activity_dentist_visits">
+
+
+    <TextView
+        android:id="@+id/sugar_textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="28dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="61dp"
+        android:text="Treatments:"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/dentist_treatmenttxtid"
+        app:layout_constraintHorizontal_bias="0.461"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dentist_viewbtnid"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <ProgressBar
+        android:id="@+id/dentist_progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="71dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="71dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:visibility="invisible"
+        app:layout_constraintHorizontal_bias="0.622"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dentist_error" />
+
+    <TextView
+        android:id="@+id/dentist_error"
+        android:layout_width="157dp"
+        android:layout_height="36dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="7dp"
+        android:textColor="@android:color/holo_red_dark"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dentist_savebtnid"
+        app:layout_constraintHorizontal_bias="0.502"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp" />
+
+    <Button
+        android:id="@+id/dentist_savebtnid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="12dp"
+        android:text="Save"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dentist_treatmenttxtid"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp" />
+
+    <EditText
+        android:id="@+id/dentist_treatmenttxtid"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="126dp"
+        android:ems="10"
+        android:hint="ex: examination, cleaning and whitening"
+        android:inputType="text|textLongMessage"
+        android:textAlignment="center"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dentist_viewbtnid" />
+
+    <TextView
+        android:id="@+id/dentist_time2tvid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="84dp"
+        android:layout_marginRight="73dp"
+        android:layout_marginTop="-5dp"
+        android:text="Time"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dentist_timetvid" />
+
+    <TextView
+        android:id="@+id/dentist_date2tvid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="78dp"
+        android:layout_marginStart="81dp"
+        android:layout_marginTop="6dp"
+        android:text="Date"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dentist_datetvid" />
+
+    <TextView
+        android:id="@+id/dentist_timetvid"
+        android:layout_width="162dp"
+        android:layout_height="28dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="21dp"
+        android:hint="Time"
+        android:textAlignment="center"
+        android:textColor="@android:color/background_dark"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toRightOf="@+id/dentist_datetvid"
+        app:layout_constraintTop_toBottomOf="@+id/dentist_viewbtnid"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.666"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp" />
+
+    <TextView
+        android:id="@+id/dentist_textView"
+        android:layout_width="0dp"
+        android:layout_height="108dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="28dp"
+        android:text="Record your dental treatments such as teeth cleaning, whitening,  restoration, crowns, bridges, braces, endodontic therapy, periodontal therapy, extraction and oral surgery. As well as examinations, radiographs (x-rays) and diagnosis."
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp" />
+
+    <Button
+        android:id="@+id/dentist_viewbtnid"
+        android:layout_width="329dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="18dp"
+        android:text="View History"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dentist_textView"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp" />
+
+    <TextView
+        android:id="@+id/dentist_datetvid"
+        android:layout_width="166dp"
+        android:layout_height="28dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="21dp"
+        android:hint="Date"
+        android:textAlignment="center"
+        android:textColor="@android:color/background_dark"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dentist_viewbtnid"
+        android:layout_marginStart="16dp" />
+</android.support.constraint.ConstraintLayout>

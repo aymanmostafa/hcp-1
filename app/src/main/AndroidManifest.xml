@@ -81,6 +81,10 @@
         <activity
             android:name=".ListsugarActivity"
             android:label="@string/title_activity_listsugar"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".DentistVisitsActivity"
+            android:label="@string/title_activity_dentist_visits"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

@@ -18,7 +18,7 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintHorizontal_bias="0.703"
-        app:layout_constraintLeft_toRightOf="@+id/sugar_date2tvid"
+        app:layout_constraintLeft_toRightOf="@+id/dentist_date2tvid"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sugar_timetvid" />
 
@@ -133,7 +133,7 @@
         app:layout_constraintTop_toBottomOf="@+id/sugar_savebtnid" />
 
     <TextView
-        android:id="@+id/sugar_date2tvid"
+        android:id="@+id/dentist_date2tvid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="62dp"

@@ -36,39 +36,37 @@ import java.util.HashMap;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class SugarActivityFragment extends Fragment implements View.OnClickListener, Response.Listener,
+public class DentistVisitsActivityFragment extends Fragment implements View.OnClickListener, Response.Listener,
         Response.ErrorListener {
 
     Button view,save;
-    TextView date,time,error,date2,time2;
-    EditText mg;
-    ProgressBar mProgressbar;
-    SharedPreferences sharedPre;
-    DatePickerDialog datePickerDialog;
-    private RequestQueue mQueue;
-    public static final String REQUEST_TAG = "savesugarVolleyActivity";
-
-    public SugarActivityFragment() {
+    TextView date, time, error, date2, time2;
+    EditText treatments;
+    ProgressBar progressBar;
+    SharedPreferences sharedPref;
+    private RequestQueue queue;
+    public static final String REQUEST_TAG = "savedentistVolleyActivity";
+    DatePickerDialog datePicker;
+    public DentistVisitsActivityFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_sugar, container, false);
+        View rootView =  inflater.inflate(R.layout.fragment_dentist_visits, container, false);
 
+        view = (Button) rootView.findViewById(R.id.dentist_viewbtnid);
+        save = (Button) rootView.findViewById(R.id.dentist_savebtnid);
 
-        view = (Button) rootView.findViewById(R.id.sugar_Viewbtnid);
-        save = (Button) rootView.findViewById(R.id.sugar_savebtnid);
-
-        date = (TextView) rootView.findViewById(R.id.sugar_datetvid);
-        time = (TextView) rootView.findViewById(R.id.sugar_timetvid);
+        date = (TextView) rootView.findViewById(R.id.dentist_datetvid);
+        time = (TextView) rootView.findViewById(R.id.dentist_timetvid);
         date2 = (TextView) rootView.findViewById(R.id.dentist_date2tvid);
-        time2 = (TextView) rootView.findViewById(R.id.sugar_time2tvid);
-        error = (TextView) rootView.findViewById(R.id.sugar_error);
+        time2 = (TextView) rootView.findViewById(R.id.dentist_time2tvid);
+        error = (TextView) rootView.findViewById(R.id.dentist_error);
 
-        mg = (EditText) rootView.findViewById(R.id.sugar_mgtxtid);
+        treatments = (EditText) rootView.findViewById(R.id.dentist_treatmenttxtid);
 
-        mProgressbar = (ProgressBar) rootView.findViewById(R.id.sugar_progressBar);
+        progressBar = (ProgressBar) rootView.findViewById(R.id.dentist_progressBar);
 
         view.setOnClickListener(this);
         save.setOnClickListener(this);
@@ -84,20 +82,21 @@ public class SugarActivityFragment extends Fragment implements View.OnClickListe
 
         return rootView;
     }
+
     @Override
     public void onStart() {
         super.onStart();
         // Instantiate the RequestQueue.
-        mQueue = VolleyRequestQueue.getInstance(getContext().getApplicationContext())
+        queue = VolleyRequestQueue.getInstance(getContext().getApplicationContext())
                 .getRequestQueue();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        mProgressbar.setVisibility(View.INVISIBLE);
-        if (mQueue != null) {
-            mQueue.cancelAll(REQUEST_TAG);
+        progressBar.setVisibility(View.INVISIBLE);
+        if (queue != null) {
+            queue.cancelAll(REQUEST_TAG);
         }
     }
 
@@ -112,7 +111,7 @@ public class SugarActivityFragment extends Fragment implements View.OnClickListe
             int mMonth = c.get(Calendar.MONTH);
             int mDay = c.get(Calendar.DAY_OF_MONTH);
 
-            datePickerDialog = new DatePickerDialog(getContext(),
+            datePicker = new DatePickerDialog(getContext(),
                     new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker view, int year,
@@ -120,8 +119,8 @@ public class SugarActivityFragment extends Fragment implements View.OnClickListe
                             date.setText(year +"-" + (monthOfYear + 1) + "-" +dayOfMonth);
                         }
                     }, mYear, mMonth, mDay);
-            datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
-            datePickerDialog.show();
+            datePicker.getDatePicker().setMaxDate(new Date().getTime());
+            datePicker.show();
         }
         else if(v == time || v == time2){
             Calendar mcurrentTime = Calendar.getInstance();
@@ -144,27 +143,27 @@ public class SugarActivityFragment extends Fragment implements View.OnClickListe
             else if(time.getText().toString().equals("")){
                 error.setText("Enter The Time");
             }
-            else if(mg.getText().toString().equals("")){
-                error.setText("Enter Your mg/dL");
+            else if(treatments.getText().toString().equals("")){
+                error.setText("Enter treatments");
             }
             else{
                 error.setText("");
                 if (!isNetworkAvailable(getContext()))
                     Toast.makeText(getActivity(), "Failed to Connect! Check your Connection", Toast.LENGTH_SHORT).show();
                 else {
-                    sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
+                    sharedPref = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
 
-                    mProgressbar.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.VISIBLE);
                     final JSONObjectRequest jsonRequest = new JSONObjectRequest(Request.Method
-                            .POST, getString(R.string.api_url_sugar),
-                            sendData(sharedPre.getInt(getString(R.string.shared_userId),0), date.getText().toString(),time.getText().toString(),
-                                    Integer.valueOf(mg.getText().toString())), this, this);
+                            .POST, getString(R.string.api_url_dentist),
+                            sendData(sharedPref.getInt(getString(R.string.shared_userId),0), date.getText().toString(),time.getText().toString(),
+                                    treatments.getText().toString()), this, this);
                     jsonRequest.setTag(REQUEST_TAG);
                     jsonRequest.setRetryPolicy(new DefaultRetryPolicy(
                             0,
                             DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                             DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-                    mQueue.add(jsonRequest);
+                    queue.add(jsonRequest);
                 }
             }
         }
@@ -173,7 +172,7 @@ public class SugarActivityFragment extends Fragment implements View.OnClickListe
     @Override
     public void onResponse(Object response) {
         try {
-            mProgressbar.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.INVISIBLE);
             Boolean userStatus = ((JSONObject) response).optBoolean(getString(R.string.api_receive_json_status));
 
             if (userStatus) {
@@ -183,24 +182,24 @@ public class SugarActivityFragment extends Fragment implements View.OnClickListe
             }
         }
         catch(Exception e){
-            mProgressbar.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.INVISIBLE);
             error.setText("Unexpected Error happened!");
         }
     }
 
     @Override
     public void onErrorResponse(VolleyError error) {
-        mProgressbar.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.INVISIBLE);
         this.error.setText("Unexpected Error happened!");
     }
 
-    public JSONObject sendData(int userid,String date,String time,int bpm){
+    public JSONObject sendData(int userid, String date, String time, String treatments){
         HashMap m = new HashMap();
-        m.put(getString(R.string.api_send_json_sugar_userId),userid);
-        m.put(getString(R.string.api_send_json_sugar_date),date);
-        m.put(getString(R.string.api_send_json_sugar_time),time);
-        m.put(getString(R.string.api_send_json_sugar_mg),bpm);
-        Log.e(REQUEST_TAG, "sendData:"+(new JSONObject(m)).toString());
+        m.put(getString(R.string.api_send_json_dentist_userId),userid);
+        m.put(getString(R.string.api_send_json_dentist_date),date);
+        m.put(getString(R.string.api_send_json_dentist_time),time);
+        m.put(getString(R.string.api_send_json_dentist_treatments),treatments);
+        Log.e("Send Dentist Data", "sendData:"+(new JSONObject(m)).toString());
         return new JSONObject(m);
     }
 
@@ -218,6 +217,4 @@ public class SugarActivityFragment extends Fragment implements View.OnClickListe
 
         return formattedDate;
     }
-
 }
-

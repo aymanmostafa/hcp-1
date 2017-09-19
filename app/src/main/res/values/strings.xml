@@ -7,30 +7,42 @@
     <string name="shared_isUserLoged">isUserloged</string>
     <string name="shared_userId">userId</string>
 
-    <string name="api_url_login">http://hcp.cloudhub.io/login</string>
-    <string name="api_url_signup">http://hcp.cloudhub.io/register</string>
-    <string name="api_url_vital">http://hcp.cloudhub.io/vital_signs</string>
-    <string name="api_url_period">http://hcp.cloudhub.io/menstrual_cycle/set</string>
-    <string name="api_url_sugar">http://hcp.cloudhub.io/sugar_test/set</string>
-    <string name="api_url_sugar_list">http://hcp.cloudhub.io/sugar_test</string>
+    <!--Development-->
+    <string name="api_url_login">http://10.0.2.2:8088/login</string>
+    <string name="api_url_signup">http://10.0.2.2:8088/register</string>
+    <string name="api_url_vital">http://10.0.2.2:8088/vital_signs</string>
+    <string name="api_url_period">http://10.0.2.2:8088/menstrual_cycle/set</string>
+    <string name="api_url_sugar">http://10.0.2.2:8088/sugar_test/set</string>
+    <string name="api_url_sugar_list">http://10.0.2.2:8088/sugar_test</string>
+    <string name="api_url_Period_list">http://10.0.2.2:8088/menstrual_cycle</string>
+    <string name="api_url_bloodVital">http://10.0.2.2:8088/blood_pressure/set</string>
+    <string name="api_url_heartVital">http://10.0.2.2:8088/heart_rate/set</string>
+    <string name="api_url_tempVital">http://10.0.2.2:8088/body_temperature/set</string>
+    <string name="api_url_respVital">http://10.0.2.2:8088/respiratory_rate/set</string>
+    <string name="api_url_bloodVital_list">http://10.0.2.2:8088/blood_pressure</string>
+    <string name="api_url_heartVital_list">http://10.0.2.2:8088/heart_rate</string>
+    <string name="api_url_tempVital_list">http://10.0.2.2:8088/body_temperature</string>
+    <string name="api_url_respVital_list">http://10.0.2.2:8088/respiratory_rate</string>
+    <string name="api_url_dentist">http://10.0.2.2:8088/dentist_visit/set</string>
+    <!--Development-->
 
-
-
-
-
-    <string name="api_url_Period_list">http://hcp.cloudhub.io/menstrual_cycle</string>
-
-
-    <string name="api_url_bloodVital">http://hcp.cloudhub.io/blood_pressure/set</string>
-    <string name="api_url_heartVital">http://hcp.cloudhub.io/heart_rate/set</string>
-    <string name="api_url_tempVital">http://hcp.cloudhub.io/body_temperature/set</string>
-    <string name="api_url_respVital">http://hcp.cloudhub.io/respiratory_rate/set</string>
-
-    <string name="api_url_bloodVital_list">http://hcp.cloudhub.io/blood_pressure</string>
-    <string name="api_url_heartVital_list">http://hcp.cloudhub.io/heart_rate</string>
-    <string name="api_url_tempVital_list">http://hcp.cloudhub.io/body_temperature</string>
-    <string name="api_url_respVital_list">http://hcp.cloudhub.io/respiratory_rate</string>
-
+    <!--Production-->
+    <!--<string name="api_url_login">http://hcp.cloudhub.io/login</string>-->
+    <!--<string name="api_url_signup">http://hcp.cloudhub.io/register</string>-->
+    <!--<string name="api_url_vital">http://hcp.cloudhub.io/vital_signs</string>-->
+    <!--<string name="api_url_period">http://hcp.cloudhub.io/menstrual_cycle/set</string>-->
+    <!--<string name="api_url_sugar">http://hcp.cloudhub.io/sugar_test/set</string>-->
+    <!--<string name="api_url_sugar_list">http://hcp.cloudhub.io/sugar_test</string>-->
+    <!--<string name="api_url_Period_list">http://hcp.cloudhub.io/menstrual_cycle</string>-->
+    <!--<string name="api_url_bloodVital">http://hcp.cloudhub.io/blood_pressure/set</string>-->
+    <!--<string name="api_url_heartVital">http://hcp.cloudhub.io/heart_rate/set</string>-->
+    <!--<string name="api_url_tempVital">http://hcp.cloudhub.io/body_temperature/set</string>-->
+    <!--<string name="api_url_respVital">http://hcp.cloudhub.io/respiratory_rate/set</string>-->
+    <!--<string name="api_url_bloodVital_list">http://hcp.cloudhub.io/blood_pressure</string>-->
+    <!--<string name="api_url_heartVital_list">http://hcp.cloudhub.io/heart_rate</string>-->
+    <!--<string name="api_url_tempVital_list">http://hcp.cloudhub.io/body_temperature</string>-->
+    <!--<string name="api_url_respVital_list">http://hcp.cloudhub.io/respiratory_rate</string>-->
+    <!--Production-->
 
     <string name="api_send_json_login_email">email</string>
     <string name="api_send_json_login_password">password</string>
@@ -50,12 +62,10 @@
     <string name="api_send_json_bloodVital_sys">systolic</string>
     <string name="api_send_json_bloodVital_dia">diastolic</string>
 
-
     <string name="api_receive_json_vital_bloodPressure">resultSet1</string>
     <string name="api_receive_json_vital_bodyTemp">resultSet2</string>
     <string name="api_receive_json_vital_heartRate">resultSet3</string>
     <string name="api_receive_json_vital_RespRate">resultSet4</string>
-
 
     <string name="api_receive_json_vital_date">date</string>
     <string name="api_receive_json_vital_bloodPressure_systolic">systolic</string>
@@ -79,34 +89,27 @@
     <string name="api_send_json_respVital_time">time</string>
     <string name="api_send_json_respVital_cel">bpm</string>
 
-
-
     <string name="api_send_json_sugar_userId">userid</string>
-
     <string name="api_send_json_sugar_date">date</string>
     <string name="api_send_json_sugar_time">time</string>
     <string name="api_send_json_sugar_mg">test result</string>
+
+    <string name="api_send_json_dentist_userId">userid</string>
+    <string name="api_send_json_dentist_date">date</string>
+    <string name="api_send_json_dentist_time">time</string>
+    <string name="api_send_json_dentist_treatments">treatments</string>
 
     <string name="api_receive_json_sugar_date">date</string>
     <string name="api_receive_json_sugar_time">time</string>
     <string name="api_receive_json_sugar_mg">test result</string>
 
-
-
     <string name="api_send_json_list_arr_userid">userid</string>
-
 
     <string name="api_send_json_period_userId">userid</string>
     <string name="api_send_json_period_startdate">start date</string>
     <string name="api_send_json_period_starttime">start time</string>
     <string name="api_send_json_period_enddate">end date</string>
     <string name="api_send_json_period_endtime">end time</string>
-
-
-
-
-
-
 
     <string name="api_send_json_vital_list_arr_userid">userid</string>
     <string name="api_receive_json_vital_list_arr_date">date</string>
@@ -116,7 +119,6 @@
     <string name="api_receive_json_vital_heartRate_list_arr_bpm">bpm</string>
     <string name="api_receive_json_vital_tempRate_list_arr_celsius">celsius</string>
     <string name="api_receive_json_vital_RespRate_list_arr_bpm">bpm</string>
-
 
     <string name="title_activity_blood_vital_signs">BloodVitalSignsActivity</string>
     <string name="title_activity_temp_vital_signs">TempVitalSignsActivity</string>
@@ -130,5 +132,5 @@
     <string name="title_activity_listperiod">ListperiodActivity</string>
     <string name="title_activity_sugar">SugarActivity</string>
     <string name="title_activity_listsugar">ListsugarActivity</string>
-
+    <string name="title_activity_dentist_visits">DentistVisitsActivity</string>
 </resources>
