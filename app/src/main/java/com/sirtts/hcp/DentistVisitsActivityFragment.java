@@ -103,7 +103,7 @@ public class DentistVisitsActivityFragment extends Fragment implements View.OnCl
     @Override
     public void onClick(View v) {
         if(v == view){
-            startActivity(new Intent(getContext(), ListsugarActivity.class));
+            startActivity(new Intent(getContext(), ListDentistVisitsActivity.class));
         }
         else if(v == date || v == date2){
             final Calendar c = Calendar.getInstance();

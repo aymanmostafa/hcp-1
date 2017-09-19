@@ -17,35 +17,35 @@
 
                 <TextView
                     android:id="@+id/VitalList_textviewval1"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@+id/VitalList_textviewdate"
                     android:layout_below="@+id/VitalList_textviewval2"
-                    android:layout_weight="1"
+                    android:layout_weight="2"
                     android:text="val1"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="#050505" />
 
                 <TextView
                     android:id="@+id/VitalList_textviewtime"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/VitalList_textviewval1"
 
                     android:layout_toStartOf="@+id/VitalList_textviewval1"
-                    android:layout_weight="0.28"
+                    android:layout_weight="1"
                     android:text="time"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="#050505" />
 
                 <TextView
                     android:id="@+id/VitalList_textviewdate"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/VitalList_textviewtime"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
-                    android:layout_weight="0.25"
+                    android:layout_weight="1"
                     android:text="date"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="#050505" />

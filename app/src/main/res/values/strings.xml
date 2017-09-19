@@ -24,6 +24,7 @@
     <string name="api_url_tempVital_list">http://10.0.2.2:8088/body_temperature</string>
     <string name="api_url_respVital_list">http://10.0.2.2:8088/respiratory_rate</string>
     <string name="api_url_dentist">http://10.0.2.2:8088/dentist_visit/set</string>
+    <string name="api_url_dentist_list">http://10.0.2.2:8088/dentist_visit</string>
     <!--Development-->
 
     <!--Production-->
@@ -99,6 +100,10 @@
     <string name="api_send_json_dentist_time">time</string>
     <string name="api_send_json_dentist_treatments">treatments</string>
 
+    <string name="api_receive_json_dentist_date">date</string>
+    <string name="api_receive_json_dentist_time">time</string>
+    <string name="api_receive_json_dentist_treatments">treatments</string>
+
     <string name="api_receive_json_sugar_date">date</string>
     <string name="api_receive_json_sugar_time">time</string>
     <string name="api_receive_json_sugar_mg">test result</string>
@@ -133,4 +138,5 @@
     <string name="title_activity_sugar">SugarActivity</string>
     <string name="title_activity_listsugar">ListsugarActivity</string>
     <string name="title_activity_dentist_visits">DentistVisitsActivity</string>
+    <string name="title_activity_list_dentist_visits">ListDentistVisitsActivity</string>
 </resources>

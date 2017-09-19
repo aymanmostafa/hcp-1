@@ -85,6 +85,10 @@
         <activity
             android:name=".DentistVisitsActivity"
             android:label="@string/title_activity_dentist_visits"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ListDentistVisitsActivity"
+            android:label="@string/title_activity_list_dentist_visits"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
