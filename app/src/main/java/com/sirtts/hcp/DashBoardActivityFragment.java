@@ -40,6 +40,10 @@ public class DashBoardActivityFragment extends Fragment implements View.OnClickL
         dentist = (Button) rootView.findViewById(R.id.dashboard_dentistbtnid);
         dentist.setOnClickListener(this);
 
+        sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged),Context.MODE_PRIVATE);
+        if(sharedPre.getBoolean(getString(R.string.shared_female),false))
+            period.setVisibility(View.VISIBLE);
+
         return rootView;
     }
 

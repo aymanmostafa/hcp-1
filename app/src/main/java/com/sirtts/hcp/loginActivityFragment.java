@@ -128,12 +128,14 @@ public class loginActivityFragment extends Fragment implements View.OnClickListe
             Boolean userStatus = ((JSONObject) response).optBoolean(getString(R.string.api_receive_json_login_status));
             int userId = ((JSONObject) response).optInt(getString(R.string.api_receive_json_login_userId));
             String errorMsg = ((JSONObject) response).optString(getString(R.string.api_receive_json_login_errorMsg));
+            Boolean userFemale = ((JSONObject) response).optBoolean(getString(R.string.api_receive_json_login_female));
 
             if (userStatus && userId > 0 && errorMsg.equals("")) {
                 sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged),Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPre.edit();
                 editor.putBoolean(getString(R.string.shared_isUserLoged), true);
                 editor.putInt(getString(R.string.shared_userId), userId);
+                editor.putBoolean(getString(R.string.shared_female), userFemale);
                 editor.commit();
                 startActivity(new Intent(getContext(), DashBoardActivity.class));
                 getActivity().finish();
