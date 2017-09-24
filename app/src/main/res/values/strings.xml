@@ -10,23 +10,27 @@
 
 
     <!--Development-->
-    <string name="api_url_login">http://10.0.2.2:8088/login</string>
-    <string name="api_url_signup">http://10.0.2.2:8088/register</string>
-    <string name="api_url_vital">http://10.0.2.2:8088/vital_signs</string>
-    <string name="api_url_period">http://10.0.2.2:8088/menstrual_cycle/set</string>
-    <string name="api_url_sugar">http://10.0.2.2:8088/sugar_test/set</string>
-    <string name="api_url_sugar_list">http://10.0.2.2:8088/sugar_test</string>
-    <string name="api_url_Period_list">http://10.0.2.2:8088/menstrual_cycle</string>
-    <string name="api_url_bloodVital">http://10.0.2.2:8088/blood_pressure/set</string>
-    <string name="api_url_heartVital">http://10.0.2.2:8088/heart_rate/set</string>
-    <string name="api_url_tempVital">http://10.0.2.2:8088/body_temperature/set</string>
-    <string name="api_url_respVital">http://10.0.2.2:8088/respiratory_rate/set</string>
-    <string name="api_url_bloodVital_list">http://10.0.2.2:8088/blood_pressure</string>
-    <string name="api_url_heartVital_list">http://10.0.2.2:8088/heart_rate</string>
-    <string name="api_url_tempVital_list">http://10.0.2.2:8088/body_temperature</string>
-    <string name="api_url_respVital_list">http://10.0.2.2:8088/respiratory_rate</string>
-    <string name="api_url_dentist">http://10.0.2.2:8088/dentist_visit/set</string>
-    <string name="api_url_dentist_list">http://10.0.2.2:8088/dentist_visit</string>
+    <string name="api_url_login">http://192.168.103.13:8088/login</string>
+    <string name="api_url_signup">http://192.168.103.13:8088/register</string>
+    <string name="api_url_vital">http://192.168.103.13:8088/vital_signs</string>
+    <string name="api_url_period">http://192.168.103.13:8088/menstrual_cycle/set</string>
+    <string name="api_url_sugar">http://192.168.103.13:8088/sugar_test/set</string>
+    <string name="api_url_sugar_list">http://192.168.103.13:8088/sugar_test</string>
+    <string name="api_url_Period_list">http://192.168.103.13:8088/menstrual_cycle</string>
+    <string name="api_url_bloodVital">http://192.168.103.13:8088/blood_pressure/set</string>
+    <string name="api_url_heartVital">http://192.168.103.13:8088/heart_rate/set</string>
+    <string name="api_url_tempVital">http://192.168.103.13:8088/body_temperature/set</string>
+    <string name="api_url_respVital">http://192.168.103.13:8088/respiratory_rate/set</string>
+    <string name="api_url_bloodVital_list">http://192.168.103.13:8088/blood_pressure</string>
+    <string name="api_url_heartVital_list">http://192.168.103.13:8088/heart_rate</string>
+    <string name="api_url_tempVital_list">http://192.168.103.13:8088/body_temperature</string>
+    <string name="api_url_respVital_list">http://192.168.103.13:8088/respiratory_rate</string>
+    <string name="api_url_dentist">http://192.168.103.13:8088/dentist_visit/set</string>
+    <string name="api_url_dentist_list">http://192.168.103.13:8088/dentist_visit</string>
+    <string name="api_url_blood_columns">http://192.168.103.13:8088/blood_test/fields</string>
+    <string name="api_url_blood_list">http://192.168.103.13:8088/blood_test/all</string>
+    <string name="api_url_blood_get">http://192.168.103.13:8088/blood_test</string>
+    <string name="api_url_blood_set">http://192.168.103.13:8088/blood_test/set</string>
     <!--Development-->
 
     <!--Production-->
@@ -128,6 +132,22 @@
     <string name="api_receive_json_vital_tempRate_list_arr_celsius">celsius</string>
     <string name="api_receive_json_vital_RespRate_list_arr_bpm">bpm</string>
 
+
+    <string name="api_receive_json_blood_fields">COLUMN_NAME</string>
+    <string name="api_send_json_blood_userId">userid</string>
+    <string name="api_send_json_blood_date">date</string>
+    <string name="api_send_json_blood_time">time</string>
+    <string name="api_send_json_blood_Id">id</string>
+
+
+
+
+    <string name="api_receive_json_blood_list_userId">userid</string>
+    <string name="api_receive_json_blood_list_date">date</string>
+    <string name="api_receive_json_blood_list_time">time</string>
+    <string name="api_receive_json_blood_list_id">id</string>
+
+
     <string name="title_activity_blood_vital_signs">BloodVitalSignsActivity</string>
     <string name="title_activity_temp_vital_signs">TempVitalSignsActivity</string>
     <string name="title_activity_heart_vital_signs">HeartVitalSignsActivity</string>
@@ -142,4 +162,7 @@
     <string name="title_activity_listsugar">ListsugarActivity</string>
     <string name="title_activity_dentist_visits">DentistVisitsActivity</string>
     <string name="title_activity_list_dentist_visits">ListDentistVisitsActivity</string>
+    <string name="title_activity_blood">BloodActivity</string>
+    <string name="title_activity_list_blood">ListBloodActivity</string>
+    <string name="title_activity_blood_details">BloodDetailsActivity</string>
 </resources>

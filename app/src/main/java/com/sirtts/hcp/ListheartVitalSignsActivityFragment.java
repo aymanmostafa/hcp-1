@@ -54,6 +54,23 @@ public class ListheartVitalSignsActivityFragment extends Fragment implements  Re
         listview = (ListView) rootView.findViewById(R.id.ListHeartVitalSigns_listView);
         mProgressbar = (ProgressBar) rootView.findViewById(R.id.ListHeartVitalSigns_progressBar);
 
+        if (isNetworkAvailable(getContext())) {
+            SharedPreferences sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
+
+            mQueue = VolleyRequestQueue.getInstance(getContext().getApplicationContext())
+                    .getRequestQueue();
+            final JSONArrayRequest jsonRequest = new JSONArrayRequest(Request.Method
+                    .POST, getString(R.string.api_url_heartVital_list),
+                    sendData(sharedPre.getInt(getString(R.string.shared_userId),0)), this, this);
+            jsonRequest.setTag(REQUEST_TAG);
+            jsonRequest.setRetryPolicy(new DefaultRetryPolicy(
+                    0,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            mQueue.add(jsonRequest);
+        }
+        else Toast.makeText(getActivity(), "Failed to Connect! Check your Connection", Toast.LENGTH_SHORT).show();
+
 
         return rootView;
     }
@@ -64,22 +81,6 @@ public class ListheartVitalSignsActivityFragment extends Fragment implements  Re
     }
 
     public  void onResume(){
-        if (isNetworkAvailable(getContext())) {
-            SharedPreferences sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
-
-            mQueue = VolleyRequestQueue.getInstance(getContext().getApplicationContext())
-                .getRequestQueue();
-        final JSONArrayRequest jsonRequest = new JSONArrayRequest(Request.Method
-                .POST, getString(R.string.api_url_heartVital_list),
-                sendData(sharedPre.getInt(getString(R.string.shared_userId),0)), this, this);
-        jsonRequest.setTag(REQUEST_TAG);
-        jsonRequest.setRetryPolicy(new DefaultRetryPolicy(
-                0,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        mQueue.add(jsonRequest);
-        }
-        else Toast.makeText(getActivity(), "Failed to Connect! Check your Connection", Toast.LENGTH_SHORT).show();
         super.onResume();
     }
 
@@ -104,7 +105,7 @@ public class ListheartVitalSignsActivityFragment extends Fragment implements  Re
                 );
             }
 
-            adp = new VitalListAdapter(getContext(),date_ArrayList,time_ArrayList,val1_ArrayList);
+            adp = new VitalListAdapter(getContext(),date_ArrayList,time_ArrayList,val1_ArrayList,new ArrayList<Integer>());
 
             listview.setAdapter(adp);
 

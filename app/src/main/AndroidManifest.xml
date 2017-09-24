@@ -89,6 +89,18 @@
         <activity
             android:name=".ListDentistVisitsActivity"
             android:label="@string/title_activity_list_dentist_visits"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".BloodActivity"
+            android:label="@string/title_activity_blood"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ListBloodActivity"
+            android:label="@string/title_activity_list_blood"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".BloodDetailsActivity"
+            android:label="@string/title_activity_blood_details"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

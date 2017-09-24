@@ -52,16 +52,6 @@ public class ListrespVitalSignsActivityFragment extends Fragment implements  Res
         listview = (ListView) rootView.findViewById(R.id.ListRespVitalSigns_listView);
         mProgressbar = (ProgressBar) rootView.findViewById(R.id.ListRespVitalSigns_progressBar);
 
-
-        return rootView;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    public  void onResume(){
         if (isNetworkAvailable(getContext())) {
             SharedPreferences sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
             mQueue = VolleyRequestQueue.getInstance(getContext().getApplicationContext())
@@ -77,6 +67,17 @@ public class ListrespVitalSignsActivityFragment extends Fragment implements  Res
             mQueue.add(jsonRequest);
         }
         else Toast.makeText(getActivity(), "Failed to Connect! Check your Connection", Toast.LENGTH_SHORT).show();
+
+
+        return rootView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    public  void onResume(){
         super.onResume();
     }
 
@@ -101,7 +102,7 @@ public class ListrespVitalSignsActivityFragment extends Fragment implements  Res
                 );
             }
 
-            adp = new VitalListAdapter(getContext(),date_ArrayList,time_ArrayList,val1_ArrayList);
+            adp = new VitalListAdapter(getContext(),date_ArrayList,time_ArrayList,val1_ArrayList,new ArrayList<Integer>());
 
             listview.setAdapter(adp);
 

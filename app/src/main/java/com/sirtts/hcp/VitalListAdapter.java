@@ -17,13 +17,15 @@ public class VitalListAdapter extends BaseAdapter {
     ArrayList<String> date;
     ArrayList<String> time;
     ArrayList<String> val1;
+    ArrayList<Integer> id;
 
 
     public VitalListAdapter(
             Context context2,
             ArrayList<String> date,
             ArrayList<String> time,
-            ArrayList<String> val1
+            ArrayList<String> val1,
+            ArrayList<Integer> id
     )
     {
 
@@ -31,6 +33,7 @@ public class VitalListAdapter extends BaseAdapter {
         this.date = date;
         this.time = time;
         this.val1 = val1;
+        this.id = id;
     }
 
     public int getCount() {
@@ -38,9 +41,9 @@ public class VitalListAdapter extends BaseAdapter {
         return date.size();
     }
 
-    public Object getItem(int position) {
+    public Integer getItem(int position) {
         // TODO Auto-generated method stub
-        return null;
+        return id.get(position);
     }
 
     public long getItemId(int position) {

@@ -52,16 +52,6 @@ public class ListDentistVisitsActivityFragment extends Fragment implements  Resp
         listview = (ListView) rootView.findViewById(R.id.ListDentist_listView);
         progressBar = (ProgressBar) rootView.findViewById(R.id.ListDentist_progressBar);
 
-
-        return rootView;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    public  void onResume(){
         if (isNetworkAvailable(getContext())) {
             SharedPreferences sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
 
@@ -78,7 +68,18 @@ public class ListDentistVisitsActivityFragment extends Fragment implements  Resp
             queue.add(jsonRequest);
         }
         else Toast.makeText(getActivity(), "Failed to Connect! Check your Connection", Toast.LENGTH_SHORT).show();
-        super.onResume();
+
+
+        return rootView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    public  void onResume(){
+       super.onResume();
     }
 
     @Override
@@ -103,7 +104,7 @@ public class ListDentistVisitsActivityFragment extends Fragment implements  Resp
                 );
             }
 
-            adp = new VitalListAdapter(getContext(),date_ArrayList,time_ArrayList,val1_ArrayList);
+            adp = new VitalListAdapter(getContext(),date_ArrayList,time_ArrayList,val1_ArrayList,new ArrayList<Integer>());
 
             listview.setAdapter(adp);
 

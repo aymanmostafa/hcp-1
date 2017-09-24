@@ -1,6 +1,7 @@
 package com.sirtts.hcp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -28,7 +30,7 @@ import java.util.HashMap;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ListsugarActivityFragment extends Fragment implements  Response.Listener<JSONArray>,
+public class ListBloodActivityFragment extends Fragment implements Response.Listener<JSONArray>,
         Response.ErrorListener {
 
     private RequestQueue mQueue;
@@ -37,28 +39,27 @@ public class ListsugarActivityFragment extends Fragment implements  Response.Lis
     ArrayList<String> date_ArrayList = new ArrayList<String>();
     ArrayList<String> time_ArrayList = new ArrayList<String>();
     ArrayList<String> val1_ArrayList = new ArrayList<String>();
+    ArrayList<Integer> id_ArrayList = new ArrayList<Integer>();
     ProgressBar mProgressbar;
-    public static final String REQUEST_TAG = "ListٍSugarVolley";
+    public static final String REQUEST_TAG = "ListBloodVolley";
 
 
-    public ListsugarActivityFragment() {
+    public ListBloodActivityFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_listsugar, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_list_blood, container, false);
 
-        listview = (ListView) rootView.findViewById(R.id.ListsugarSigns_listView);
-        mProgressbar = (ProgressBar) rootView.findViewById(R.id.ListsugarSigns_progressBar);
-
+        listview = (ListView) rootView.findViewById(R.id.ListBlood_listView);
+        mProgressbar = (ProgressBar) rootView.findViewById(R.id.ListBlood_progressBar);
         if (isNetworkAvailable(getContext())) {
             SharedPreferences sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
-
             mQueue = VolleyRequestQueue.getInstance(getContext().getApplicationContext())
                     .getRequestQueue();
             final JSONArrayRequest jsonRequest = new JSONArrayRequest(Request.Method
-                    .POST, getString(R.string.api_url_sugar_list),
+                    .POST, getString(R.string.api_url_blood_list),
                     sendData(sharedPre.getInt(getString(R.string.shared_userId),0)), this, this);
             jsonRequest.setTag(REQUEST_TAG);
             jsonRequest.setRetryPolicy(new DefaultRetryPolicy(
@@ -68,6 +69,16 @@ public class ListsugarActivityFragment extends Fragment implements  Response.Lis
             mQueue.add(jsonRequest);
         }
         else Toast.makeText(getActivity(), "Failed to Connect! Check your Connection", Toast.LENGTH_SHORT).show();
+
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+
+                 Integer x = (Integer) parent.getItemAtPosition(position);
+                 Intent intent = new Intent(getContext(), BloodDetailsActivity.class);
+                 intent.putExtra("bloodID", x.intValue());
+                 startActivity(intent);
+            }
+        });
 
         return rootView;
     }
@@ -96,13 +107,13 @@ public class ListsugarActivityFragment extends Fragment implements  Response.Lis
             mProgressbar.setVisibility(View.INVISIBLE);
 
             for(int i=0;i<response.length();i++){
-                date_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_sugar_date))));
-                time_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_sugar_time))));
-                val1_ArrayList.add(String.valueOf(response.optJSONObject(i).optInt(getString(R.string.api_receive_json_sugar_mg)))
-                );
+                date_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_blood_list_date))));
+                time_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_blood_list_time))));
+                val1_ArrayList.add("Click to View");
+                id_ArrayList.add(response.optJSONObject(i).optInt(getString(R.string.api_receive_json_blood_list_id)));
             }
 
-            adp = new VitalListAdapter(getContext(),date_ArrayList,time_ArrayList,val1_ArrayList,new ArrayList<Integer>());
+            adp = new VitalListAdapter(getContext(),date_ArrayList,time_ArrayList,val1_ArrayList,id_ArrayList);
 
             listview.setAdapter(adp);
 
@@ -122,7 +133,7 @@ public class ListsugarActivityFragment extends Fragment implements  Response.Lis
 
     public JSONObject sendData(int userid){
         HashMap m = new HashMap();
-        m.put(getString(R.string.api_send_json_vital_list_arr_userid),userid);
+        m.put(getString(R.string.api_receive_json_blood_list_userId),userid);
         Log.e(REQUEST_TAG, "sendData: "+(new JSONObject(m)).toString());
         return new JSONObject(m);
     }
@@ -131,5 +142,6 @@ public class ListsugarActivityFragment extends Fragment implements  Response.Lis
         final ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
         return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
     }
+
 
 }

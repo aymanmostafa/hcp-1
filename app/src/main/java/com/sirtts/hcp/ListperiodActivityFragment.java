@@ -56,16 +56,6 @@ public class ListperiodActivityFragment extends Fragment implements  Response.Li
         listview = (ListView) rootView.findViewById(R.id.ListPeriod_listView);
         mProgressbar = (ProgressBar) rootView.findViewById(R.id.ListPeriod_progressBar);
 
-
-        return rootView;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    public  void onResume(){
         if (isNetworkAvailable(getContext())) {
             SharedPreferences sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
             mQueue = VolleyRequestQueue.getInstance(getContext().getApplicationContext())
@@ -81,7 +71,18 @@ public class ListperiodActivityFragment extends Fragment implements  Response.Li
             mQueue.add(jsonRequest);
         }
         else Toast.makeText(getActivity(), "Failed to Connect! Check your Connection", Toast.LENGTH_SHORT).show();
-        super.onResume();
+
+
+        return rootView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    public  void onResume(){
+       super.onResume();
     }
 
     @Override
@@ -111,7 +112,7 @@ public class ListperiodActivityFragment extends Fragment implements  Response.Li
                         (dateFormat.parse(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_send_json_period_startdate)))).getTime()))));
             }
 
-            adp = new VitalListAdapter(getContext(),duration_ArrayList,end_ArrayList,start_ArrayList);
+            adp = new VitalListAdapter(getContext(),duration_ArrayList,end_ArrayList,start_ArrayList,new ArrayList<Integer>());
 
             listview.setAdapter(adp);
 
