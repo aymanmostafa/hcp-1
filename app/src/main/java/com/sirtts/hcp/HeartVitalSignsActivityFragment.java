@@ -25,6 +25,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONObject;
 
@@ -36,8 +37,7 @@ import java.util.HashMap;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class HeartVitalSignsActivityFragment extends Fragment implements View.OnClickListener, Response.Listener,
-        Response.ErrorListener {
+public class HeartVitalSignsActivityFragment extends Fragment implements View.OnClickListener{
 
     Button view,save;
     TextView date,time,error,date2,time2;
@@ -154,10 +154,37 @@ public class HeartVitalSignsActivityFragment extends Fragment implements View.On
                     sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
 
                     mProgressbar.setVisibility(View.VISIBLE);
-                    final JSONObjectRequest jsonRequest = new JSONObjectRequest(Request.Method
-                            .POST, getString(R.string.api_url_heartVital),
+
+                    JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, getString(R.string.api_url_heartVital),
                             sendData(sharedPre.getInt(getString(R.string.shared_userId),0), date.getText().toString(),time.getText().toString(),
-                                    Integer.valueOf(bpm.getText().toString())), this, this);
+                                    Integer.valueOf(bpm.getText().toString())),
+                            new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    try {
+                                        mProgressbar.setVisibility(View.INVISIBLE);
+                                        Boolean userStatus = ((JSONObject) response).optBoolean(getString(R.string.api_receive_json_status));
+
+                                        if (userStatus) {
+                                            Toast.makeText(getActivity(), "Data Saved!", Toast.LENGTH_LONG).show();
+                                        } else {
+                                            error.setText("Unexpected Error happened!");
+                                        }
+                                    }
+                                    catch(Exception e){
+                                        mProgressbar.setVisibility(View.INVISIBLE);
+                                        error.setText("Unexpected Error happened!");
+                                    }
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError errork) {
+                                    mProgressbar.setVisibility(View.INVISIBLE);
+                                    error.setText("Unexpected Error happened!");
+                                }
+                            });
+
                     jsonRequest.setTag(REQUEST_TAG);
                     jsonRequest.setRetryPolicy(new DefaultRetryPolicy(
                             0,
@@ -167,30 +194,6 @@ public class HeartVitalSignsActivityFragment extends Fragment implements View.On
                 }
             }
         }
-    }
-
-    @Override
-    public void onResponse(Object response) {
-        try {
-            mProgressbar.setVisibility(View.INVISIBLE);
-            Boolean userStatus = ((JSONObject) response).optBoolean(getString(R.string.api_receive_json_status));
-
-            if (userStatus) {
-                Toast.makeText(getActivity(), "Data Saved!", Toast.LENGTH_LONG).show();
-            } else {
-                error.setText("Unexpected Error happened!");
-            }
-        }
-        catch(Exception e){
-            mProgressbar.setVisibility(View.INVISIBLE);
-            error.setText("Unexpected Error happened!");
-        }
-    }
-
-    @Override
-    public void onErrorResponse(VolleyError error) {
-        mProgressbar.setVisibility(View.INVISIBLE);
-        this.error.setText("Unexpected Error happened!");
     }
 
     public JSONObject sendData(int userid,String date,String time,int bpm){

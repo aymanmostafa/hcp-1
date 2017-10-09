@@ -27,6 +27,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -241,28 +242,37 @@ public class BloodActivityFragment extends Fragment implements View.OnClickListe
                     sharedPref = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
 
                     mProgressbar.setVisibility(View.VISIBLE);
-                    final JSONObjectRequest jsonRequest = new JSONObjectRequest(Request.Method
-                            .POST, getString(R.string.api_url_blood_set),
+                    JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, getString(R.string.api_url_blood_set),
                             sendData(sharedPref.getInt(getString(R.string.shared_userId),0), date.getText().toString(),time.getText().toString(),
-                                    mainListLayout),new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                mProgressbar.setVisibility(View.INVISIBLE);
-                                Boolean userStatus = response.optBoolean(getString(R.string.api_receive_json_status));
+                                    mainListLayout),
+                            new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    try {
+                                        mProgressbar.setVisibility(View.INVISIBLE);
+                                        Boolean userStatus = response.optBoolean(getString(R.string.api_receive_json_status));
 
-                                if (userStatus) {
-                                    Toast.makeText(getActivity(), "Data Saved!", Toast.LENGTH_LONG).show();
-                                } else {
+                                        if (userStatus) {
+                                            Toast.makeText(getActivity(), "Data Saved!", Toast.LENGTH_LONG).show();
+                                        } else {
+                                            error.setText("Unexpected Error happened!");
+                                        }
+                                    }
+                                    catch(Exception e){
+                                        mProgressbar.setVisibility(View.INVISIBLE);
+                                        error.setText("Unexpected Error happened!");
+                                    }
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError errork) {
+                                    mProgressbar.setVisibility(View.INVISIBLE);
                                     error.setText("Unexpected Error happened!");
                                 }
-                            }
-                            catch(Exception e){
-                                mProgressbar.setVisibility(View.INVISIBLE);
-                                error.setText("Unexpected Error happened!");
-                            }
-                        }
-                    }, this);
+                            });
+
+
                     jsonRequest.setTag(REQUEST_TAG_Save);
                     jsonRequest.setRetryPolicy(new DefaultRetryPolicy(
                             0,

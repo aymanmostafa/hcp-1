@@ -18,6 +18,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -28,8 +29,7 @@ import java.util.HashMap;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ListDentistVisitsActivityFragment extends Fragment implements  Response.Listener<JSONArray>,
-        Response.ErrorListener {
+public class ListDentistVisitsActivityFragment extends Fragment {
 
     private RequestQueue queue;
     ListView listview;
@@ -57,9 +57,40 @@ public class ListDentistVisitsActivityFragment extends Fragment implements  Resp
 
             queue = VolleyRequestQueue.getInstance(getContext().getApplicationContext())
                     .getRequestQueue();
-            final JSONArrayRequest jsonRequest = new JSONArrayRequest(Request.Method
-                    .POST, getString(R.string.api_url_dentist_list),
-                    sendData(sharedPre.getInt(getString(R.string.shared_userId),0)), this, this);
+
+            JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.POST, getString(R.string.api_url_dentist_list),
+                    sendData(sharedPre.getInt(getString(R.string.shared_userId),0)),
+                    new Response.Listener<JSONArray>() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            try {
+                                progressBar.setVisibility(View.INVISIBLE);
+
+                                for(int i=0;i<response.length();i++){
+                                    date_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_dentist_date)))+"\n"
+                                            +String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_dentist_time))));
+                                    time_ArrayList.add("");
+                                    val1_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_dentist_treatments)))
+                                    );
+                                }
+
+                                adp = new VitalListAdapter(getContext(),date_ArrayList,time_ArrayList,val1_ArrayList,new ArrayList<Integer>());
+                                listview.setAdapter(adp);
+                            }
+                            catch(Exception e){
+                                progressBar.setVisibility(View.INVISIBLE);
+                                Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError errork) {
+                            progressBar.setVisibility(View.INVISIBLE);
+                            Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
             jsonRequest.setTag(REQUEST_TAG);
             jsonRequest.setRetryPolicy(new DefaultRetryPolicy(
                     0,
@@ -91,42 +122,13 @@ public class ListDentistVisitsActivityFragment extends Fragment implements  Resp
         }
     }
 
-    @Override
-    public void onResponse(JSONArray response) {
-        try {
-            progressBar.setVisibility(View.INVISIBLE);
-
-            for(int i=0;i<response.length();i++){
-                date_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_dentist_date)))+"\n"
-                +String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_dentist_time))));
-                time_ArrayList.add("");
-                val1_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_dentist_treatments)))
-                );
-            }
-
-            adp = new VitalListAdapter(getContext(),date_ArrayList,time_ArrayList,val1_ArrayList,new ArrayList<Integer>());
-
-            listview.setAdapter(adp);
-
-
-        }
-        catch(Exception e){
-            progressBar.setVisibility(View.INVISIBLE);
-            Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    public void onErrorResponse(VolleyError error) {
-        progressBar.setVisibility(View.INVISIBLE);
-        Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_SHORT).show();
-    }
-
-    public JSONObject sendData(int userid){
+    public JSONArray sendData(int userid){
         HashMap m = new HashMap();
         m.put(getString(R.string.api_send_json_vital_list_arr_userid),userid);
         Log.e(REQUEST_TAG, "sendData: "+(new JSONObject(m)).toString());
-        return new JSONObject(m);
+        JSONArray x = new JSONArray();
+        x.put(new JSONObject(m));
+        return x;
     }
 
     public boolean isNetworkAvailable(final Context context) {

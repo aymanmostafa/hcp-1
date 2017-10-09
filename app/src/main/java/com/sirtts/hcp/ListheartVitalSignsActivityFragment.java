@@ -19,6 +19,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -30,8 +31,7 @@ import java.util.logging.Logger;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ListheartVitalSignsActivityFragment extends Fragment implements  Response.Listener<JSONArray>,
-        Response.ErrorListener {
+public class ListheartVitalSignsActivityFragment extends Fragment {
 
     private RequestQueue mQueue;
     ListView listview;
@@ -59,9 +59,37 @@ public class ListheartVitalSignsActivityFragment extends Fragment implements  Re
 
             mQueue = VolleyRequestQueue.getInstance(getContext().getApplicationContext())
                     .getRequestQueue();
-            final JSONArrayRequest jsonRequest = new JSONArrayRequest(Request.Method
-                    .POST, getString(R.string.api_url_heartVital_list),
-                    sendData(sharedPre.getInt(getString(R.string.shared_userId),0)), this, this);
+
+            JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.POST, getString(R.string.api_url_heartVital_list),
+                    sendData(sharedPre.getInt(getString(R.string.shared_userId),0)),
+                    new Response.Listener<JSONArray>() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            try {
+                                mProgressbar.setVisibility(View.INVISIBLE);
+
+                                for(int i=0;i<response.length();i++){
+                                    date_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_vital_list_arr_date))));
+                                    time_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_vital_list_arr_time))));
+                                    val1_ArrayList.add(String.valueOf(response.optJSONObject(i).optInt(getString(R.string.api_receive_json_vital_heartRate_list_arr_bpm)))
+                                    );
+                                }
+                                adp = new VitalListAdapter(getContext(),date_ArrayList,time_ArrayList,val1_ArrayList,new ArrayList<Integer>());
+                                listview.setAdapter(adp);
+                            }
+                            catch(Exception e){
+                                mProgressbar.setVisibility(View.INVISIBLE);
+                                Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError errork) {
+                            mProgressbar.setVisibility(View.INVISIBLE);
+                            Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
             jsonRequest.setTag(REQUEST_TAG);
             jsonRequest.setRetryPolicy(new DefaultRetryPolicy(
                     0,
@@ -93,42 +121,15 @@ public class ListheartVitalSignsActivityFragment extends Fragment implements  Re
         }
     }
 
-    @Override
-    public void onResponse(JSONArray response) {
-        try {
-            mProgressbar.setVisibility(View.INVISIBLE);
-
-            for(int i=0;i<response.length();i++){
-                date_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_vital_list_arr_date))));
-                time_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_vital_list_arr_time))));
-                val1_ArrayList.add(String.valueOf(response.optJSONObject(i).optInt(getString(R.string.api_receive_json_vital_heartRate_list_arr_bpm)))
-                );
-            }
-
-            adp = new VitalListAdapter(getContext(),date_ArrayList,time_ArrayList,val1_ArrayList,new ArrayList<Integer>());
-
-            listview.setAdapter(adp);
-
-
-        }
-        catch(Exception e){
-            mProgressbar.setVisibility(View.INVISIBLE);
-            Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    public void onErrorResponse(VolleyError error) {
-        mProgressbar.setVisibility(View.INVISIBLE);
-        Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_SHORT).show();
-    }
-
-    public JSONObject sendData(int userid){
+    public JSONArray sendData(int userid){
         HashMap m = new HashMap();
         m.put(getString(R.string.api_send_json_vital_list_arr_userid),userid);
         Log.e(REQUEST_TAG, "sendData: "+(new JSONObject(m)).toString());
-        return new JSONObject(m);
+        JSONArray x = new JSONArray();
+        x.put(new JSONObject(m));
+        return x;
     }
+
 
     public boolean isNetworkAvailable(final Context context) {
         final ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));

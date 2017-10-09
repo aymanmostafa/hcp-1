@@ -21,8 +21,10 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -30,8 +32,7 @@ import java.util.HashMap;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class VitalSignsActivityFragment extends Fragment  implements View.OnClickListener, Response.Listener,
-        Response.ErrorListener {
+public class VitalSignsActivityFragment extends Fragment  implements View.OnClickListener{
     Button blood,temp,heart,resp;
     TextView lastBlood,lastTemp,lastHeart,lastResp,error;
     ProgressBar mProgressbar;
@@ -87,26 +88,83 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
     @Override
     public void onStart() {
         super.onStart();
-        // Instantiate the RequestQueue.
+
         error.setText("");
         mProgressbar.setVisibility(View.VISIBLE);
         sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged),Context.MODE_PRIVATE);
 
         mQueue = VolleyRequestQueue.getInstance(getContext().getApplicationContext())
                 .getRequestQueue();
-        final JSONObjectRequest jsonRequest = new JSONObjectRequest(Request.Method
-                .POST, getString(R.string.api_url_vital),
-                sendData(sharedPre.getInt(getString(R.string.shared_userId),0)), this, this);
-        jsonRequest.setTag(REQUEST_TAG);
-        jsonRequest.setRetryPolicy(new DefaultRetryPolicy(
-                0,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         if (!isNetworkAvailable(getContext()))
             Toast.makeText(getActivity(), "Failed to Connect! Check your Connection", Toast.LENGTH_SHORT).show();
+        else {
 
-        mQueue.add(jsonRequest);
+            JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.POST, getString(R.string.api_url_vital), sendData(sharedPre.getInt(getString(R.string.shared_userId), 0)),
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                mProgressbar.setVisibility(View.INVISIBLE);
+
+                                JSONArray bloodJsonarr = response.optJSONArray(getString(R.string.api_receive_json_vital_bloodPressure));
+                                JSONArray tempJsonarr = response.optJSONArray(getString(R.string.api_receive_json_vital_bodyTemp));
+                                JSONArray heartJsonarr = response.optJSONArray(getString(R.string.api_receive_json_vital_heartRate));
+                                JSONArray respJsonarr = response.optJSONArray(getString(R.string.api_receive_json_vital_RespRate));
+
+                                if (bloodJsonarr.length() > 0) {
+                                    JSONObject bloodJsonObj = bloodJsonarr.getJSONObject(0);
+                                    lastBlood.setText(bloodJsonObj.optInt(
+                                            getString(R.string.api_receive_json_vital_bloodPressure_systolic))
+                                            + "/" + bloodJsonObj.optInt(getString(R.string.api_receive_json_vital_bloodPressure_diastolic))
+                                            + " on " + bloodJsonObj.optString(getString(R.string.api_receive_json_vital_date))
+                                    );
+                                } else lastBlood.setText("");
+
+                                if (tempJsonarr.length() > 0) {
+                                    JSONObject tempJsonObj = tempJsonarr.getJSONObject(0);
+                                    lastTemp.setText(tempJsonObj.optDouble(getString(R.string.api_receive_json_vital_bodyTemp_celsius)) +
+                                            " °C on " + tempJsonObj.optString(getString(R.string.api_receive_json_vital_date))
+                                    );
+                                } else lastTemp.setText("");
+
+                                if (heartJsonarr.length() > 0) {
+                                    JSONObject heartJsonObj = heartJsonarr.getJSONObject(0);
+                                    lastHeart.setText(heartJsonObj.optInt(getString(R.string.api_receive_json_vital_heartRate_bpm)) +
+                                            " bpm on " + heartJsonObj.optString(getString(R.string.api_receive_json_vital_date))
+                                    );
+                                } else lastHeart.setText("");
+
+                                if (respJsonarr.length() > 0) {
+                                    JSONObject respJsonObj = respJsonarr.getJSONObject(0);
+                                    lastResp.setText(respJsonObj.optInt(getString(R.string.api_receive_json_vital_RespRate_bpm)) +
+                                            " Breath/Min. on " + respJsonObj.optString(getString(R.string.api_receive_json_vital_date))
+                                    );
+                                } else lastResp.setText("");
+
+
+                            } catch (Exception e) {
+                                mProgressbar.setVisibility(View.INVISIBLE);
+                                error.setText("Can't fetch your data!");
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError errork) {
+                            mProgressbar.setVisibility(View.INVISIBLE);
+                            error.setText("Can't fetch your data!");
+                        }
+                    });
+
+            jsObjRequest.setTag(REQUEST_TAG);
+            jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(
+                    0,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+            mQueue.add(jsObjRequest);
+        }
 
     }
 
@@ -119,63 +177,6 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
         }
     }
 
-    @Override
-    public void onResponse(Object response) {
-        try {
-            mProgressbar.setVisibility(View.INVISIBLE);
-
-            JSONArray bloodJsonarr = ((JSONObject) response).optJSONArray(getString(R.string.api_receive_json_vital_bloodPressure));
-            JSONArray tempJsonarr = ((JSONObject) response).optJSONArray(getString(R.string.api_receive_json_vital_bodyTemp));
-            JSONArray heartJsonarr = ((JSONObject) response).optJSONArray(getString(R.string.api_receive_json_vital_heartRate));
-            JSONArray respJsonarr = ((JSONObject) response).optJSONArray(getString(R.string.api_receive_json_vital_RespRate));
-
-            if(bloodJsonarr.length()>0) {
-                JSONObject bloodJsonObj = bloodJsonarr.getJSONObject(0);
-                lastBlood.setText(bloodJsonObj.optInt(
-                        getString(R.string.api_receive_json_vital_bloodPressure_systolic))
-                        + "/" + bloodJsonObj.optInt(getString(R.string.api_receive_json_vital_bloodPressure_diastolic))
-                        + " on " + bloodJsonObj.optString(getString(R.string.api_receive_json_vital_date))
-                );
-            }
-            else lastBlood.setText("");
-
-            if(tempJsonarr.length()>0) {
-                JSONObject tempJsonObj = tempJsonarr.getJSONObject(0);
-                lastTemp.setText(tempJsonObj.optDouble(getString(R.string.api_receive_json_vital_bodyTemp_celsius)) +
-                        " °C on " + tempJsonObj.optString(getString(R.string.api_receive_json_vital_date))
-                );
-            }
-            else lastTemp.setText("");
-
-            if(heartJsonarr.length()>0) {
-                JSONObject heartJsonObj = heartJsonarr.getJSONObject(0);
-                lastHeart.setText(heartJsonObj.optInt(getString(R.string.api_receive_json_vital_heartRate_bpm)) +
-                        " bpm on " + heartJsonObj.optString(getString(R.string.api_receive_json_vital_date))
-                );
-            }
-            else lastHeart.setText("");
-
-            if(respJsonarr.length()>0) {
-                JSONObject respJsonObj = respJsonarr.getJSONObject(0);
-                lastResp.setText(respJsonObj.optInt(getString(R.string.api_receive_json_vital_RespRate_bpm)) +
-                        " Breath/Min. on " + respJsonObj.optString(getString(R.string.api_receive_json_vital_date))
-                );
-            }
-            else lastResp.setText("");
-
-
-        }
-        catch(Exception e){
-            mProgressbar.setVisibility(View.INVISIBLE);
-            error.setText("Can't fetch your data!ff");
-        }
-    }
-
-    @Override
-    public void onErrorResponse(VolleyError error) {
-        mProgressbar.setVisibility(View.INVISIBLE);
-        this.error.setText("Can't fetch your data!");
-    }
 
     public JSONObject sendData(int user_id){
         HashMap<String,Integer> m = new HashMap<>();

@@ -27,11 +27,13 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -39,8 +41,7 @@ import java.util.HashMap;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class BloodDetailsActivityFragment extends Fragment implements  Response.Listener<JSONArray>,
-        Response.ErrorListener {
+public class BloodDetailsActivityFragment extends Fragment {
 
     TextView tempTv,error;
     EditText tempEt;
@@ -65,9 +66,64 @@ public class BloodDetailsActivityFragment extends Fragment implements  Response.
             Intent i = getActivity().getIntent();
             mQueue = VolleyRequestQueue.getInstance(getContext().getApplicationContext())
                     .getRequestQueue();
-            final JSONArrayRequest jsonRequest = new JSONArrayRequest(Request.Method
-                    .POST, getString(R.string.api_url_blood_get),
-                    sendData(i.getIntExtra("bloodID",0)), this, this);
+
+            JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.POST, getString(R.string.api_url_blood_get),
+                    sendData(i.getIntExtra("bloodID",0)),
+                    new Response.Listener<JSONArray>() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            try {
+                                mProgressbar.setVisibility(View.INVISIBLE);
+                                JSONObject responseObj = response.getJSONObject(0);
+                                for(int i=0;i<responseObj.names().length();i++){
+                                    tempLayout = new LinearLayout(getContext());
+                                    tempEt = new EditText(getContext());
+                                    tempTv = new TextView(getContext());
+
+                                    LinearLayout.LayoutParams tt = new LinearLayout.LayoutParams(
+                                            LinearLayout.LayoutParams.MATCH_PARENT,
+                                            LinearLayout.LayoutParams.MATCH_PARENT);
+
+                                    tempLayout.setLayoutParams(tt);
+
+                                    tempLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+                                    tempEt.setLayoutParams(new LinearLayout.LayoutParams(
+                                            LinearLayout.LayoutParams.MATCH_PARENT,
+                                            LinearLayout.LayoutParams.WRAP_CONTENT,3.0f));
+
+                                    tempTv.setLayoutParams(new LinearLayout.LayoutParams(
+                                            LinearLayout.LayoutParams.MATCH_PARENT,
+                                            LinearLayout.LayoutParams.WRAP_CONTENT,1.0f));
+
+                                    tempTv.setText(String.valueOf(responseObj.names().get(i).toString()));
+                                    Double value = responseObj.optDouble(responseObj.names().get(i).toString());
+                                    if(!Double.isNaN(value)) tempEt.setText(value.toString());
+                                    tempTv.setTypeface(null, Typeface.BOLD);
+
+                                    tempEt.setFocusable(false);
+
+                                    tempLayout.addView(tempTv);
+                                    tempLayout.addView(tempEt);
+
+                                    mainListLayout.addView(tempLayout);
+                                }
+                            }
+                            catch(Exception e){
+                                mProgressbar.setVisibility(View.INVISIBLE);
+                                Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError errork) {
+                            mProgressbar.setVisibility(View.INVISIBLE);
+                            Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+
             jsonRequest.setTag(REQUEST_TAG_View);
             jsonRequest.setRetryPolicy(new DefaultRetryPolicy(
                     0,
@@ -90,65 +146,17 @@ public class BloodDetailsActivityFragment extends Fragment implements  Response.
         }
     }
 
-    @Override
-    public void onResponse(JSONArray response) {
-        try {
-            mProgressbar.setVisibility(View.INVISIBLE);
-            JSONObject responseObj = response.getJSONObject(0);
-            for(int i=0;i<responseObj.names().length();i++){
-                tempLayout = new LinearLayout(getContext());
-                tempEt = new EditText(getContext());
-                tempTv = new TextView(getContext());
-
-                LinearLayout.LayoutParams tt = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.MATCH_PARENT);
-
-                tempLayout.setLayoutParams(tt);
-
-                tempLayout.setOrientation(LinearLayout.HORIZONTAL);
-
-                tempEt.setLayoutParams(new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT,3.0f));
-
-                tempTv.setLayoutParams(new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT,1.0f));
-
-                tempTv.setText(String.valueOf(responseObj.names().get(i).toString()));
-                Double value = responseObj.optDouble(responseObj.names().get(i).toString());
-                if(!Double.isNaN(value)) tempEt.setText(value.toString());
-                tempTv.setTypeface(null, Typeface.BOLD);
-
-                tempLayout.addView(tempTv);
-                tempLayout.addView(tempEt);
-
-                mainListLayout.addView(tempLayout);
-            }
-        }
-        catch(Exception e){
-            mProgressbar.setVisibility(View.INVISIBLE);
-            Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    public void onErrorResponse(VolleyError error) {
-        mProgressbar.setVisibility(View.INVISIBLE);
-        Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_SHORT).show();
-    }
-
     public boolean isNetworkAvailable(final Context context) {
         final ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
         return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
     }
 
-
-    public JSONObject sendData(int id){
+    public JSONArray sendData(int id){
         HashMap m = new HashMap();
         m.put(getString(R.string.api_send_json_blood_Id),id);
-        Log.e("Send blood Data", "sendData:"+(new JSONObject(m)).toString());
-        return new JSONObject(m);
+        Log.e("Send blood Data", "sendData: "+(new JSONObject(m)).toString());
+        JSONArray x = new JSONArray();
+        x.put(new JSONObject(m));
+        return x;
     }
 }

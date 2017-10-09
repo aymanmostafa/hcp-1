@@ -21,6 +21,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONObject;
 
@@ -29,8 +30,7 @@ import java.util.HashMap;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class loginActivityFragment extends Fragment implements View.OnClickListener, Response.Listener,
-        Response.ErrorListener {
+public class loginActivityFragment extends Fragment implements View.OnClickListener{
 
     private EditText username,password;
     private TextView signup,error;
@@ -107,9 +107,49 @@ public class loginActivityFragment extends Fragment implements View.OnClickListe
                     Toast.makeText(getActivity(), "Failed to Connect! Check your Connection", Toast.LENGTH_SHORT).show();
                 else {
                     mProgressbar.setVisibility(View.VISIBLE);
-                    final JSONObjectRequest jsonRequest = new JSONObjectRequest(Request.Method
-                            .POST, getString(R.string.api_url_login),
-                            sendData(username.getText().toString(), password.getText().toString()), this, this);
+
+                    JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, getString(R.string.api_url_login),
+                            sendData(username.getText().toString(), password.getText().toString()),
+                            new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    try {
+                                        mProgressbar.setVisibility(View.INVISIBLE);
+                                        Boolean userStatus = ((JSONObject) response).optBoolean(getString(R.string.api_receive_json_login_status));
+                                        int userId = ((JSONObject) response).optInt(getString(R.string.api_receive_json_login_userId));
+                                        String errorMsg = ((JSONObject) response).optString(getString(R.string.api_receive_json_login_errorMsg));
+                                        Boolean userFemale = ((JSONObject) response).optBoolean(getString(R.string.api_receive_json_login_female));
+
+                                        if (userStatus && userId > 0 && errorMsg.equals("")) {
+                                            sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged),Context.MODE_PRIVATE);
+                                            SharedPreferences.Editor editor = sharedPre.edit();
+                                            editor.putBoolean(getString(R.string.shared_isUserLoged), true);
+                                            editor.putInt(getString(R.string.shared_userId), userId);
+                                            editor.putBoolean(getString(R.string.shared_female), userFemale);
+                                            editor.commit();
+                                            startActivity(new Intent(getContext(), DashBoardActivity.class));
+                                            getActivity().finish();
+                                        } else {
+                                            error.setText(errorMsg);
+                                        }
+
+                                    }
+                                    catch(Exception e){
+                                        mProgressbar.setVisibility(View.INVISIBLE);
+                                        error.setText("Unexpected Error happened!");
+                                    }
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError errork) {
+                                    mProgressbar.setVisibility(View.INVISIBLE);
+                                    error.setText("Unexpected Error happened!");
+                                }
+                            });
+
+
+
                     jsonRequest.setTag(REQUEST_TAG);
                     jsonRequest.setRetryPolicy(new DefaultRetryPolicy(
                             0,
@@ -119,41 +159,6 @@ public class loginActivityFragment extends Fragment implements View.OnClickListe
                 }
             }
         }
-    }
-
-    @Override
-    public void onResponse(Object response) {
-        try {
-            mProgressbar.setVisibility(View.INVISIBLE);
-            Boolean userStatus = ((JSONObject) response).optBoolean(getString(R.string.api_receive_json_login_status));
-            int userId = ((JSONObject) response).optInt(getString(R.string.api_receive_json_login_userId));
-            String errorMsg = ((JSONObject) response).optString(getString(R.string.api_receive_json_login_errorMsg));
-            Boolean userFemale = ((JSONObject) response).optBoolean(getString(R.string.api_receive_json_login_female));
-
-            if (userStatus && userId > 0 && errorMsg.equals("")) {
-                sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged),Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPre.edit();
-                editor.putBoolean(getString(R.string.shared_isUserLoged), true);
-                editor.putInt(getString(R.string.shared_userId), userId);
-                editor.putBoolean(getString(R.string.shared_female), userFemale);
-                editor.commit();
-                startActivity(new Intent(getContext(), DashBoardActivity.class));
-                getActivity().finish();
-            } else {
-                error.setText(errorMsg);
-            }
-
-        }
-        catch(Exception e){
-            mProgressbar.setVisibility(View.INVISIBLE);
-            error.setText("Unexpected Error happened!");
-        }
-    }
-
-    @Override
-    public void onErrorResponse(VolleyError error) {
-        mProgressbar.setVisibility(View.INVISIBLE);
-        this.error.setText("Unexpected Error happened!");
     }
 
     public JSONObject sendData(String username,String password){

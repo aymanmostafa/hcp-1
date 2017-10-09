@@ -18,6 +18,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -32,8 +33,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ListperiodActivityFragment extends Fragment implements  Response.Listener<JSONArray>,
-        Response.ErrorListener {
+public class ListperiodActivityFragment extends Fragment {
 
     private RequestQueue mQueue;
     ListView listview;
@@ -60,9 +60,43 @@ public class ListperiodActivityFragment extends Fragment implements  Response.Li
             SharedPreferences sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
             mQueue = VolleyRequestQueue.getInstance(getContext().getApplicationContext())
                     .getRequestQueue();
-            final JSONArrayRequest jsonRequest = new JSONArrayRequest(Request.Method
-                    .POST, getString(R.string.api_url_Period_list),
-                    sendData(sharedPre.getInt(getString(R.string.shared_userId),0)), this, this);
+
+            JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.POST, getString(R.string.api_url_Period_list),
+                    sendData(sharedPre.getInt(getString(R.string.shared_userId),0)),
+                    new Response.Listener<JSONArray>() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            try {
+                                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+                                mProgressbar.setVisibility(View.INVISIBLE);
+
+                                for(int i=0;i<response.length();i++){
+                                    start_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_send_json_period_startdate)))
+                                            +"  "+   String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_send_json_period_starttime))).substring(0,5));
+                                    end_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_send_json_period_enddate)))
+                                            +"  "+   String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_send_json_period_endtime))).substring(0,5));
+
+                                    duration_ArrayList.add("         "+String.valueOf(TimeUnit.MILLISECONDS.toDays((dateFormat.parse(String.valueOf(response.optJSONObject(i).
+                                            optString(getString(R.string.api_send_json_period_enddate))))).getTime() -
+                                            (dateFormat.parse(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_send_json_period_startdate)))).getTime()))));
+                                }
+                                adp = new VitalListAdapter(getContext(),duration_ArrayList,end_ArrayList,start_ArrayList,new ArrayList<Integer>());
+                                listview.setAdapter(adp);
+                            }
+                            catch(Exception e){
+                                mProgressbar.setVisibility(View.INVISIBLE);
+                                Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError errork) {
+                            mProgressbar.setVisibility(View.INVISIBLE);
+                            Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
             jsonRequest.setTag(REQUEST_TAG);
             jsonRequest.setRetryPolicy(new DefaultRetryPolicy(
                     0,
@@ -94,47 +128,13 @@ public class ListperiodActivityFragment extends Fragment implements  Response.Li
         }
     }
 
-    @Override
-    public void onResponse(JSONArray response) {
-        try {
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-            mProgressbar.setVisibility(View.INVISIBLE);
-
-            for(int i=0;i<response.length();i++){
-                start_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_send_json_period_startdate)))
-                     +"  "+   String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_send_json_period_starttime))).substring(0,5));
-                end_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_send_json_period_enddate)))
-                        +"  "+   String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_send_json_period_endtime))).substring(0,5));
-
-                duration_ArrayList.add(String.valueOf(TimeUnit.MILLISECONDS.toDays((dateFormat.parse(String.valueOf(response.optJSONObject(i).
-                        optString(getString(R.string.api_send_json_period_enddate))))).getTime() -
-                        (dateFormat.parse(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_send_json_period_startdate)))).getTime()))));
-            }
-
-            adp = new VitalListAdapter(getContext(),duration_ArrayList,end_ArrayList,start_ArrayList,new ArrayList<Integer>());
-
-            listview.setAdapter(adp);
-
-
-        }
-        catch(Exception e){
-            mProgressbar.setVisibility(View.INVISIBLE);
-            Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    public void onErrorResponse(VolleyError error) {
-        mProgressbar.setVisibility(View.INVISIBLE);
-        Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_SHORT).show();
-    }
-
-    public JSONObject sendData(int userid){
+    public JSONArray sendData(int userid){
         HashMap m = new HashMap();
         m.put(getString(R.string.api_send_json_list_arr_userid),userid);
         Log.e(REQUEST_TAG, "sendData: "+(new JSONObject(m)).toString());
-        return new JSONObject(m);
+        JSONArray x = new JSONArray();
+        x.put(new JSONObject(m));
+        return x;
     }
 
     public boolean isNetworkAvailable(final Context context) {
