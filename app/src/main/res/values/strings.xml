@@ -9,47 +9,53 @@
     <string name="shared_female">female</string>
 
 
-    <!--Development-->
-    <string name="api_url_login">http://40.118.64.109:5980/login</string>
-    <string name="api_url_signup">http://40.118.64.109:5980/register</string>
-    <string name="api_url_vital">http://40.118.64.109:5980/vital_signs</string>
-    <string name="api_url_period">http://40.118.64.109:5980/menstrual_cycle/set</string>
-    <string name="api_url_sugar">http://40.118.64.109:5980/sugar_test/set</string>
-    <string name="api_url_sugar_list">http://40.118.64.109:5980/sugar_test</string>
-    <string name="api_url_Period_list">http://40.118.64.109:5980/menstrual_cycle</string>
-    <string name="api_url_bloodVital">http://40.118.64.109:5980/blood_pressure/set</string>
-    <string name="api_url_heartVital">http://40.118.64.109:5980/heart_rate/set</string>
-    <string name="api_url_tempVital">http://40.118.64.109:5980/body_temperature/set</string>
-    <string name="api_url_respVital">http://40.118.64.109:5980/respiratory_rate/set</string>
-    <string name="api_url_bloodVital_list">http://40.118.64.109:5980/blood_pressure</string>
-    <string name="api_url_heartVital_list">http://40.118.64.109:5980/heart_rate</string>
-    <string name="api_url_tempVital_list">http://40.118.64.109:5980/body_temperature</string>
-    <string name="api_url_respVital_list">http://40.118.64.109:5980/respiratory_rate</string>
-    <string name="api_url_dentist">http://40.118.64.109:5980/dentist_visit/set</string>
-    <string name="api_url_dentist_list">http://40.118.64.109:5980/dentist_visit</string>
-    <string name="api_url_blood_columns">http://40.118.64.109:5980/blood_test/fields</string>
-    <string name="api_url_blood_list">http://40.118.64.109:5980/blood_test/all</string>
-    <string name="api_url_blood_get">http://40.118.64.109:5980/blood_test</string>
-    <string name="api_url_blood_set">http://40.118.64.109:5980/blood_test/set</string>
-    <!--Development-->
+    <!--Production-->
+    <!--<string name="api_url_login">http://40.118.64.109:5980/login</string>-->
+    <!--<string name="api_url_signup">http://40.118.64.109:5980/register</string>-->
+    <!--<string name="api_url_vital">http://40.118.64.109:5980/vital_signs</string>-->
+    <!--<string name="api_url_period">http://40.118.64.109:5980/menstrual_cycle/set</string>-->
+    <!--<string name="api_url_sugar">http://40.118.64.109:5980/sugar_test/set</string>-->
+    <!--<string name="api_url_sugar_list">http://40.118.64.109:5980/sugar_test</string>-->
+    <!--<string name="api_url_Period_list">http://40.118.64.109:5980/menstrual_cycle</string>-->
+    <!--<string name="api_url_bloodVital">http://40.118.64.109:5980/blood_pressure/set</string>-->
+    <!--<string name="api_url_heartVital">http://40.118.64.109:5980/heart_rate/set</string>-->
+    <!--<string name="api_url_tempVital">http://40.118.64.109:5980/body_temperature/set</string>-->
+    <!--<string name="api_url_respVital">http://40.118.64.109:5980/respiratory_rate/set</string>-->
+    <!--<string name="api_url_bloodVital_list">http://40.118.64.109:5980/blood_pressure</string>-->
+    <!--<string name="api_url_heartVital_list">http://40.118.64.109:5980/heart_rate</string>-->
+    <!--<string name="api_url_tempVital_list">http://40.118.64.109:5980/body_temperature</string>-->
+    <!--<string name="api_url_respVital_list">http://40.118.64.109:5980/respiratory_rate</string>-->
+    <!--<string name="api_url_dentist">http://40.118.64.109:5980/dentist_visit/set</string>-->
+    <!--<string name="api_url_dentist_list">http://40.118.64.109:5980/dentist_visit</string>-->
+    <!--<string name="api_url_blood_columns">http://40.118.64.109:5980/blood_test/fields</string>-->
+    <!--<string name="api_url_blood_list">http://40.118.64.109:5980/blood_test/all</string>-->
+    <!--<string name="api_url_blood_get">http://40.118.64.109:5980/blood_test</string>-->
+    <!--<string name="api_url_blood_set">http://40.118.64.109:5980/blood_test/set</string>-->
+    <!--Production-->
 
-    <!--Production-->
-    <!--<string name="api_url_login">http://hcp.cloudhub.io/login</string>-->
-    <!--<string name="api_url_signup">http://hcp.cloudhub.io/register</string>-->
-    <!--<string name="api_url_vital">http://hcp.cloudhub.io/vital_signs</string>-->
-    <!--<string name="api_url_period">http://hcp.cloudhub.io/menstrual_cycle/set</string>-->
-    <!--<string name="api_url_sugar">http://hcp.cloudhub.io/sugar_test/set</string>-->
-    <!--<string name="api_url_sugar_list">http://hcp.cloudhub.io/sugar_test</string>-->
-    <!--<string name="api_url_Period_list">http://hcp.cloudhub.io/menstrual_cycle</string>-->
-    <!--<string name="api_url_bloodVital">http://hcp.cloudhub.io/blood_pressure/set</string>-->
-    <!--<string name="api_url_heartVital">http://hcp.cloudhub.io/heart_rate/set</string>-->
-    <!--<string name="api_url_tempVital">http://hcp.cloudhub.io/body_temperature/set</string>-->
-    <!--<string name="api_url_respVital">http://hcp.cloudhub.io/respiratory_rate/set</string>-->
-    <!--<string name="api_url_bloodVital_list">http://hcp.cloudhub.io/blood_pressure</string>-->
-    <!--<string name="api_url_heartVital_list">http://hcp.cloudhub.io/heart_rate</string>-->
-    <!--<string name="api_url_tempVital_list">http://hcp.cloudhub.io/body_temperature</string>-->
-    <!--<string name="api_url_respVital_list">http://hcp.cloudhub.io/respiratory_rate</string>-->
-    <!--Production-->
+    <!--development-->
+    <string name="api_url_login">http://10.0.2.2:8088/login</string>
+    <string name="api_url_signup">http://10.0.2.2:8088/register</string>
+    <string name="api_url_vital">http://10.0.2.2:8088/vital_signs</string>
+    <string name="api_url_period">http://10.0.2.2:8088/menstrual_cycle/set</string>
+    <string name="api_url_sugar">http://10.0.2.2:8088/sugar_test/set</string>
+    <string name="api_url_sugar_list">http://10.0.2.2:8088/sugar_test</string>
+    <string name="api_url_Period_list">http://10.0.2.2:8088/menstrual_cycle</string>
+    <string name="api_url_bloodVital">http://10.0.2.2:8088/blood_pressure/set</string>
+    <string name="api_url_heartVital">http://10.0.2.2:8088/heart_rate/set</string>
+    <string name="api_url_tempVital">http://10.0.2.2:8088/body_temperature/set</string>
+    <string name="api_url_respVital">http://10.0.2.2:8088/respiratory_rate/set</string>
+    <string name="api_url_bloodVital_list">http://10.0.2.2:8088/blood_pressure</string>
+    <string name="api_url_heartVital_list">http://10.0.2.2:8088/heart_rate</string>
+    <string name="api_url_tempVital_list">http://10.0.2.2:8088/body_temperature</string>
+    <string name="api_url_respVital_list">http://10.0.2.2:8088/respiratory_rate</string>
+    <string name="api_url_dentist">http://10.0.2.2.109/dentist_visit/set</string>
+    <string name="api_url_dentist_list">http://10.0.2.2:8088/dentist_visit</string>
+    <string name="api_url_blood_columns">http://10.0.2.2:8088/blood_test/fields</string>
+    <string name="api_url_blood_list">http://10.0.2.2.8088/blood_test/all</string>
+    <string name="api_url_blood_get">http://10.0.2.2.8088/blood_test</string>
+    <string name="api_url_blood_set">http://10.0.2.2.8088/blood_test/set</string>
+    <!--development-->
 
     <string name="api_send_json_login_email">email</string>
     <string name="api_send_json_login_password">password</string>
