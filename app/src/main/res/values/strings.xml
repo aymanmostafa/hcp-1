@@ -49,12 +49,12 @@
     <string name="api_url_heartVital_list">http://10.0.2.2:8088/heart_rate</string>
     <string name="api_url_tempVital_list">http://10.0.2.2:8088/body_temperature</string>
     <string name="api_url_respVital_list">http://10.0.2.2:8088/respiratory_rate</string>
-    <string name="api_url_dentist">http://10.0.2.2.109/dentist_visit/set</string>
+    <string name="api_url_dentist">http://10.0.2.2:8088/dentist_visit/set</string>
     <string name="api_url_dentist_list">http://10.0.2.2:8088/dentist_visit</string>
     <string name="api_url_blood_columns">http://10.0.2.2:8088/blood_test/fields</string>
-    <string name="api_url_blood_list">http://10.0.2.2.8088/blood_test/all</string>
-    <string name="api_url_blood_get">http://10.0.2.2.8088/blood_test</string>
-    <string name="api_url_blood_set">http://10.0.2.2.8088/blood_test/set</string>
+    <string name="api_url_blood_list">http://10.0.2.2:8088/blood_test/all</string>
+    <string name="api_url_blood_get">http://10.0.2.2:8088/blood_test</string>
+    <string name="api_url_blood_set">http://10.0.2.2:8088/blood_test/set</string>
     <!--development-->
 
     <string name="api_send_json_login_email">email</string>
