@@ -1,5 +1,6 @@
 package com.sirtts.hcp;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -43,7 +44,7 @@ import java.util.HashMap;
 public class BloodActivityFragment extends Fragment implements View.OnClickListener,  Response.Listener<JSONArray>,
         Response.ErrorListener {
 
-    TextView tempTv,date,date2,time,time2,error,bloodtv;
+    TextView tempTv,date,date2,time,time2,error,bloodtv,info;
     Button save,view;
     EditText tempEt;
     LinearLayout tempLayout,mainListLayout;
@@ -68,6 +69,7 @@ public class BloodActivityFragment extends Fragment implements View.OnClickListe
 
         save = (Button) rootView.findViewById(R.id.blood_savebtnid);
         view = (Button) rootView.findViewById(R.id.blood_viewbtnid);
+        info = (Button) rootView.findViewById(R.id.blood_Infobtnid);
 
         date = (TextView) rootView.findViewById(R.id.blood_datetvid);
         date2 = (TextView) rootView.findViewById(R.id.blood_date2tvid);
@@ -78,6 +80,7 @@ public class BloodActivityFragment extends Fragment implements View.OnClickListe
 
         save.setOnClickListener(this);
         view.setOnClickListener(this);
+        info.setOnClickListener(this);
 
         date.setText(getCurrentDateAndTime("yyyy-MM-dd"));
         time.setText(getCurrentDateAndTime("HH:mm"));
@@ -281,6 +284,17 @@ public class BloodActivityFragment extends Fragment implements View.OnClickListe
                     mQueue.add(jsonRequest);
                 }
             }
+        }
+        else if(v == info){
+            AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getContext());
+
+            alertBuilder.setMessage("Blood tests are an essential diagnostic tool. Blood is made" +
+                    " up of different kinds of cells and contains other compounds, including " +
+                    "various salts and certain proteins. Blood tests reveal details about " +
+                    "these Blood cells and, Blood compounds, salts and proteins.");
+
+            AlertDialog alertDialog = alertBuilder.create();
+            alertDialog.show();
         }
     }
 

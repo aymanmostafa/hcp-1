@@ -1,5 +1,6 @@
 package com.sirtts.hcp;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -42,7 +43,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class PeriodActivityFragment extends Fragment implements View.OnClickListener{
 
-    Button view, save;
+    Button view, save,info;
     TextView startdate, starttime, error, enddate, endtime;
     ProgressBar mProgressbar;
     SharedPreferences sharedPre;
@@ -60,6 +61,7 @@ public class PeriodActivityFragment extends Fragment implements View.OnClickList
 
         view = (Button) rootView.findViewById(R.id.period_Viewbtnid);
         save = (Button) rootView.findViewById(R.id.period_savebtnid);
+        save = (Button) rootView.findViewById(R.id.period_Infobtnid);
 
         startdate = (TextView) rootView.findViewById(R.id.period_startdatetvid);
         starttime = (TextView) rootView.findViewById(R.id.period_starttimetvid);
@@ -72,6 +74,7 @@ public class PeriodActivityFragment extends Fragment implements View.OnClickList
 
         view.setOnClickListener(this);
         save.setOnClickListener(this);
+        info.setOnClickListener(this);
 
         startdate.setText(getCurrentDateAndTime("yyyy-MM-dd"));
         starttime.setText(getCurrentDateAndTime("HH:mm"));
@@ -171,7 +174,9 @@ public class PeriodActivityFragment extends Fragment implements View.OnClickList
             long duration = 0;
             try {
                 DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                duration = TimeUnit.MILLISECONDS.toDays((dateFormat.parse(enddate.getText().toString())).getTime() - (dateFormat.parse(startdate.getText().toString())).getTime());
+                duration = TimeUnit.MILLISECONDS.toDays((dateFormat.parse(enddate.getText()
+                        .toString())).getTime() - (dateFormat.parse(startdate.getText()
+                        .toString())).getTime());
 
             }catch(ParseException e){
                 error.setText("Unexpected Error happened!");
@@ -195,18 +200,22 @@ public class PeriodActivityFragment extends Fragment implements View.OnClickList
 
                     mProgressbar.setVisibility(View.VISIBLE);
 
-                    JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, getString(R.string.api_url_period),
-                            sendData(sharedPre.getInt(getString(R.string.shared_userId), 0), startdate.getText().toString(), starttime.getText().toString(),
+                    JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST,
+                            getString(R.string.api_url_period),
+                            sendData(sharedPre.getInt(getString(R.string.shared_userId), 0),
+                                    startdate.getText().toString(), starttime.getText().toString(),
                                     enddate.getText().toString(), endtime.getText().toString()),
                             new Response.Listener<JSONObject>() {
                                 @Override
                                 public void onResponse(JSONObject response) {
                                     try {
                                         mProgressbar.setVisibility(View.INVISIBLE);
-                                        Boolean userStatus = ((JSONObject) response).optBoolean(getString(R.string.api_receive_json_status));
+                                        Boolean userStatus = ((JSONObject) response).
+                                                optBoolean(getString(R.string.api_receive_json_status));
 
                                         if (userStatus) {
-                                            Toast.makeText(getActivity(), "Data Saved!", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(getActivity(), "Data Saved!",
+                                                    Toast.LENGTH_LONG).show();
                                         } else {
                                             error.setText("Unexpected Error happened!");
                                         }
@@ -232,9 +241,24 @@ public class PeriodActivityFragment extends Fragment implements View.OnClickList
                 }
             }
         }
+        else if(v == info){
+            AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getContext());
+
+            alertBuilder.setTitle("Menstrual cycle");
+            alertBuilder.setMessage("The menstrual cycle is the regular natural change that " +
+                    "occurs in the female reproductive system (specifically the uterus and " +
+                    "ovaries) that makes pregnancy possible. The cycle is required for the " +
+                    "production of ovocytes, and for the preparation of the uterus for" +
+                    " pregnancy. Up to 80% of women report having some symptoms during " +
+                    "the one to two weeks prior to menstruation.");
+
+            AlertDialog alertDialog = alertBuilder.create();
+            alertDialog.show();
+        }
     }
 
-    public JSONObject sendData(int userid, String startdate, String starttime, String enddate, String endtime) {
+    public JSONObject sendData(int userid, String startdate, String starttime,
+                               String enddate, String endtime) {
         HashMap m = new HashMap();
         m.put(getString(R.string.api_send_json_period_userId), userid);
         m.put(getString(R.string.api_send_json_period_startdate), startdate);
@@ -246,8 +270,10 @@ public class PeriodActivityFragment extends Fragment implements View.OnClickList
     }
 
     public boolean isNetworkAvailable(final Context context) {
-        final ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
-        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
+        final ConnectivityManager connectivityManager = ((ConnectivityManager)
+                context.getSystemService(Context.CONNECTIVITY_SERVICE));
+        return connectivityManager.getActiveNetworkInfo() != null &&
+                connectivityManager.getActiveNetworkInfo().isConnected();
     }
 
     public String getCurrentDateAndTime(String format) {

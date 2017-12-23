@@ -1,5 +1,6 @@
 package com.sirtts.hcp;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -39,7 +40,7 @@ import java.util.HashMap;
  */
 public class SugarActivityFragment extends Fragment implements View.OnClickListener{
 
-    Button view,save;
+    Button view,save,info;
     TextView date,time,error,date2,time2;
     EditText mg;
     ProgressBar mProgressbar;
@@ -59,6 +60,7 @@ public class SugarActivityFragment extends Fragment implements View.OnClickListe
 
         view = (Button) rootView.findViewById(R.id.sugar_Viewbtnid);
         save = (Button) rootView.findViewById(R.id.sugar_savebtnid);
+        info = (Button) rootView.findViewById(R.id.sugar_Infobtnid);
 
         date = (TextView) rootView.findViewById(R.id.sugar_datetvid);
         time = (TextView) rootView.findViewById(R.id.sugar_timetvid);
@@ -72,6 +74,7 @@ public class SugarActivityFragment extends Fragment implements View.OnClickListe
 
         view.setOnClickListener(this);
         save.setOnClickListener(this);
+        info.setOnClickListener(this);
 
         date.setText(getCurrentDateAndTime("yyyy-MM-dd"));
         time.setText(getCurrentDateAndTime("HH:mm"));
@@ -194,6 +197,18 @@ public class SugarActivityFragment extends Fragment implements View.OnClickListe
                     mQueue.add(jsonRequest);
                 }
             }
+        }
+        else if(v == info){
+            AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getContext());
+
+            alertBuilder.setTitle("Diabetes");
+            alertBuilder.setMessage("commonly referred to as diabetes, is a group of metabolic" +
+                    " disorders in which there are high blood sugar levels over a prolonged " +
+                    "period. Symptoms of high blood sugar include frequent urination, " +
+                    "increased thirst, and increased hunger.");
+
+            AlertDialog alertDialog = alertBuilder.create();
+            alertDialog.show();
         }
     }
 

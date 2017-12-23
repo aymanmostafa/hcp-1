@@ -1,8 +1,10 @@
 package com.sirtts.hcp;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -41,7 +43,8 @@ import java.util.HashMap;
  */
 public class VitalSignsActivityFragment extends Fragment  implements View.OnClickListener{
 
-    Button view_blood,save_blood,view_heart,save_heart,view_resp,save_resp,view_temp,save_temp;
+    Button view_blood,save_blood,view_heart,save_heart,view_resp,save_resp,view_temp,save_temp,
+            info_blood,info_heart,info_resp,info_temp;
     TextView date_blood,time_blood,date_heart,time_heart,date_resp,time_resp,date_temp,time_temp;
     EditText sys_blood,dia_blood,bpm_heart,bpm_resp,celsuis_temp;
     ProgressBar mProgressbar_blood,mProgressbar_heart,mProgressbar_resp,mProgressbar_temp;
@@ -61,6 +64,7 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
         //blood
         view_blood = (Button) rootView.findViewById(R.id.bloodVital_Viewbtnid);
         save_blood = (Button) rootView.findViewById(R.id.bloodVital_savebtnid);
+        info_blood = (Button) rootView.findViewById(R.id.bloodVital_Infobtnid);
 
         date_blood = (TextView) rootView.findViewById(R.id.bloodVital_datetvid);
         time_blood = (TextView) rootView.findViewById(R.id.bloodVital_timetvid);
@@ -72,6 +76,7 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
 
         view_blood.setOnClickListener(this);
         save_blood.setOnClickListener(this);
+        info_blood.setOnClickListener(this);
 
         date_blood.setText(getCurrentDateAndTime("yyyy-MM-dd"));
         time_blood.setText(getCurrentDateAndTime("HH:mm"));
@@ -82,6 +87,7 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
         //heart
         view_heart = (Button) rootView.findViewById(R.id.heartVital_Viewbtnid);
         save_heart = (Button) rootView.findViewById(R.id.heartVital_savebtnid);
+        info_heart = (Button) rootView.findViewById(R.id.heartVital_Infobtnid);
 
         date_heart = (TextView) rootView.findViewById(R.id.heartVital_datetvid);
         time_heart = (TextView) rootView.findViewById(R.id.heartVital_timetvid);
@@ -92,6 +98,7 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
 
         view_heart.setOnClickListener(this);
         save_heart.setOnClickListener(this);
+        info_heart.setOnClickListener(this);
 
         date_heart.setText(getCurrentDateAndTime("yyyy-MM-dd"));
         time_heart.setText(getCurrentDateAndTime("HH:mm"));
@@ -102,6 +109,7 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
         //resp
         view_resp = (Button) rootView.findViewById(R.id.respVital_Viewbtnid);
         save_resp = (Button) rootView.findViewById(R.id.respVital_savebtnid);
+        info_resp = (Button) rootView.findViewById(R.id.respVital_Infobtnid);
 
         date_resp = (TextView) rootView.findViewById(R.id.respVital_datetvid);
         time_resp = (TextView) rootView.findViewById(R.id.respVital_timetvid);
@@ -112,6 +120,7 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
 
         view_resp.setOnClickListener(this);
         save_resp.setOnClickListener(this);
+        info_resp.setOnClickListener(this);
 
         date_resp.setText(getCurrentDateAndTime("yyyy-MM-dd"));
         time_resp.setText(getCurrentDateAndTime("HH:mm"));
@@ -122,6 +131,7 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
         //temp
         view_temp = (Button) rootView.findViewById(R.id.tempVital_Viewbtnid);
         save_temp = (Button) rootView.findViewById(R.id.tempVital_savebtnid);
+        info_temp = (Button) rootView.findViewById(R.id.tempVital_Infobtnid);
 
         date_temp = (TextView) rootView.findViewById(R.id.tempVital_datetvid);
         time_temp = (TextView) rootView.findViewById(R.id.tempVital_timetvid);
@@ -132,6 +142,7 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
 
         view_temp.setOnClickListener(this);
         save_temp.setOnClickListener(this);
+        info_temp.setOnClickListener(this);
 
         date_temp.setText(getCurrentDateAndTime("yyyy-MM-dd"));
         time_temp.setText(getCurrentDateAndTime("HH:mm"));
@@ -180,7 +191,8 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
                 m.put(getString(R.string.api_send_json_bloodVital_sys), Integer.valueOf(sys_blood.getText().toString()));
                 m.put(getString(R.string.api_send_json_bloodVital_dia), Integer.valueOf(dia_blood.getText().toString()));
 
-                requestTheRequest(mProgressbar_blood, getString(R.string.api_url_bloodVital), new JSONObject(m));
+                requestTheRequest(mProgressbar_blood, getString(R.string.api_url_bloodVital),
+                        new JSONObject(m));
             }
         }
         else if(v == save_heart){
@@ -207,7 +219,8 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
 
                 m.put(getString(R.string.api_send_json_heartVital_cel), Integer.valueOf(bpm_heart.getText().toString()));
 
-                requestTheRequest(mProgressbar_heart, getString(R.string.api_url_heartVital), new JSONObject(m));
+                requestTheRequest(mProgressbar_heart, getString(R.string.api_url_heartVital),
+                        new JSONObject(m));
             }
         }
         else if(v == save_resp){
@@ -234,7 +247,8 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
 
                 m.put(getString(R.string.api_send_json_respVital_cel), Integer.valueOf(bpm_resp.getText().toString()));
 
-                requestTheRequest(mProgressbar_resp, getString(R.string.api_url_respVital), new JSONObject(m));
+                requestTheRequest(mProgressbar_resp, getString(R.string.api_url_respVital),
+                        new JSONObject(m));
             }
         }
         else if(v == save_temp){
@@ -261,7 +275,8 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
 
                 m.put(getString(R.string.api_send_json_tempVital_cel), Float.valueOf(celsuis_temp.getText().toString()));
 
-                requestTheRequest(mProgressbar_temp, getString(R.string.api_url_tempVital), new JSONObject(m));
+                requestTheRequest(mProgressbar_temp, getString(R.string.api_url_tempVital),
+                        new JSONObject(m));
             }
         }
         else if(v == view_blood){
@@ -276,7 +291,60 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
         else if(v == view_temp){
             startActivity(new Intent(getContext(), ListtempVitalSignsActivity.class));
         }
+        else if(v == info_blood){
+            AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getContext());
 
+            alertBuilder.setTitle("Blood Pressure");
+            alertBuilder.setMessage("When your heart beats, it squeezes and pushes blood " +
+                    "through your arteries to the rest of your body. This force creates" +
+                    " pressure on those blood vessels, and that's your systolic blood" +
+                    " pressure.  A normal systolic pressure is below 120. " +
+                    " A reading of 140 or more is high blood pressure");
+
+            AlertDialog alertDialog = alertBuilder.create();
+            alertDialog.show();
+        }
+        else if(v == info_heart){
+            AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getContext());
+
+            alertBuilder.setTitle("Heart Rate");
+            alertBuilder.setMessage("Heart rate is the speed of the heartbeat measured by the" +
+                    " number of contractions of the heart per minute (bpm). The heart rate can " +
+                    "vary according to the body's physical needs, including the need to absorb" +
+                    " oxygen and excrete carbon dioxide. It is usually equal or close to the " +
+                    "pulse measured at any peripheral point.");
+
+            AlertDialog alertDialog = alertBuilder.create();
+            alertDialog.show();
+        }
+        else if(v == info_temp){
+            AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getContext());
+
+            alertBuilder.setTitle("Body Temperature");
+            alertBuilder.setMessage("The normal human body temperature range is " +
+                    "typically stated as 36.5–37.5 °C .Individual body temperature " +
+                    "depends upon the age, exertion, infection, sex, time of day, and " +
+                    "reproductive status of the subject, the place in the body at which " +
+                    "the measurement is made, the subject's state of consciousness " +
+                    "(waking or sleeping), activity level, and emotional state.");
+
+            AlertDialog alertDialog = alertBuilder.create();
+            alertDialog.show();
+        }
+        else if(v == info_resp){
+            AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getContext());
+
+            alertBuilder.setTitle("Respiratary Rate");
+            alertBuilder.setMessage("The respiratory rate in humans is measured when a person is " +
+                    "at rest and involves counting the number of breaths for one minute by " +
+                    "counting how many times the chest rises. An optical breath rate sensor " +
+                    "can be used for monitoring patients during a magnetic resonance imaging " +
+                    "scan. Respiration rates may increase with fever, illness, " +
+                    "or other medical conditions.");
+
+            AlertDialog alertDialog = alertBuilder.create();
+            alertDialog.show();
+        }
     }
 
     @Override
@@ -297,8 +365,10 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
     }
 
     public boolean isNetworkAvailable(final Context context) {
-        final ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
-        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
+        final ConnectivityManager connectivityManager = ((ConnectivityManager)
+                context.getSystemService(Context.CONNECTIVITY_SERVICE));
+        return connectivityManager.getActiveNetworkInfo() != null &&
+                connectivityManager.getActiveNetworkInfo().isConnected();
     }
 
     public String getCurrentDateAndTime(String format)
@@ -360,12 +430,14 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
                             if (userStatus) {
                                 Toast.makeText(getActivity(), "Data Saved!", Toast.LENGTH_LONG).show();
                             } else {
-                                Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity(), "Unexpected Error happened!",
+                                        Toast.LENGTH_LONG).show();
                             }
                         }
                         catch(Exception e){
                             mProgressbar.setVisibility(View.INVISIBLE);
-                            Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "Unexpected Error happened!",
+                                    Toast.LENGTH_LONG).show();
                         }
                     }
                 },
@@ -373,7 +445,8 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
                     @Override
                     public void onErrorResponse(VolleyError errork) {
                         mProgressbar.setVisibility(View.INVISIBLE);
-                        Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "Unexpected Error happened!",
+                                Toast.LENGTH_LONG).show();
                     }
                 });
 
