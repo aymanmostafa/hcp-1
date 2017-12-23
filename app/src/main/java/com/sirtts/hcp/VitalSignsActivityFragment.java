@@ -1,6 +1,7 @@
 package com.sirtts.hcp;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,8 +13,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -27,18 +31,24 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class VitalSignsActivityFragment extends Fragment  implements View.OnClickListener{
-    Button blood,temp,heart,resp;
-    TextView lastBlood,lastTemp,lastHeart,lastResp,error;
-    ProgressBar mProgressbar;
+
+    Button view_blood,save_blood,view_heart,save_heart,view_resp,save_resp,view_temp,save_temp;
+    TextView date_blood,time_blood,date_heart,time_heart,date_resp,time_resp,date_temp,time_temp;
+    EditText sys_blood,dia_blood,bpm_heart,bpm_resp,celsuis_temp;
+    ProgressBar mProgressbar_blood,mProgressbar_heart,mProgressbar_resp,mProgressbar_temp;
+    SharedPreferences sharedPre;
+    DatePickerDialog datePickerDialog;
     private RequestQueue mQueue;
-    private SharedPreferences sharedPre ;
-    public static final String REQUEST_TAG = "vitalVolleyActivity";
+    public static final String REQUEST_TAG = "VitalSignsVolleyActivity";
 
     public VitalSignsActivityFragment() {
     }
@@ -48,145 +58,330 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_vital_signs, container, false);
 
-        blood = (Button) rootView.findViewById(R.id.vital_bloodPressurebtnid);
-        temp = (Button) rootView.findViewById(R.id.vital_bodyTemperaturebtnid);
-        heart = (Button) rootView.findViewById(R.id.vital_heartRatebtnid);
-        resp = (Button) rootView.findViewById(R.id.vital_respirataryRatebtnid);
+        //blood
+        view_blood = (Button) rootView.findViewById(R.id.bloodVital_Viewbtnid);
+        save_blood = (Button) rootView.findViewById(R.id.bloodVital_savebtnid);
 
-        lastBlood = (TextView) rootView.findViewById(R.id.vital_bloodPressuretvid);
-        lastTemp = (TextView) rootView.findViewById(R.id.vital_bodyTemperaturetvid);
-        lastHeart = (TextView) rootView.findViewById(R.id.vital_heartRatetvid);
-        lastResp = (TextView) rootView.findViewById(R.id.vital_respirataryRatetvid);
-        error = (TextView) rootView.findViewById(R.id.vital_error);
+        date_blood = (TextView) rootView.findViewById(R.id.bloodVital_datetvid);
+        time_blood = (TextView) rootView.findViewById(R.id.bloodVital_timetvid);
 
-        mProgressbar = (ProgressBar) rootView.findViewById(R.id.vital_progressBar);
+        sys_blood = (EditText) rootView.findViewById(R.id.bloodVital_systxtid);
+        dia_blood = (EditText) rootView.findViewById(R.id.bloodVital_diatxtid);
 
-        blood.setOnClickListener(this);
-        temp.setOnClickListener(this);
-        heart.setOnClickListener(this);
-        resp.setOnClickListener(this);
+        mProgressbar_blood = (ProgressBar) rootView.findViewById(R.id.bloodVital_progressBar);
+
+        view_blood.setOnClickListener(this);
+        save_blood.setOnClickListener(this);
+
+        date_blood.setText(getCurrentDateAndTime("yyyy-MM-dd"));
+        time_blood.setText(getCurrentDateAndTime("HH:mm"));
+
+        date_blood.setOnClickListener(this);
+        time_blood.setOnClickListener(this);
+
+        //heart
+        view_heart = (Button) rootView.findViewById(R.id.heartVital_Viewbtnid);
+        save_heart = (Button) rootView.findViewById(R.id.heartVital_savebtnid);
+
+        date_heart = (TextView) rootView.findViewById(R.id.heartVital_datetvid);
+        time_heart = (TextView) rootView.findViewById(R.id.heartVital_timetvid);
+
+        bpm_heart = (EditText) rootView.findViewById(R.id.heartVital_bpmtxtid);
+
+        mProgressbar_heart = (ProgressBar) rootView.findViewById(R.id.heartVital_progressBar);
+
+        view_heart.setOnClickListener(this);
+        save_heart.setOnClickListener(this);
+
+        date_heart.setText(getCurrentDateAndTime("yyyy-MM-dd"));
+        time_heart.setText(getCurrentDateAndTime("HH:mm"));
+
+        date_heart.setOnClickListener(this);
+        time_heart.setOnClickListener(this);
+
+        //resp
+        view_resp = (Button) rootView.findViewById(R.id.respVital_Viewbtnid);
+        save_resp = (Button) rootView.findViewById(R.id.respVital_savebtnid);
+
+        date_resp = (TextView) rootView.findViewById(R.id.respVital_datetvid);
+        time_resp = (TextView) rootView.findViewById(R.id.respVital_timetvid);
+
+        bpm_resp = (EditText) rootView.findViewById(R.id.respVital_bpmtxtid);
+
+        mProgressbar_resp = (ProgressBar) rootView.findViewById(R.id.respVital_progressBar);
+
+        view_resp.setOnClickListener(this);
+        save_resp.setOnClickListener(this);
+
+        date_resp.setText(getCurrentDateAndTime("yyyy-MM-dd"));
+        time_resp.setText(getCurrentDateAndTime("HH:mm"));
+
+        date_resp.setOnClickListener(this);
+        time_resp.setOnClickListener(this);
+
+        //temp
+        view_temp = (Button) rootView.findViewById(R.id.tempVital_Viewbtnid);
+        save_temp = (Button) rootView.findViewById(R.id.tempVital_savebtnid);
+
+        date_temp = (TextView) rootView.findViewById(R.id.tempVital_datetvid);
+        time_temp = (TextView) rootView.findViewById(R.id.tempVital_timetvid);
+
+        celsuis_temp = (EditText) rootView.findViewById(R.id.tempVital_celsiustxtid);
+
+        mProgressbar_temp = (ProgressBar) rootView.findViewById(R.id.tempVital_progressBar);
+
+        view_temp.setOnClickListener(this);
+        save_temp.setOnClickListener(this);
+
+        date_temp.setText(getCurrentDateAndTime("yyyy-MM-dd"));
+        time_temp.setText(getCurrentDateAndTime("HH:mm"));
+
+        date_temp.setOnClickListener(this);
+        time_temp.setOnClickListener(this);
+
 
         return rootView;
     }
 
     @Override
     public void onClick(View v) {
-        if(v == blood){
-            startActivity(new Intent(getContext(), BloodVitalSignsActivity.class));
+        if(v == date_blood || v == date_heart || v == date_temp || v == date_resp){
+            datePicker((TextView) v);
         }
-        else if(v == temp){
-            startActivity(new Intent(getContext(), TempVitalSignsActivity.class));
+        else if(v == time_blood || v == time_heart || v == time_temp || v == time_resp){
+            timePacker((TextView) v);
         }
-        else if(v == heart){
-            startActivity(new Intent(getContext(), HeartVitalSignsActivity.class));
+        else if(v == save_blood){
+            if(date_blood.getText().toString().equals("")){
+                date_blood.requestFocus();
+                date_blood.setError("Enter The Date");
+            }
+            else if(time_blood.getText().toString().equals("")){
+                time_blood.requestFocus();
+                time_blood.setError("Enter The Time");
+            }
+            else if(sys_blood.getText().toString().equals("")){
+                sys_blood.requestFocus();
+                sys_blood.setError("Enter Your Systolic");
+            }
+            else if(dia_blood.getText().toString().equals("")){
+                dia_blood.requestFocus();
+                dia_blood.setError("Enter Your Diastolic");
+            }
+            else {
+                sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
+
+                HashMap m = new HashMap();
+
+                m.put(getString(R.string.api_send_json_vital_userId), sharedPre.getInt(getString(R.string.shared_userId), 0));
+                m.put(getString(R.string.api_send_json_bloodVital_date), date_blood.getText().toString());
+                m.put(getString(R.string.api_send_json_bloodVital_time), time_blood.getText().toString());
+
+                m.put(getString(R.string.api_send_json_bloodVital_sys), Integer.valueOf(sys_blood.getText().toString()));
+                m.put(getString(R.string.api_send_json_bloodVital_dia), Integer.valueOf(dia_blood.getText().toString()));
+
+                requestTheRequest(mProgressbar_blood, getString(R.string.api_url_bloodVital), new JSONObject(m));
+            }
         }
-        else if(v == resp){
-            startActivity(new Intent(getContext(), RespVitalSignsActivity.class));
+        else if(v == save_heart){
+            if(date_heart.getText().toString().equals("")){
+                date_heart.requestFocus();
+                date_heart.setError("Enter The Date");
+            }
+            else if(time_heart.getText().toString().equals("")){
+                time_heart.requestFocus();
+                time_heart.setError("Enter The Time");
+            }
+            else if(bpm_heart.getText().toString().equals("")){
+                bpm_heart.requestFocus();
+                bpm_heart.setError("Enter Your BPM");
+            }
+            else {
+                sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
+
+                HashMap m = new HashMap();
+
+                m.put(getString(R.string.api_send_json_vital_userId), sharedPre.getInt(getString(R.string.shared_userId), 0));
+                m.put(getString(R.string.api_send_json_heartVital_date), date_heart.getText().toString());
+                m.put(getString(R.string.api_send_json_heartVital_time), time_heart.getText().toString());
+
+                m.put(getString(R.string.api_send_json_heartVital_cel), Integer.valueOf(bpm_heart.getText().toString()));
+
+                requestTheRequest(mProgressbar_heart, getString(R.string.api_url_heartVital), new JSONObject(m));
+            }
         }
+        else if(v == save_resp){
+            if(date_resp.getText().toString().equals("")){
+                date_resp.requestFocus();
+                date_resp.setError("Enter The Date");
+            }
+            else if(time_resp.getText().toString().equals("")){
+                time_resp.requestFocus();
+                time_resp.setError("Enter The Time");
+            }
+            else if(bpm_resp.getText().toString().equals("")){
+                bpm_resp.requestFocus();
+                bpm_resp.setError("Enter Your Breaths/Min.");
+            }
+            else {
+                sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
+
+                HashMap m = new HashMap();
+
+                m.put(getString(R.string.api_send_json_vital_userId), sharedPre.getInt(getString(R.string.shared_userId), 0));
+                m.put(getString(R.string.api_send_json_respVital_date), date_resp.getText().toString());
+                m.put(getString(R.string.api_send_json_respVital_time), time_resp.getText().toString());
+
+                m.put(getString(R.string.api_send_json_respVital_cel), Integer.valueOf(bpm_resp.getText().toString()));
+
+                requestTheRequest(mProgressbar_resp, getString(R.string.api_url_respVital), new JSONObject(m));
+            }
+        }
+        else if(v == save_temp){
+            if(date_temp.getText().toString().equals("")){
+                date_temp.requestFocus();
+                date_temp.setError("Enter The Date");
+            }
+            else if(time_temp.getText().toString().equals("")){
+                time_temp.requestFocus();
+                time_temp.setError("Enter The Time");
+            }
+            else if(celsuis_temp.getText().toString().equals("")){
+                celsuis_temp.requestFocus();
+                celsuis_temp.setError("Enter Your Temperature");
+            }
+            else {
+                sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
+
+                HashMap m = new HashMap();
+
+                m.put(getString(R.string.api_send_json_vital_userId), sharedPre.getInt(getString(R.string.shared_userId), 0));
+                m.put(getString(R.string.api_send_json_tempVital_date), date_temp.getText().toString());
+                m.put(getString(R.string.api_send_json_tempVital_time), time_temp.getText().toString());
+
+                m.put(getString(R.string.api_send_json_tempVital_cel), Float.valueOf(celsuis_temp.getText().toString()));
+
+                requestTheRequest(mProgressbar_temp, getString(R.string.api_url_tempVital), new JSONObject(m));
+            }
+        }
+        else if(v == view_blood){
+            startActivity(new Intent(getContext(), ListBloodVitalSignsActivity.class));
+        }
+        else if(v == view_heart){
+            startActivity(new Intent(getContext(), ListheartVitalSignsActivity.class));
+        }
+        else if(v == view_resp){
+            startActivity(new Intent(getContext(), ListrespVitalSignsActivity.class));
+        }
+        else if(v == view_temp){
+            startActivity(new Intent(getContext(), ListtempVitalSignsActivity.class));
+        }
+
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
-        error.setText("");
-        mProgressbar.setVisibility(View.VISIBLE);
-        sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged),Context.MODE_PRIVATE);
-
         mQueue = VolleyRequestQueue.getInstance(getContext().getApplicationContext())
                 .getRequestQueue();
-
-        if (!isNetworkAvailable(getContext()))
-            Toast.makeText(getActivity(), "Failed to Connect! Check your Connection", Toast.LENGTH_SHORT).show();
-        else {
-
-            JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.POST, getString(R.string.api_url_vital), sendData(sharedPre.getInt(getString(R.string.shared_userId), 0)),
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                mProgressbar.setVisibility(View.INVISIBLE);
-
-                                JSONArray bloodJsonarr = response.optJSONArray(getString(R.string.api_receive_json_vital_bloodPressure));
-                                JSONArray tempJsonarr = response.optJSONArray(getString(R.string.api_receive_json_vital_bodyTemp));
-                                JSONArray heartJsonarr = response.optJSONArray(getString(R.string.api_receive_json_vital_heartRate));
-                                JSONArray respJsonarr = response.optJSONArray(getString(R.string.api_receive_json_vital_RespRate));
-
-                                if (bloodJsonarr.length() > 0) {
-                                    JSONObject bloodJsonObj = bloodJsonarr.getJSONObject(0);
-                                    lastBlood.setText(bloodJsonObj.optInt(
-                                            getString(R.string.api_receive_json_vital_bloodPressure_systolic))
-                                            + "/" + bloodJsonObj.optInt(getString(R.string.api_receive_json_vital_bloodPressure_diastolic))
-                                            + " on " + bloodJsonObj.optString(getString(R.string.api_receive_json_vital_date))
-                                    );
-                                } else lastBlood.setText("");
-
-                                if (tempJsonarr.length() > 0) {
-                                    JSONObject tempJsonObj = tempJsonarr.getJSONObject(0);
-                                    lastTemp.setText(tempJsonObj.optDouble(getString(R.string.api_receive_json_vital_bodyTemp_celsius)) +
-                                            " °C on " + tempJsonObj.optString(getString(R.string.api_receive_json_vital_date))
-                                    );
-                                } else lastTemp.setText("");
-
-                                if (heartJsonarr.length() > 0) {
-                                    JSONObject heartJsonObj = heartJsonarr.getJSONObject(0);
-                                    lastHeart.setText(heartJsonObj.optInt(getString(R.string.api_receive_json_vital_heartRate_bpm)) +
-                                            " bpm on " + heartJsonObj.optString(getString(R.string.api_receive_json_vital_date))
-                                    );
-                                } else lastHeart.setText("");
-
-                                if (respJsonarr.length() > 0) {
-                                    JSONObject respJsonObj = respJsonarr.getJSONObject(0);
-                                    lastResp.setText(respJsonObj.optInt(getString(R.string.api_receive_json_vital_RespRate_bpm)) +
-                                            " Breath/Min. on " + respJsonObj.optString(getString(R.string.api_receive_json_vital_date))
-                                    );
-                                } else lastResp.setText("");
-
-
-                            } catch (Exception e) {
-                                mProgressbar.setVisibility(View.INVISIBLE);
-                                error.setText("Can't fetch your data!");
-                            }
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError errork) {
-                            mProgressbar.setVisibility(View.INVISIBLE);
-                            error.setText("Can't fetch your data!");
-                        }
-                    });
-
-            jsObjRequest.setTag(REQUEST_TAG);
-            jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(
-                    0,
-                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
-            mQueue.add(jsObjRequest);
-        }
 
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        mProgressbar.setVisibility(View.INVISIBLE);
+        //mProgressbar.setVisibility(View.INVISIBLE);
         if (mQueue != null) {
             mQueue.cancelAll(REQUEST_TAG);
         }
     }
 
-
-    public JSONObject sendData(int user_id){
-        HashMap<String,Integer> m = new HashMap<>();
-        m.put(getString(R.string.api_send_json_vital_userId),user_id);
-        Log.e(REQUEST_TAG, "sendData: "+(new JSONObject(m)).toString());
-        return new JSONObject(m);
-    }
-
     public boolean isNetworkAvailable(final Context context) {
         final ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
         return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
+    }
+
+    public String getCurrentDateAndTime(String format)
+    {
+        Calendar c = Calendar.getInstance();
+
+        SimpleDateFormat df = new SimpleDateFormat(format);
+        String formattedDate = df.format(c.getTime());
+
+        return formattedDate;
+    }
+
+    public void datePicker(final TextView date){
+        final Calendar c = Calendar.getInstance();
+        int mYear = c.get(Calendar.YEAR);
+        int mMonth = c.get(Calendar.MONTH);
+        int mDay = c.get(Calendar.DAY_OF_MONTH);
+
+        datePickerDialog = new DatePickerDialog(getContext(),
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
+                        date.setText(year +"-" + (monthOfYear + 1) + "-" +dayOfMonth);
+                    }
+                }, mYear, mMonth, mDay);
+        datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
+        datePickerDialog.show();
+    }
+
+    public void timePacker(final TextView time){
+        Calendar mcurrentTime = Calendar.getInstance();
+        int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+        int minute = mcurrentTime.get(Calendar.MINUTE);
+        TimePickerDialog mTimePicker;
+        mTimePicker = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                time.setText( selectedHour + ":" + selectedMinute);
+            }
+        }, hour, minute, false);
+        mTimePicker.setTitle("Select Time");
+        mTimePicker.show();
+    }
+
+    public void requestTheRequest(final ProgressBar mProgressbar, String URL, JSONObject data){
+         mProgressbar.setVisibility(View.VISIBLE);
+
+        Log.e("VitalSend-->", "sendData:"+(data).toString());
+
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, URL, data,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            mProgressbar.setVisibility(View.INVISIBLE);
+                            Boolean userStatus = ((JSONObject) response).optBoolean(getString(R.string.api_receive_json_status));
+
+                            if (userStatus) {
+                                Toast.makeText(getActivity(), "Data Saved!", Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                        catch(Exception e){
+                            mProgressbar.setVisibility(View.INVISIBLE);
+                            Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError errork) {
+                        mProgressbar.setVisibility(View.INVISIBLE);
+                        Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        jsonRequest.setTag(REQUEST_TAG);
+        jsonRequest.setRetryPolicy(new DefaultRetryPolicy(
+                0,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        mQueue.add(jsonRequest);
     }
 }

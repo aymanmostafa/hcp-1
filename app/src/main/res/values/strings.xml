@@ -7,30 +7,30 @@
     <string name="shared_isUserLoged">isUserloged</string>
     <string name="shared_userId">userId</string>
     <string name="shared_female">female</string>
-
+''
 
     <!--Development-->
-    <string name="api_url_login">http://40.118.64.109:5980/login</string>
-    <string name="api_url_signup">http://40.118.64.109:5980/register</string>
-    <string name="api_url_vital">http://40.118.64.109:5980/vital_signs</string>
-    <string name="api_url_period">http://40.118.64.109:5980/menstrual_cycle/set</string>
-    <string name="api_url_sugar">http://40.118.64.109:5980/sugar_test/set</string>
-    <string name="api_url_sugar_list">http://40.118.64.109:5980/sugar_test</string>
-    <string name="api_url_Period_list">http://40.118.64.109:5980/menstrual_cycle</string>
-    <string name="api_url_bloodVital">http://40.118.64.109:5980/blood_pressure/set</string>
-    <string name="api_url_heartVital">http://40.118.64.109:5980/heart_rate/set</string>
-    <string name="api_url_tempVital">http://40.118.64.109:5980/body_temperature/set</string>
-    <string name="api_url_respVital">http://40.118.64.109:5980/respiratory_rate/set</string>
-    <string name="api_url_bloodVital_list">http://40.118.64.109:5980/blood_pressure</string>
-    <string name="api_url_heartVital_list">http://40.118.64.109:5980/heart_rate</string>
-    <string name="api_url_tempVital_list">http://40.118.64.109:5980/body_temperature</string>
-    <string name="api_url_respVital_list">http://40.118.64.109:5980/respiratory_rate</string>
-    <string name="api_url_dentist">http://40.118.64.109:5980/dentist_visit/set</string>
-    <string name="api_url_dentist_list">http://40.118.64.109:5980/dentist_visit</string>
-    <string name="api_url_blood_columns">http://40.118.64.109:5980/blood_test/fields</string>
-    <string name="api_url_blood_list">http://40.118.64.109:5980/blood_test/all</string>
-    <string name="api_url_blood_get">http://40.118.64.109:5980/blood_test</string>
-    <string name="api_url_blood_set">http://40.118.64.109:5980/blood_test/set</string>
+    <string name="api_url_login">http://hcp.westeurope.cloudapp.azure.com:5980/login</string>
+    <string name="api_url_signup">http://hcp.westeurope.cloudapp.azure.com:5980/register</string>
+    <string name="api_url_vital">http://hcp.westeurope.cloudapp.azure.com:5980/vital_signs</string>
+    <string name="api_url_period">http://hcp.westeurope.cloudapp.azure.com:5980/menstrual_cycle/set</string>
+    <string name="api_url_sugar">http://hcp.westeurope.cloudapp.azure.com:5980/sugar_test/set</string>
+    <string name="api_url_sugar_list">http://hcp.westeurope.cloudapp.azure.com:5980/sugar_test</string>
+    <string name="api_url_Period_list">http://hcp.westeurope.cloudapp.azure.com:5980/menstrual_cycle</string>
+    <string name="api_url_bloodVital">http://hcp.westeurope.cloudapp.azure.com:5980/blood_pressure/set</string>
+    <string name="api_url_heartVital">http://hcp.westeurope.cloudapp.azure.com:5980/heart_rate/set</string>
+    <string name="api_url_tempVital">http://hcp.westeurope.cloudapp.azure.com:5980/body_temperature/set</string>
+    <string name="api_url_respVital">http://hcp.westeurope.cloudapp.azure.com:5980/respiratory_rate/set</string>
+    <string name="api_url_bloodVital_list">http://hcp.westeurope.cloudapp.azure.com:5980/blood_pressure</string>
+    <string name="api_url_heartVital_list">http://hcp.westeurope.cloudapp.azure.com:5980/heart_rate</string>
+    <string name="api_url_tempVital_list">http://hcp.westeurope.cloudapp.azure.com:5980/body_temperature</string>
+    <string name="api_url_respVital_list">http://hcp.westeurope.cloudapp.azure.com:5980/respiratory_rate</string>
+    <string name="api_url_dentist">http://hcp.westeurope.cloudapp.azure.com:5980/dentist_visit/set</string>
+    <string name="api_url_dentist_list">http://hcp.westeurope.cloudapp.azure.com:5980/dentist_visit</string>
+    <string name="api_url_blood_columns">http://hcp.westeurope.cloudapp.azure.com:5980/blood_test/fields</string>
+    <string name="api_url_blood_list">http://hcp.westeurope.cloudapp.azure.com:5980/blood_test/all</string>
+    <string name="api_url_blood_get">http://hcp.westeurope.cloudapp.azure.com:5980/blood_test</string>
+    <string name="api_url_blood_set">http://hcp.westeurope.cloudapp.azure.com:5980/blood_test/set</string>
     <!--Development-->
 
     <!--Production-->
