@@ -345,7 +345,7 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
     }
 
     public void requestTheRequest(final ProgressBar mProgressbar, String URL, JSONObject data){
-         mProgressbar.setVisibility(View.VISIBLE);
+        mProgressbar.setVisibility(View.VISIBLE);
 
         Log.e("VitalSend-->", "sendData:"+(data).toString());
 
