@@ -28,22 +28,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/sugar_time2tvid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="7dp"
-        android:layout_marginTop="7dp"
-        android:text="Enter Time"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintHorizontal_bias="0.544"
-        app:layout_constraintLeft_toRightOf="@+id/dentist_date2tvid"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sugar_timetvid"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="7dp" />
+            <TextView
+                android:id="@+id/sugar_time2tvid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="7dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="7dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="7dp"
+                android:text="Record Time"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintHorizontal_bias="0.544"
+                app:layout_constraintLeft_toRightOf="@+id/dentist_date2tvid"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sugar_timetvid" />
 
 
 
@@ -170,18 +170,18 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp" />
 
-    <TextView
-        android:id="@+id/dentist_date2tvid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="62dp"
-        android:layout_marginTop="7dp"
-        android:text="Enter Date"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sugar_datetvid"
-        android:layout_marginStart="62dp" />
+            <TextView
+                android:id="@+id/dentist_date2tvid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="62dp"
+                android:layout_marginStart="62dp"
+                android:layout_marginTop="7dp"
+                android:text="Record Date"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sugar_datetvid" />
 
             <SeekBar
                 android:id="@+id/seekBar_sugar"

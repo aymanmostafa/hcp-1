@@ -112,31 +112,31 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dentist_viewbtnid" />
 
-    <TextView
-        android:id="@+id/dentist_time2tvid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="84dp"
-        android:layout_marginRight="73dp"
-        android:layout_marginTop="-5dp"
-        android:text="Time"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dentist_timetvid" />
+            <TextView
+                android:id="@+id/dentist_time2tvid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="84dp"
+                android:layout_marginRight="53dp"
+                android:layout_marginTop="3dp"
+                android:text="Record Time"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dentist_timetvid" />
 
-    <TextView
-        android:id="@+id/dentist_date2tvid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="78dp"
-        android:layout_marginStart="81dp"
-        android:layout_marginTop="6dp"
-        android:text="Date"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dentist_datetvid" />
+            <TextView
+                android:id="@+id/dentist_date2tvid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="81dp"
+                android:layout_marginTop="3dp"
+                android:text="Record Date"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dentist_datetvid" />
 
     <TextView
         android:id="@+id/dentist_timetvid"
