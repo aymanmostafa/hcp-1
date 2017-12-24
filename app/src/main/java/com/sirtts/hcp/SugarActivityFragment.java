@@ -223,7 +223,7 @@ public class SugarActivityFragment extends Fragment implements View.OnClickListe
         else if(v == info){
             AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getContext());
 
-            alertBuilder.setTitle("Diabetes");
+            alertBuilder.setTitle("Blood Sugar");
             alertBuilder.setMessage("commonly referred to as diabetes, is a group of metabolic" +
                     " disorders in which there are high blood sugar levels over a prolonged " +
                     "period. Symptoms of high blood sugar include frequent urination, " +
