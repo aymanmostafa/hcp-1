@@ -200,13 +200,13 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
             }
         });
 
-        celsuis_temp.setText(seekBar_temp.getProgress() + " Celsius");
+        celsuis_temp.setText(seekBar_temp.getProgress()/10 + " Celsius");
 
         this.seekBar_temp.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
-                celsuis_temp.setText(progressValue + " Celsius");
+                celsuis_temp.setText((float) progressValue/10 + " Celsius");
             }
 
             @Override
@@ -379,7 +379,7 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
                 m.put(getString(R.string.api_send_json_tempVital_date), date_temp.getText().toString());
                 m.put(getString(R.string.api_send_json_tempVital_time), time_temp.getText().toString());
 
-                m.put(getString(R.string.api_send_json_tempVital_cel), seekBar_temp.getProgress());
+                m.put(getString(R.string.api_send_json_tempVital_cel), (float)seekBar_temp.getProgress()/10);
 
                 requestTheRequest(mProgressbar_temp, getString(R.string.api_url_tempVital),
                         new JSONObject(m));

@@ -70,7 +70,7 @@ public class ListtempVitalSignsActivityFragment extends Fragment {
                                 for(int i=0;i<response.length();i++){
                                     date_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_vital_list_arr_date))));
                                     time_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_vital_list_arr_time))));
-                                    val1_ArrayList.add(String.valueOf(response.optJSONObject(i).optInt(getString(R.string.api_receive_json_vital_tempRate_list_arr_celsius))));
+                                    val1_ArrayList.add(String.valueOf(response.optJSONObject(i).optDouble(getString(R.string.api_receive_json_vital_tempRate_list_arr_celsius))));
 
                                 }
                                 adp = new VitalListAdapter(getContext(),date_ArrayList,time_ArrayList,val1_ArrayList,new ArrayList<Integer>());
