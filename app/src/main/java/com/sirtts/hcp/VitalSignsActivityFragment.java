@@ -16,8 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -45,11 +46,12 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
 
     Button view_blood,save_blood,view_heart,save_heart,view_resp,save_resp,view_temp,save_temp,
             info_blood,info_heart,info_resp,info_temp;
-    TextView date_blood,time_blood,date_heart,time_heart,date_resp,time_resp,date_temp,time_temp;
-    EditText sys_blood,dia_blood,bpm_heart,bpm_resp,celsuis_temp;
+    TextView date_blood,time_blood,date_heart,time_heart,date_resp,time_resp,date_temp,time_temp,sys_blood;
+    TextView bpm_heart,bpm_resp,celsuis_temp;
     ProgressBar mProgressbar_blood,mProgressbar_heart,mProgressbar_resp,mProgressbar_temp;
     SharedPreferences sharedPre;
     DatePickerDialog datePickerDialog;
+    SeekBar seekBar_sys_blood,seekBar_dia_blood,seekBar_temp,seekBar_heart,seekBar_resp;
     private RequestQueue mQueue;
     public static final String REQUEST_TAG = "VitalSignsVolleyActivity";
 
@@ -69,8 +71,11 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
         date_blood = (TextView) rootView.findViewById(R.id.bloodVital_datetvid);
         time_blood = (TextView) rootView.findViewById(R.id.bloodVital_timetvid);
 
-        sys_blood = (EditText) rootView.findViewById(R.id.bloodVital_systxtid);
-        dia_blood = (EditText) rootView.findViewById(R.id.bloodVital_diatxtid);
+        sys_blood = (TextView) rootView.findViewById(R.id.bloodVital_systxtid);
+
+        seekBar_sys_blood = (SeekBar) rootView.findViewById(R.id.seekBarSys_bloodVital);
+        seekBar_dia_blood = (SeekBar) rootView.findViewById(R.id.seekBarDia_bloodVital);
+
 
         mProgressbar_blood = (ProgressBar) rootView.findViewById(R.id.bloodVital_progressBar);
 
@@ -92,9 +97,12 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
         date_heart = (TextView) rootView.findViewById(R.id.heartVital_datetvid);
         time_heart = (TextView) rootView.findViewById(R.id.heartVital_timetvid);
 
-        bpm_heart = (EditText) rootView.findViewById(R.id.heartVital_bpmtxtid);
+        bpm_heart = (TextView) rootView.findViewById(R.id.heartVital_bpmtxtid);
 
         mProgressbar_heart = (ProgressBar) rootView.findViewById(R.id.heartVital_progressBar);
+
+
+        seekBar_heart = (SeekBar) rootView.findViewById(R.id.seekBar_heartVital);
 
         view_heart.setOnClickListener(this);
         save_heart.setOnClickListener(this);
@@ -114,9 +122,11 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
         date_resp = (TextView) rootView.findViewById(R.id.respVital_datetvid);
         time_resp = (TextView) rootView.findViewById(R.id.respVital_timetvid);
 
-        bpm_resp = (EditText) rootView.findViewById(R.id.respVital_bpmtxtid);
+        bpm_resp = (TextView) rootView.findViewById(R.id.respVital_bpmtxtid);
 
         mProgressbar_resp = (ProgressBar) rootView.findViewById(R.id.respVital_progressBar);
+
+        seekBar_resp = (SeekBar) rootView.findViewById(R.id.seekBar_respVital);
 
         view_resp.setOnClickListener(this);
         save_resp.setOnClickListener(this);
@@ -136,9 +146,11 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
         date_temp = (TextView) rootView.findViewById(R.id.tempVital_datetvid);
         time_temp = (TextView) rootView.findViewById(R.id.tempVital_timetvid);
 
-        celsuis_temp = (EditText) rootView.findViewById(R.id.tempVital_celsiustxtid);
+        celsuis_temp = (TextView) rootView.findViewById(R.id.tempVital_celsiustxtid);
 
         mProgressbar_temp = (ProgressBar) rootView.findViewById(R.id.tempVital_progressBar);
+
+        seekBar_temp = (SeekBar) rootView.findViewById(R.id.seekBar_tempVital);
 
         view_temp.setOnClickListener(this);
         save_temp.setOnClickListener(this);
@@ -149,6 +161,104 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
 
         date_temp.setOnClickListener(this);
         time_temp.setOnClickListener(this);
+
+        sys_blood.setText(seekBar_sys_blood.getProgress() + " / " + seekBar_sys_blood.getProgress());
+
+        this.seekBar_dia_blood.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
+                sys_blood.setText(seekBar_sys_blood.getProgress() + " / " + progressValue);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        this.seekBar_sys_blood.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
+                sys_blood.setText(progressValue + " / " + seekBar_dia_blood.getProgress());
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        celsuis_temp.setText(seekBar_temp.getProgress() + " Celsius");
+
+        this.seekBar_temp.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
+                celsuis_temp.setText(progressValue + " Celsius");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        bpm_heart.setText(seekBar_heart.getProgress() + " bpm");
+
+        this.seekBar_heart.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
+                bpm_heart.setText(progressValue + " bpm");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        bpm_resp.setText(seekBar_resp.getProgress() + " bpm");
+
+        this.seekBar_resp.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
+                bpm_resp.setText(progressValue + " bpm");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
 
 
         return rootView;
@@ -175,10 +285,6 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
                 sys_blood.requestFocus();
                 sys_blood.setError("Enter Your Systolic");
             }
-            else if(dia_blood.getText().toString().equals("")){
-                dia_blood.requestFocus();
-                dia_blood.setError("Enter Your Diastolic");
-            }
             else {
                 sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
 
@@ -188,8 +294,8 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
                 m.put(getString(R.string.api_send_json_bloodVital_date), date_blood.getText().toString());
                 m.put(getString(R.string.api_send_json_bloodVital_time), time_blood.getText().toString());
 
-                m.put(getString(R.string.api_send_json_bloodVital_sys), Integer.valueOf(sys_blood.getText().toString()));
-                m.put(getString(R.string.api_send_json_bloodVital_dia), Integer.valueOf(dia_blood.getText().toString()));
+                m.put(getString(R.string.api_send_json_bloodVital_sys), seekBar_sys_blood.getProgress());
+                m.put(getString(R.string.api_send_json_bloodVital_dia), seekBar_dia_blood.getProgress());
 
                 requestTheRequest(mProgressbar_blood, getString(R.string.api_url_bloodVital),
                         new JSONObject(m));
@@ -217,7 +323,7 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
                 m.put(getString(R.string.api_send_json_heartVital_date), date_heart.getText().toString());
                 m.put(getString(R.string.api_send_json_heartVital_time), time_heart.getText().toString());
 
-                m.put(getString(R.string.api_send_json_heartVital_cel), Integer.valueOf(bpm_heart.getText().toString()));
+                m.put(getString(R.string.api_send_json_heartVital_cel), seekBar_heart.getProgress());
 
                 requestTheRequest(mProgressbar_heart, getString(R.string.api_url_heartVital),
                         new JSONObject(m));
@@ -245,7 +351,7 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
                 m.put(getString(R.string.api_send_json_respVital_date), date_resp.getText().toString());
                 m.put(getString(R.string.api_send_json_respVital_time), time_resp.getText().toString());
 
-                m.put(getString(R.string.api_send_json_respVital_cel), Integer.valueOf(bpm_resp.getText().toString()));
+                m.put(getString(R.string.api_send_json_respVital_cel), seekBar_resp.getProgress());
 
                 requestTheRequest(mProgressbar_resp, getString(R.string.api_url_respVital),
                         new JSONObject(m));
@@ -273,7 +379,7 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
                 m.put(getString(R.string.api_send_json_tempVital_date), date_temp.getText().toString());
                 m.put(getString(R.string.api_send_json_tempVital_time), time_temp.getText().toString());
 
-                m.put(getString(R.string.api_send_json_tempVital_cel), Float.valueOf(celsuis_temp.getText().toString()));
+                m.put(getString(R.string.api_send_json_tempVital_cel), seekBar_temp.getProgress());
 
                 requestTheRequest(mProgressbar_temp, getString(R.string.api_url_tempVital),
                         new JSONObject(m));

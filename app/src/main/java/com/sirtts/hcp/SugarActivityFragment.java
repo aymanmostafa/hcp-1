@@ -15,8 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -41,11 +41,11 @@ import java.util.HashMap;
 public class SugarActivityFragment extends Fragment implements View.OnClickListener{
 
     Button view,save,info;
-    TextView date,time,error,date2,time2;
-    EditText mg;
+    TextView date,time,error,date2,time2,mg;
     ProgressBar mProgressbar;
     SharedPreferences sharedPre;
     DatePickerDialog datePickerDialog;
+    SeekBar seekBar;
     private RequestQueue mQueue;
     public static final String REQUEST_TAG = "savesugarVolleyActivity";
 
@@ -68,9 +68,11 @@ public class SugarActivityFragment extends Fragment implements View.OnClickListe
         time2 = (TextView) rootView.findViewById(R.id.sugar_time2tvid);
         error = (TextView) rootView.findViewById(R.id.sugar_error);
 
-        mg = (EditText) rootView.findViewById(R.id.sugar_mgtxtid);
+        mg = (TextView) rootView.findViewById(R.id.sugar_mgtxtid);
 
         mProgressbar = (ProgressBar) rootView.findViewById(R.id.sugar_progressBar);
+
+        seekBar = (SeekBar) rootView.findViewById(R.id.seekBar_sugar);
 
         view.setOnClickListener(this);
         save.setOnClickListener(this);
@@ -84,6 +86,26 @@ public class SugarActivityFragment extends Fragment implements View.OnClickListe
 
         date2.setOnClickListener(this);
         time2.setOnClickListener(this);
+
+        this.mg.setText(seekBar.getProgress() + " mg/dl");
+
+        this.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
+                mg.setText(progressValue + " mg/dl");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
 
         return rootView;
     }
@@ -161,7 +183,7 @@ public class SugarActivityFragment extends Fragment implements View.OnClickListe
 
                     JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, getString(R.string.api_url_sugar),
                             sendData(sharedPre.getInt(getString(R.string.shared_userId),0), date.getText().toString(),time.getText().toString(),
-                                    Integer.valueOf(mg.getText().toString())),
+                                    seekBar.getProgress()),
                             new Response.Listener<JSONObject>() {
                                 @Override
                                 public void onResponse(JSONObject response) {
@@ -170,7 +192,7 @@ public class SugarActivityFragment extends Fragment implements View.OnClickListe
                                         Boolean userStatus = ((JSONObject) response).optBoolean(getString(R.string.api_receive_json_status));
 
                                         if (userStatus) {
-                                            Toast.makeText(getActivity(), "Data Saved!", Toast.LENGTH_LONG).show();
+                                              Toast.makeText(getActivity(), "Data Saved!", Toast.LENGTH_LONG).show();
                                         } else {
                                             error.setText("Unexpected Error happened!");
                                         }

@@ -10,8 +10,6 @@
         android:id="@+id/sugar_rel"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        tools:layout_editor_absoluteY="8dp"
-        tools:layout_editor_absoluteX="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -22,7 +20,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sugar_rel"
+        app:layout_constraintTop_toBottomOf="@+id/sugar_rel"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintVertical_bias="1.0">
 
@@ -43,14 +41,16 @@
         app:layout_constraintHorizontal_bias="0.544"
         app:layout_constraintLeft_toRightOf="@+id/dentist_date2tvid"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sugar_timetvid" />
+        app:layout_constraintTop_toBottomOf="@+id/sugar_timetvid"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="7dp" />
 
 
 
     <Button
         android:id="@+id/sugar_Viewbtnid"
         android:layout_width="203dp"
-        android:layout_height="43dp"
+        android:layout_height="48dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:text="View Your Past Records"
@@ -58,7 +58,9 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView3"
         app:layout_constraintRight_toLeftOf="@+id/sugar_Infobtnid"
         android:layout_marginRight="8dp"
-        app:layout_constraintHorizontal_bias="0.1" />
+        app:layout_constraintHorizontal_bias="0.1"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp" />
 
             <Button
                 android:id="@+id/sugar_Infobtnid"
@@ -68,7 +70,8 @@
                 android:layout_marginTop="8dp"
                 android:text="Info"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+                app:layout_constraintTop_toBottomOf="@+id/imageView3"
+                android:layout_marginEnd="52dp" />
 
             <TextView
         android:id="@+id/sugar_datetvid"
@@ -82,7 +85,8 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sugar_Viewbtnid" />
+        app:layout_constraintTop_toBottomOf="@+id/sugar_Viewbtnid"
+                android:layout_marginStart="16dp" />
 
     <TextView
         android:id="@+id/sugar_timetvid"
@@ -99,23 +103,31 @@
         app:layout_constraintTop_toBottomOf="@+id/sugar_Viewbtnid"
         android:layout_marginRight="16dp"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="1.0" />
+        app:layout_constraintHorizontal_bias="1.0"
+        android:layout_marginStart="28dp"
+        android:layout_marginEnd="16dp" />
 
-    <EditText
-        android:id="@+id/sugar_mgtxtid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="61dp"
-        android:ems="10"
-        android:hint="mg/dL"
-        android:inputType="number"
-        android:textAlignment="center"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sugar_Viewbtnid" />
+            <TextView
+                android:id="@+id/sugar_mgtxtid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="80dp"
+                android:ems="10"
+                android:hint="mg/dL"
+                android:inputType="number"
+                android:text="mg/dl"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sugar_Viewbtnid" />
 
     <Button
         android:id="@+id/sugar_savebtnid"
@@ -127,8 +139,10 @@
         app:layout_constraintRight_toLeftOf="@+id/sugar_progressBar"
         android:layout_marginRight="8dp"
         app:layout_constraintHorizontal_bias="0.813"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/sugar_mgtxtid" />
+        android:layout_marginTop="35dp"
+        app:layout_constraintTop_toBottomOf="@+id/seekBar_sugar"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp" />
 
     <ProgressBar
         android:id="@+id/sugar_progressBar"
@@ -136,10 +150,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="71dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="36dp"
         android:visibility="invisible"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sugar_mgtxtid" />
+        app:layout_constraintTop_toBottomOf="@+id/seekBar_sugar"
+        android:layout_marginEnd="71dp" />
 
     <TextView
         android:id="@+id/sugar_error"
@@ -151,7 +166,9 @@
         android:textColor="@android:color/holo_red_dark"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sugar_savebtnid" />
+        app:layout_constraintTop_toBottomOf="@+id/sugar_savebtnid"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp" />
 
     <TextView
         android:id="@+id/dentist_date2tvid"
@@ -163,9 +180,26 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sugar_datetvid" />
+        app:layout_constraintTop_toBottomOf="@+id/sugar_datetvid"
+        android:layout_marginStart="62dp" />
 
-    <ImageView
+            <SeekBar
+                android:id="@+id/seekBar_sugar"
+                android:layout_width="0dp"
+                android:layout_height="12dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="12dp"
+                android:elevation="1dp"
+                android:max="100"
+                android:progress="50"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sugar_mgtxtid" />
+
+            <ImageView
         android:id="@+id/imageView3"
         android:layout_width="358dp"
         android:layout_height="192dp"
@@ -179,7 +213,9 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="8dp"
-        app:layout_constraintVertical_bias="0.015" />
+        app:layout_constraintVertical_bias="0.015"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp" />
 
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
