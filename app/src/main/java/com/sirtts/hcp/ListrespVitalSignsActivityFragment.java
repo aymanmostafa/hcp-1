@@ -41,7 +41,7 @@ public class ListrespVitalSignsActivityFragment extends Fragment {
     ArrayList<String> time_ArrayList = new ArrayList<String>();
     ArrayList<String> val1_ArrayList = new ArrayList<String>();
     ProgressBar mProgressbar;
-    public static final String REQUEST_TAG = "ListTempVitalVolley";
+    public static final String REQUEST_TAG = "ListRespVitalVolley";
 
 
     public ListrespVitalSignsActivityFragment() {

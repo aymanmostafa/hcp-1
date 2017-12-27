@@ -115,16 +115,20 @@ public class signupActivityFragment extends Fragment implements View.OnClickList
         }
         else if(v == signup){
             if(username.getText().toString().equals("") || !android.util.Patterns.EMAIL_ADDRESS.matcher(username.getText().toString()).matches()){
-                error.setText("Enter a Valid Email");
+                username.requestFocus();
+                username.setError("Enter a Valid Email");
             }
             else if(password.getText().toString().equals("")){
-                error.setText("Enter a Valid Password");
+                password.requestFocus();
+                password.setError("Enter a Valid password");
             }
             else if(!repassword.getText().toString().equals(password.getText().toString())){
-                error.setText("Passwords aren't equal");
+                repassword.requestFocus();
+                repassword.setError("Passwords aren't equal");
             }
             else if(date.getText().toString().equals("")){
-                error.setText("Enter a Valid Date");
+                date.requestFocus();
+                date.setError("Enter a Valid Date");
             }
             else{
                 gender = (RadioButton) getActivity().findViewById(genderGroup.getCheckedRadioButtonId());

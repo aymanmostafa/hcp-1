@@ -96,10 +96,12 @@ public class loginActivityFragment extends Fragment implements View.OnClickListe
         }
         else if(v == login){
             if(username.getText().toString().equals("") || !android.util.Patterns.EMAIL_ADDRESS.matcher(username.getText().toString()).matches()){
-                error.setText("Enter a Valid Email");
+                username.requestFocus();
+                username.setError("Enter a Valid Email");
             }
             else if(password.getText().toString().equals("")){
-                error.setText("Enter a Valid Password");
+                password.requestFocus();
+                password.setError("Enter a Valid Password");
             }
             else{
                 error.setText("");

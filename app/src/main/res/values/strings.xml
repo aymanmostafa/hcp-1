@@ -97,7 +97,7 @@
     <string name="api_send_json_spo2Vital_userId">userid</string>
     <string name="api_send_json_spo2Vital_date">date</string>
     <string name="api_send_json_spo2Vital_time">time</string>
-    <string name="api_send_json_spo2Vital_cel">percentage</string>
+    <string name="api_send_json_spo2Vital_cel">percent</string>
 
     <string name="api_send_json_respVital_userId">userid</string>
     <string name="api_send_json_respVital_date">date</string>
@@ -138,6 +138,7 @@
     <string name="api_receive_json_vital_heartRate_list_arr_bpm">bpm</string>
     <string name="api_receive_json_vital_tempRate_list_arr_celsius">celsius</string>
     <string name="api_receive_json_vital_RespRate_list_arr_bpm">bpm</string>
+    <string name="api_receive_json_vital_Spo2Rate_list_arr_percent">percent</string>
 
 
     <string name="api_receive_json_blood_fields">COLUMN_NAME</string>
