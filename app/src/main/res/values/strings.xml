@@ -21,10 +21,12 @@
     <string name="api_url_heartVital">http://hcp.westeurope.cloudapp.azure.com:5980/heart_rate/set</string>
     <string name="api_url_tempVital">http://hcp.westeurope.cloudapp.azure.com:5980/body_temperature/set</string>
     <string name="api_url_respVital">http://hcp.westeurope.cloudapp.azure.com:5980/respiratory_rate/set</string>
+    <string name="api_url_spo2Vital">http://hcp.westeurope.cloudapp.azure.com:5980/spo2/set</string>
     <string name="api_url_bloodVital_list">http://hcp.westeurope.cloudapp.azure.com:5980/blood_pressure</string>
     <string name="api_url_heartVital_list">http://hcp.westeurope.cloudapp.azure.com:5980/heart_rate</string>
     <string name="api_url_tempVital_list">http://hcp.westeurope.cloudapp.azure.com:5980/body_temperature</string>
     <string name="api_url_respVital_list">http://hcp.westeurope.cloudapp.azure.com:5980/respiratory_rate</string>
+    <string name="api_url_spo2Vital_list">http://hcp.westeurope.cloudapp.azure.com:5980/spo2</string>
     <string name="api_url_dentist">http://hcp.westeurope.cloudapp.azure.com:5980/dentist_visit/set</string>
     <string name="api_url_dentist_list">http://hcp.westeurope.cloudapp.azure.com:5980/dentist_visit</string>
     <string name="api_url_blood_columns">http://hcp.westeurope.cloudapp.azure.com:5980/blood_test/fields</string>
@@ -92,6 +94,11 @@
     <string name="api_send_json_heartVital_time">time</string>
     <string name="api_send_json_heartVital_cel">bpm</string>
 
+    <string name="api_send_json_spo2Vital_userId">userid</string>
+    <string name="api_send_json_spo2Vital_date">date</string>
+    <string name="api_send_json_spo2Vital_time">time</string>
+    <string name="api_send_json_spo2Vital_cel">percentage</string>
+
     <string name="api_send_json_respVital_userId">userid</string>
     <string name="api_send_json_respVital_date">date</string>
     <string name="api_send_json_respVital_time">time</string>
@@ -140,8 +147,6 @@
     <string name="api_send_json_blood_Id">id</string>
 
 
-
-
     <string name="api_receive_json_blood_list_userId">userid</string>
     <string name="api_receive_json_blood_list_date">date</string>
     <string name="api_receive_json_blood_list_time">time</string>
@@ -165,4 +170,5 @@
     <string name="title_activity_blood">BloodActivity</string>
     <string name="title_activity_list_blood">ListBloodActivity</string>
     <string name="title_activity_blood_details">BloodDetailsActivity</string>
+    <string name="title_activity_listspo2_vital_signs">Listspo2VitalSignsActivity</string>
 </resources>

@@ -44,14 +44,17 @@ import java.util.HashMap;
  */
 public class VitalSignsActivityFragment extends Fragment  implements View.OnClickListener{
 
-    Button view_blood,save_blood,view_heart,save_heart,view_resp,save_resp,view_temp,save_temp,
-            info_blood,info_heart,info_resp,info_temp;
-    TextView date_blood,time_blood,date_heart,time_heart,date_resp,time_resp,date_temp,time_temp,sys_blood;
-    TextView bpm_heart,bpm_resp,celsuis_temp;
-    ProgressBar mProgressbar_blood,mProgressbar_heart,mProgressbar_resp,mProgressbar_temp;
+    Button view_blood, save_blood, view_heart, save_heart, view_resp, save_resp, view_temp, save_temp,
+            info_blood, info_heart, info_resp, info_temp, view_spo2, save_spo2, info_spo2;
+    TextView date_blood, time_blood, date_heart, time_heart, date_resp, time_resp, date_temp,
+            time_temp, sys_blood, date_spo2, time_spo2;
+    TextView bpm_heart, bpm_resp, celsuis_temp, percentage_spo2;
+    ProgressBar mProgressbar_blood, mProgressbar_heart, mProgressbar_resp,
+            mProgressbar_temp, mProgressbar_spo2;
     SharedPreferences sharedPre;
     DatePickerDialog datePickerDialog;
-    SeekBar seekBar_sys_blood,seekBar_dia_blood,seekBar_temp,seekBar_heart,seekBar_resp;
+    SeekBar seekBar_sys_blood, seekBar_dia_blood, seekBar_temp, seekBar_heart, seekBar_resp,
+            seekBar_spo2;
     private RequestQueue mQueue;
     public static final String REQUEST_TAG = "VitalSignsVolleyActivity";
 
@@ -162,9 +165,34 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
         date_temp.setOnClickListener(this);
         time_temp.setOnClickListener(this);
 
+        //spo2
+        view_spo2 = (Button) rootView.findViewById(R.id.spo2Vital_Viewbtnid);
+        save_spo2 = (Button) rootView.findViewById(R.id.spo2Vital_savebtnid);
+        info_spo2 = (Button) rootView.findViewById(R.id.spo2Vital_Infobtnid);
+
+        date_spo2 = (TextView) rootView.findViewById(R.id.spo2Vital_datetvid);
+        time_spo2 = (TextView) rootView.findViewById(R.id.spo2Vital_timetvid);
+
+        percentage_spo2 = (TextView) rootView.findViewById(R.id.spo2Vital_percentagetxtid);
+
+        mProgressbar_spo2 = (ProgressBar) rootView.findViewById(R.id.spo2Vital_progressBar);
+
+        seekBar_spo2 = (SeekBar) rootView.findViewById(R.id.seekBar_spo2Vital);
+
+        view_spo2.setOnClickListener(this);
+        save_spo2.setOnClickListener(this);
+        info_spo2.setOnClickListener(this);
+
+        date_spo2.setText(getCurrentDateAndTime("yyyy-MM-dd"));
+        time_spo2.setText(getCurrentDateAndTime("HH:mm"));
+
+        date_spo2.setOnClickListener(this);
+        time_spo2.setOnClickListener(this);
+
+
         sys_blood.setText(seekBar_sys_blood.getProgress() + " / " + seekBar_sys_blood.getProgress());
 
-        this.seekBar_dia_blood.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        this.seekBar_spo2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
@@ -260,16 +288,35 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
             }
         });
 
+        percentage_spo2.setText(seekBar_spo2.getProgress() + " %");
+
+        this.seekBar_spo2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
+                percentage_spo2.setText(progressValue + " %");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
 
         return rootView;
     }
 
     @Override
     public void onClick(View v) {
-        if(v == date_blood || v == date_heart || v == date_temp || v == date_resp){
+        if(v == date_blood || v == date_heart || v == date_temp || v == date_resp || v == date_spo2){
             datePicker((TextView) v);
         }
-        else if(v == time_blood || v == time_heart || v == time_temp || v == time_resp){
+        else if(v == time_blood || v == time_heart || v == time_temp || v == time_resp || v == time_spo2){
             timePacker((TextView) v);
         }
         else if(v == save_blood){
@@ -385,6 +432,34 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
                         new JSONObject(m));
             }
         }
+        else if(v == save_spo2){
+            if(date_spo2.getText().toString().equals("")){
+                date_spo2.requestFocus();
+                date_spo2.setError("Enter The Date");
+            }
+            else if(time_spo2.getText().toString().equals("")){
+                time_spo2.requestFocus();
+                time_spo2.setError("Enter The Time");
+            }
+            else if(percentage_spo2.getText().toString().equals("")){
+                percentage_spo2.requestFocus();
+                percentage_spo2.setError("Enter Your spo2");
+            }
+            else {
+                sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
+
+                HashMap m = new HashMap();
+
+                m.put(getString(R.string.api_send_json_vital_userId), sharedPre.getInt(getString(R.string.shared_userId), 0));
+                m.put(getString(R.string.api_send_json_spo2Vital_date), date_spo2.getText().toString());
+                m.put(getString(R.string.api_send_json_spo2Vital_time), time_spo2.getText().toString());
+
+                m.put(getString(R.string.api_send_json_spo2Vital_cel), seekBar_spo2.getProgress());
+
+                requestTheRequest(mProgressbar_spo2, getString(R.string.api_url_spo2Vital),
+                        new JSONObject(m));
+            }
+        }
         else if(v == view_blood){
             startActivity(new Intent(getContext(), ListBloodVitalSignsActivity.class));
         }
@@ -396,6 +471,9 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
         }
         else if(v == view_temp){
             startActivity(new Intent(getContext(), ListtempVitalSignsActivity.class));
+        }
+        else if(v == view_spo2){
+            startActivity(new Intent(getContext(), Listspo2VitalSignsActivity.class));
         }
         else if(v == info_blood){
             AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getContext());
@@ -447,6 +525,19 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
                     "can be used for monitoring patients during a magnetic resonance imaging " +
                     "scan. Respiration rates may increase with fever, illness, " +
                     "or other medical conditions.");
+
+            AlertDialog alertDialog = alertBuilder.create();
+            alertDialog.show();
+        }
+        else if(v == info_spo2){
+            AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getContext());
+
+            alertBuilder.setTitle("SpO2");
+            alertBuilder.setMessage("SpO2 is an estimate of arterial oxygen saturation, or SaO2, " +
+                    "which refers to the amount of oxygenated haemoglobin in the blood.\n" +
+                    "\n" +
+                    "Haemoglobin is a protein that carries oxygen in the blood. It is found " +
+                    "inside red blood cells and gives them their red colour.");
 
             AlertDialog alertDialog = alertBuilder.create();
             alertDialog.show();

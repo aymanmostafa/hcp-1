@@ -101,6 +101,10 @@
         <activity
             android:name=".BloodDetailsActivity"
             android:label="@string/title_activity_blood_details"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Listspo2VitalSignsActivity"
+            android:label="@string/title_activity_listspo2_vital_signs"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
