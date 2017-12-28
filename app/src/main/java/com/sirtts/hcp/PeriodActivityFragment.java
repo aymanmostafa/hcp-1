@@ -61,7 +61,7 @@ public class PeriodActivityFragment extends Fragment implements View.OnClickList
 
         view = (Button) rootView.findViewById(R.id.period_Viewbtnid);
         save = (Button) rootView.findViewById(R.id.period_savebtnid);
-        save = (Button) rootView.findViewById(R.id.period_Infobtnid);
+        info = (Button) rootView.findViewById(R.id.period_Infobtnid);
 
         startdate = (TextView) rootView.findViewById(R.id.period_startdatetvid);
         starttime = (TextView) rootView.findViewById(R.id.period_starttimetvid);

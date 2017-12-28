@@ -105,6 +105,14 @@
         <activity
             android:name=".Listspo2VitalSignsActivity"
             android:label="@string/title_activity_listspo2_vital_signs"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".HistoryActivity"
+            android:label="@string/title_activity_history"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".analyticsActivity"
+            android:label="@string/title_activity_analytics"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

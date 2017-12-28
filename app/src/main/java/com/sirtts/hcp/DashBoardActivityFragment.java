@@ -15,7 +15,7 @@ import android.widget.Button;
  */
 public class DashBoardActivityFragment extends Fragment implements View.OnClickListener {
 
-    Button logout,vital,period,sugar,dentist,blood;
+    Button logout,vital,period,sugar,dentist,blood,analytics;
     private SharedPreferences sharedPre ;
     public DashBoardActivityFragment() {
     }
@@ -42,6 +42,9 @@ public class DashBoardActivityFragment extends Fragment implements View.OnClickL
 
         blood = (Button) rootView.findViewById(R.id.dashboard_bloodbtnid);
         blood.setOnClickListener(this);
+
+        analytics = (Button) rootView.findViewById(R.id.dashboard_Analytics);
+        analytics.setOnClickListener(this);
 
         sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged),Context.MODE_PRIVATE);
         if(sharedPre.getBoolean(getString(R.string.shared_female),false))
@@ -75,6 +78,9 @@ public class DashBoardActivityFragment extends Fragment implements View.OnClickL
         }
         else if(v == blood){
             startActivity(new Intent(getContext(), BloodActivity.class));
+        }
+        else if(v == analytics){
+            startActivity(new Intent(getContext(), analyticsActivity.class));
         }
     }
 }

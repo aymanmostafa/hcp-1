@@ -172,4 +172,9 @@
     <string name="title_activity_list_blood">ListBloodActivity</string>
     <string name="title_activity_blood_details">BloodDetailsActivity</string>
     <string name="title_activity_listspo2_vital_signs">Listspo2VitalSignsActivity</string>
+    <string name="title_activity_history">HistoryActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="title_activity_analytics">analyticsActivity</string>
 </resources>
