@@ -113,6 +113,10 @@
         <activity
             android:name=".analyticsActivity"
             android:label="@string/title_activity_analytics"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".DentistDetailsActivity"
+            android:label="@string/title_activity_dentist_details"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

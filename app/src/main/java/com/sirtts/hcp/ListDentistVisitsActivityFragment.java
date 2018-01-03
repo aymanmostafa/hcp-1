@@ -1,6 +1,7 @@
 package com.sirtts.hcp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -31,14 +33,15 @@ import java.util.HashMap;
  */
 public class ListDentistVisitsActivityFragment extends Fragment {
 
-    private RequestQueue queue;
+    private RequestQueue mQueue;
     ListView listview;
     VitalListAdapter adp;
     ArrayList<String> date_ArrayList = new ArrayList<String>();
     ArrayList<String> time_ArrayList = new ArrayList<String>();
     ArrayList<String> val1_ArrayList = new ArrayList<String>();
-    ProgressBar progressBar;
-    public static final String REQUEST_TAG = "ListٍDentistVolley";
+    ArrayList<Integer> id_ArrayList = new ArrayList<Integer>();
+    ProgressBar mProgressbar;
+    public static final String REQUEST_TAG = "ListDentistVolley";
 
 
     public ListDentistVisitsActivityFragment() {
@@ -50,12 +53,10 @@ public class ListDentistVisitsActivityFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_list_dentist_visits, container, false);
 
         listview = (ListView) rootView.findViewById(R.id.ListDentist_listView);
-        progressBar = (ProgressBar) rootView.findViewById(R.id.ListDentist_progressBar);
-
+        mProgressbar = (ProgressBar) rootView.findViewById(R.id.ListDentist_progressBar);
         if (isNetworkAvailable(getContext())) {
             SharedPreferences sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
-
-            queue = VolleyRequestQueue.getInstance(getContext().getApplicationContext())
+            mQueue = VolleyRequestQueue.getInstance(getContext().getApplicationContext())
                     .getRequestQueue();
 
             JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.POST, getString(R.string.api_url_dentist_list),
@@ -64,42 +65,53 @@ public class ListDentistVisitsActivityFragment extends Fragment {
                         @Override
                         public void onResponse(JSONArray response) {
                             try {
-                                progressBar.setVisibility(View.INVISIBLE);
+                                mProgressbar.setVisibility(View.INVISIBLE);
 
                                 for(int i=0;i<response.length();i++){
-                                    date_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_dentist_date)))+"\n"
-                                            +String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_dentist_time))));
-                                    time_ArrayList.add("");
-                                    val1_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_dentist_treatments)))
-                                    );
+                                    date_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_dentist_date))));
+                                    time_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_dentist_time))));
+                                    val1_ArrayList.add("Click to View");
+                                    id_ArrayList.add(response.optJSONObject(i).optInt(getString(R.string.api_send_json_dentist_Id)));
                                 }
 
-                                adp = new VitalListAdapter(getContext(),date_ArrayList,time_ArrayList,val1_ArrayList,new ArrayList<Integer>());
+                                adp = new VitalListAdapter(getContext(),date_ArrayList,time_ArrayList,val1_ArrayList,id_ArrayList);
+
                                 listview.setAdapter(adp);
+
+
                             }
                             catch(Exception e){
-                                progressBar.setVisibility(View.INVISIBLE);
+                                mProgressbar.setVisibility(View.INVISIBLE);
                                 Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_SHORT).show();
                             }
+
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError errork) {
-                            progressBar.setVisibility(View.INVISIBLE);
+                            mProgressbar.setVisibility(View.INVISIBLE);
                             Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_SHORT).show();
                         }
                     });
-
             jsonRequest.setTag(REQUEST_TAG);
             jsonRequest.setRetryPolicy(new DefaultRetryPolicy(
                     0,
                     DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                     DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-            queue.add(jsonRequest);
+            mQueue.add(jsonRequest);
         }
         else Toast.makeText(getActivity(), "Failed to Connect! Check your Connection", Toast.LENGTH_SHORT).show();
 
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+
+                Integer x = (Integer) parent.getItemAtPosition(position);
+                Intent intent = new Intent(getContext(), DentistDetailsActivity.class);
+                intent.putExtra("dentistID", x.intValue());
+                startActivity(intent);
+            }
+        });
 
         return rootView;
     }
@@ -110,21 +122,21 @@ public class ListDentistVisitsActivityFragment extends Fragment {
     }
 
     public  void onResume(){
-       super.onResume();
+        super.onResume();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        progressBar.setVisibility(View.INVISIBLE);
-        if (queue != null) {
-            queue.cancelAll(REQUEST_TAG);
+        mProgressbar.setVisibility(View.INVISIBLE);
+        if (mQueue != null) {
+            mQueue.cancelAll(REQUEST_TAG);
         }
     }
 
     public JSONArray sendData(int userid){
         HashMap m = new HashMap();
-        m.put(getString(R.string.api_send_json_vital_list_arr_userid),userid);
+        m.put(getString(R.string.api_send_json_dentist_userId),userid);
         Log.e(REQUEST_TAG, "sendData: "+(new JSONObject(m)).toString());
         JSONArray x = new JSONArray();
         x.put(new JSONObject(m));
@@ -135,5 +147,6 @@ public class ListDentistVisitsActivityFragment extends Fragment {
         final ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
         return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
     }
+
 
 }

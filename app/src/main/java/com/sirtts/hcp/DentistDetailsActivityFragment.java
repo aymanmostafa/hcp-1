@@ -1,10 +1,7 @@
 package com.sirtts.hcp;
 
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.support.v4.app.Fragment;
@@ -13,13 +10,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.DatePicker;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -32,81 +27,86 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class BloodDetailsActivityFragment extends Fragment {
+public class DentistDetailsActivityFragment extends Fragment {
 
-    TextView tempTv,error;
-    EditText tempEt;
+    TextView tempTv,error,notes,notestxt;
+    CheckBox tempEt;
     LinearLayout tempLayout,mainListLayout;
     private RequestQueue mQueue;
     ProgressBar mProgressbar;
-    public static final String REQUEST_TAG_View = "ViewBloodVolley";
-    public BloodDetailsActivityFragment() {
+    public static final String REQUEST_TAG_View = "ViewDentistVolley";
+    public DentistDetailsActivityFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView =  inflater.inflate(R.layout.fragment_blood_details, container, false);
+        View rootView =  inflater.inflate(R.layout.fragment_dentist_details, container, false);
 
 
-        mainListLayout = (LinearLayout) rootView.findViewById(R.id.bloodDetails_linearLayout);
+        mainListLayout = (LinearLayout) rootView.findViewById(R.id.dentistDetails_linearLayout);
 
-        mProgressbar = (ProgressBar) rootView.findViewById(R.id.bloodDetails_progressBar);
+        mProgressbar = (ProgressBar) rootView.findViewById(R.id.dentistDetails_progressBar);
+
+        notes = (TextView) rootView.findViewById(R.id.dentistDetails_notesid);
+        notestxt = (TextView) rootView.findViewById(R.id.dentistDetails_notestxtid);
 
         if (isNetworkAvailable(getContext())) {
             Intent i = getActivity().getIntent();
             mQueue = VolleyRequestQueue.getInstance(getContext().getApplicationContext())
                     .getRequestQueue();
 
-            JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.POST, getString(R.string.api_url_blood_get),
-                    sendData(i.getIntExtra("bloodID",0)),
+            JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.POST, getString(R.string.api_url_dentist_get),
+                    sendData(i.getIntExtra("dentistID",0)),
                     new Response.Listener<JSONArray>() {
                         @Override
                         public void onResponse(JSONArray response) {
                             try {
+                                notes.setVisibility(View.VISIBLE);
+                                notestxt.setVisibility(View.VISIBLE);
                                 mProgressbar.setVisibility(View.INVISIBLE);
                                 JSONObject responseObj = response.getJSONObject(0);
-                                for(int i=0;i<responseObj.names().length();i++){
-                                    tempLayout = new LinearLayout(getContext());
-                                    tempEt = new EditText(getContext());
-                                    tempTv = new TextView(getContext());
+                                Log.e("Send dentist Data", "sendData: "+response.getJSONObject(0).toString());
+                                for(int i=0;i<responseObj.names().length();i++) {
+                                    if (String.valueOf(responseObj.names().get(i).toString()).equals("notes")) {
+                                        notes.setText(responseObj.optString(responseObj.names().get(i).toString()));
+                                    } else {
+                                        tempLayout = new LinearLayout(getContext());
+                                        tempEt = new CheckBox(getContext());
+                                        tempTv = new TextView(getContext());
 
-                                    LinearLayout.LayoutParams tt = new LinearLayout.LayoutParams(
-                                            LinearLayout.LayoutParams.MATCH_PARENT,
-                                            LinearLayout.LayoutParams.MATCH_PARENT);
+                                        LinearLayout.LayoutParams tt = new LinearLayout.LayoutParams(
+                                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                                LinearLayout.LayoutParams.MATCH_PARENT);
 
-                                    tempLayout.setLayoutParams(tt);
+                                        tempLayout.setLayoutParams(tt);
 
-                                    tempLayout.setOrientation(LinearLayout.HORIZONTAL);
+                                        tempLayout.setOrientation(LinearLayout.HORIZONTAL);
 
-                                    tempEt.setLayoutParams(new LinearLayout.LayoutParams(
-                                            LinearLayout.LayoutParams.MATCH_PARENT,
-                                            LinearLayout.LayoutParams.WRAP_CONTENT,3.0f));
+                                        tempEt.setLayoutParams(new LinearLayout.LayoutParams(
+                                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                                LinearLayout.LayoutParams.WRAP_CONTENT, 5.0f));
 
-                                    tempTv.setLayoutParams(new LinearLayout.LayoutParams(
-                                            LinearLayout.LayoutParams.MATCH_PARENT,
-                                            LinearLayout.LayoutParams.WRAP_CONTENT,1.0f));
+                                        tempTv.setLayoutParams(new LinearLayout.LayoutParams(
+                                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                                LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f));
 
-                                    tempTv.setText(String.valueOf(responseObj.names().get(i).toString()));
-                                    Double value = responseObj.optDouble(responseObj.names().get(i).toString());
-                                    if(!Double.isNaN(value)) tempEt.setText(value.toString());
-                                    tempTv.setTypeface(null, Typeface.BOLD);
+                                        tempTv.setText(String.valueOf(responseObj.names().get(i).toString()));
+                                        tempEt.setChecked(responseObj.optBoolean(responseObj.names().get(i).toString()));
+                                        tempTv.setTypeface(null, Typeface.BOLD);
 
-                                    tempEt.setFocusable(false);
+                                        tempEt.setEnabled(false);
 
-                                    tempLayout.addView(tempTv);
-                                    tempLayout.addView(tempEt);
+                                        tempLayout.addView(tempTv);
+                                        tempLayout.addView(tempEt);
 
-                                    mainListLayout.addView(tempLayout);
+                                        mainListLayout.addView(tempLayout);
+                                    }
                                 }
                             }
                             catch(Exception e){
@@ -153,10 +153,10 @@ public class BloodDetailsActivityFragment extends Fragment {
 
     public JSONArray sendData(int id){
         HashMap m = new HashMap();
-        m.put(getString(R.string.api_send_json_blood_Id),id);
+        m.put(getString(R.string.api_send_json_dentist_Id),id);
         JSONArray x = new JSONArray();
         x.put(new JSONObject(m));
-        Log.e("Send blood Data", "sendData: "+x.toString());
+        Log.e("Send dentist Data", "sendData: "+x.toString());
         return x;
     }
 }

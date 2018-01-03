@@ -27,12 +27,17 @@
     <string name="api_url_tempVital_list">http://hcp.westeurope.cloudapp.azure.com:5980/body_temperature</string>
     <string name="api_url_respVital_list">http://hcp.westeurope.cloudapp.azure.com:5980/respiratory_rate</string>
     <string name="api_url_spo2Vital_list">http://hcp.westeurope.cloudapp.azure.com:5980/spo2</string>
-    <string name="api_url_dentist">http://hcp.westeurope.cloudapp.azure.com:5980/dentist_visit/set</string>
-    <string name="api_url_dentist_list">http://hcp.westeurope.cloudapp.azure.com:5980/dentist_visit</string>
     <string name="api_url_blood_columns">http://hcp.westeurope.cloudapp.azure.com:5980/blood_test/fields</string>
     <string name="api_url_blood_list">http://hcp.westeurope.cloudapp.azure.com:5980/blood_test/all</string>
     <string name="api_url_blood_get">http://hcp.westeurope.cloudapp.azure.com:5980/blood_test</string>
     <string name="api_url_blood_set">http://hcp.westeurope.cloudapp.azure.com:5980/blood_test/set</string>
+    <string name="api_url_dentist_columns">http://hcp.westeurope.cloudapp.azure.com:5980/dentist_visit/fields</string>
+    <string name="api_url_dentist_list">http://hcp.westeurope.cloudapp.azure.com:5980/dentist_visit/all</string>
+    <string name="api_url_dentist_get">http://hcp.westeurope.cloudapp.azure.com:5980/dentist_visit</string>
+    <string name="api_url_dentist_set">http://hcp.westeurope.cloudapp.azure.com:5980/dentist_visit/set</string>
+    <string name="api_url_dentist_update_next_visit">http://hcp.westeurope.cloudapp.azure.com:5980/dentist_visit/update_next_visit</string>
+
+
     <!--Development-->
 
     <!--Production-->
@@ -110,13 +115,14 @@
     <string name="api_send_json_sugar_mg">test result</string>
 
     <string name="api_send_json_dentist_userId">userid</string>
+    <string name="api_send_json_dentist_Id">id</string>
     <string name="api_send_json_dentist_date">date</string>
     <string name="api_send_json_dentist_time">time</string>
-    <string name="api_send_json_dentist_treatments">treatments</string>
+    <string name="api_send_json_dentist_notes">notes</string>
 
+    <string name="api_receive_json_dentist_fields">COLUMN_NAME</string>
     <string name="api_receive_json_dentist_date">date</string>
     <string name="api_receive_json_dentist_time">time</string>
-    <string name="api_receive_json_dentist_treatments">treatments</string>
 
     <string name="api_receive_json_sugar_date">date</string>
     <string name="api_receive_json_sugar_time">time</string>
@@ -177,4 +183,5 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="title_activity_analytics">analyticsActivity</string>
+    <string name="title_activity_dentist_details">DentistDetailsActivity</string>
 </resources>
