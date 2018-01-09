@@ -47,7 +47,7 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
     Button view_blood, save_blood, view_heart, save_heart, view_resp, save_resp, view_temp, save_temp,
             info_blood, info_heart, info_resp, info_temp, view_spo2, save_spo2, info_spo2;
     TextView date_blood, time_blood, date_heart, time_heart, date_resp, time_resp, date_temp,
-            time_temp, sys_blood, date_spo2, time_spo2;
+            time_temp, sys_blood,dia_blood, date_spo2, time_spo2;
     TextView bpm_heart, bpm_resp, celsuis_temp, percentage_spo2;
     ProgressBar mProgressbar_blood, mProgressbar_heart, mProgressbar_resp,
             mProgressbar_temp, mProgressbar_spo2;
@@ -192,11 +192,12 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
 
         sys_blood.setText(seekBar_sys_blood.getProgress() + " / " + seekBar_sys_blood.getProgress());
 
-        this.seekBar_spo2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+        this.seekBar_sys_blood.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
-                sys_blood.setText(seekBar_sys_blood.getProgress() + " / " + progressValue);
+                sys_blood.setText(progressValue + " / " + seekBar_dia_blood.getProgress());
             }
 
             @Override
@@ -210,11 +211,11 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
             }
         });
 
-        this.seekBar_sys_blood.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        this.seekBar_dia_blood.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
-                sys_blood.setText(progressValue + " / " + seekBar_dia_blood.getProgress());
+                sys_blood.setText(seekBar_sys_blood.getProgress() + " / " + progressValue);
             }
 
             @Override
