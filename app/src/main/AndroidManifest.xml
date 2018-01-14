@@ -117,7 +117,12 @@
         <activity
             android:name=".DentistDetailsActivity"
             android:label="@string/title_activity_dentist_details"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".blood_vital_graphActivity"
+            android:label="@string/title_activity_blood_vital_graph"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="landscape"></activity>
     </application>
 
 </manifest>

@@ -87,13 +87,13 @@ public class SugarActivityFragment extends Fragment implements View.OnClickListe
         date2.setOnClickListener(this);
         time2.setOnClickListener(this);
 
-        this.mg.setText(seekBar.getProgress() + " mg/dl");
+        this.mg.setText((seekBar.getProgress()+20) + " mg/dl");
 
         this.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
-                mg.setText(progressValue + " mg/dl");
+                mg.setText((progressValue+20) + " mg/dl");
             }
 
             @Override
@@ -183,7 +183,7 @@ public class SugarActivityFragment extends Fragment implements View.OnClickListe
 
                     JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, getString(R.string.api_url_sugar),
                             sendData(sharedPre.getInt(getString(R.string.shared_userId),0), date.getText().toString(),time.getText().toString(),
-                                    seekBar.getProgress()),
+                                    (seekBar.getProgress()+20)),
                             new Response.Listener<JSONObject>() {
                                 @Override
                                 public void onResponse(JSONObject response) {

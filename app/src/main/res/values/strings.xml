@@ -184,4 +184,5 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="title_activity_analytics">analyticsActivity</string>
     <string name="title_activity_dentist_details">DentistDetailsActivity</string>
+    <string name="title_activity_blood_vital_graph">blood_vital_graphActivity</string>
 </resources>

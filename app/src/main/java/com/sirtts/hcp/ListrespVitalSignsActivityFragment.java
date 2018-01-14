@@ -1,6 +1,7 @@
 package com.sirtts.hcp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -32,7 +34,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ListrespVitalSignsActivityFragment extends Fragment {
+public class ListrespVitalSignsActivityFragment extends Fragment implements View.OnClickListener{
 
     private RequestQueue mQueue;
     ListView listview;
@@ -41,6 +43,7 @@ public class ListrespVitalSignsActivityFragment extends Fragment {
     ArrayList<String> time_ArrayList = new ArrayList<String>();
     ArrayList<String> val1_ArrayList = new ArrayList<String>();
     ProgressBar mProgressbar;
+    Button graph;
     public static final String REQUEST_TAG = "ListRespVitalVolley";
 
 
@@ -54,6 +57,10 @@ public class ListrespVitalSignsActivityFragment extends Fragment {
 
         listview = (ListView) rootView.findViewById(R.id.ListRespVitalSigns_listView);
         mProgressbar = (ProgressBar) rootView.findViewById(R.id.ListRespVitalSigns_progressBar);
+
+        graph = (Button) rootView.findViewById(R.id.respvital_graphbtn);
+        graph.setOnClickListener(this);
+        graph.setVisibility(View.INVISIBLE);
 
         if (isNetworkAvailable(getContext())) {
             SharedPreferences sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
@@ -76,9 +83,8 @@ public class ListrespVitalSignsActivityFragment extends Fragment {
                                 }
 
                                 adp = new VitalListAdapter(getContext(),date_ArrayList,time_ArrayList,val1_ArrayList,new ArrayList<Integer>());
-
                                 listview.setAdapter(adp);
-
+                                graph.setVisibility(View.VISIBLE);
 
                             }
                             catch(Exception e){
@@ -141,4 +147,13 @@ public class ListrespVitalSignsActivityFragment extends Fragment {
         return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
     }
 
+    @Override
+    public void onClick(View v) {
+        if(v == graph){
+            Intent intent = new Intent(getContext(), blood_vital_graphActivity.class);
+            intent.putStringArrayListExtra("graphDate", date_ArrayList);
+            intent.putStringArrayListExtra("graphVal1", val1_ArrayList);
+            startActivity(intent);
+        }
+    }
 }

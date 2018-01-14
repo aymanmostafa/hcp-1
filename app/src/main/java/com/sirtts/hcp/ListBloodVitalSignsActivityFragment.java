@@ -1,6 +1,7 @@
 package com.sirtts.hcp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -24,20 +26,24 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ListBloodVitalSignsActivityFragment extends Fragment {
+public class ListBloodVitalSignsActivityFragment extends Fragment implements View.OnClickListener {
 
     private RequestQueue mQueue;
+    Button graph;
     ListView listview;
     VitalListAdapter adp;
     ArrayList<String> date_ArrayList = new ArrayList<String>();
     ArrayList<String> time_ArrayList = new ArrayList<String>();
     ArrayList<String> val1_ArrayList = new ArrayList<String>();
     ProgressBar mProgressbar;
+    ArrayList<String> sys_ArrayList = new ArrayList<>();
+    ArrayList<String> dia_ArrayList = new ArrayList<>();
     public static final String REQUEST_TAG = "ListBloodVitalVolley";
 
 
@@ -51,6 +57,10 @@ public class ListBloodVitalSignsActivityFragment extends Fragment {
 
         listview = (ListView) rootView.findViewById(R.id.ListBloodVitalSigns_listView);
         mProgressbar = (ProgressBar) rootView.findViewById(R.id.ListBloodVitalSigns_progressBar);
+
+        graph = (Button) rootView.findViewById(R.id.bloodvital_graphbtn);
+        graph.setOnClickListener(this);
+        graph.setVisibility(View.INVISIBLE);
 
         if (isNetworkAvailable(getContext())) {
             SharedPreferences sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
@@ -70,12 +80,13 @@ public class ListBloodVitalSignsActivityFragment extends Fragment {
                                     time_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_vital_list_arr_time))));
                                     val1_ArrayList.add(String.valueOf(response.optJSONObject(i).optInt(getString(R.string.api_receive_json_vital_bloodPressure_list_arr_systolic)))
                                             +"/"+String.valueOf(response.optJSONObject(i).optInt(getString(R.string.api_receive_json_vital_bloodPressure_list_arr_diastolic))));
+                                   sys_ArrayList.add(String.valueOf(response.optJSONObject(i).optInt(getString(R.string.api_receive_json_vital_bloodPressure_list_arr_systolic))));
+                                   dia_ArrayList.add(String.valueOf(response.optJSONObject(i).optInt(getString(R.string.api_receive_json_vital_bloodPressure_list_arr_diastolic))));
                                 }
 
                                 adp = new VitalListAdapter(getContext(),date_ArrayList,time_ArrayList,val1_ArrayList,new ArrayList<Integer>());
-
                                 listview.setAdapter(adp);
-
+                                graph.setVisibility(View.VISIBLE);
 
                             }
                             catch(Exception e){
@@ -138,4 +149,14 @@ public class ListBloodVitalSignsActivityFragment extends Fragment {
         return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
     }
 
+    @Override
+    public void onClick(View v) {
+        if(v == graph){
+            Intent intent = new Intent(getContext(), blood_vital_graphActivity.class);
+            intent.putStringArrayListExtra("graphDate", date_ArrayList);
+            intent.putStringArrayListExtra("graphVal1", sys_ArrayList);
+            intent.putStringArrayListExtra("graphVal2", dia_ArrayList);
+            startActivity(intent);
+        }
+    }
 }

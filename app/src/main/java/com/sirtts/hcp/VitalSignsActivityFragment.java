@@ -190,14 +190,13 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
         time_spo2.setOnClickListener(this);
 
 
-        sys_blood.setText(seekBar_sys_blood.getProgress() + " / " + seekBar_sys_blood.getProgress());
-
+        sys_blood.setText((seekBar_sys_blood.getProgress()+65) + " / " + (seekBar_dia_blood.getProgress()+65));
 
         this.seekBar_sys_blood.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
-                sys_blood.setText(progressValue + " / " + seekBar_dia_blood.getProgress());
+                sys_blood.setText((progressValue+65) + " / " + (seekBar_dia_blood.getProgress()+65));
             }
 
             @Override
@@ -215,7 +214,7 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
-                sys_blood.setText(seekBar_sys_blood.getProgress() + " / " + progressValue);
+                sys_blood.setText((seekBar_sys_blood.getProgress()+65) + " / " + (progressValue+65));
             }
 
             @Override
@@ -229,13 +228,13 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
             }
         });
 
-        celsuis_temp.setText(seekBar_temp.getProgress()/10 + " Celsius");
+        celsuis_temp.setText((seekBar_temp.getProgress()+350)/10 + " Celsius");
 
         this.seekBar_temp.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
-                celsuis_temp.setText((float) progressValue/10 + " Celsius");
+                celsuis_temp.setText((float) (progressValue+350)/10 + " Celsius");
             }
 
             @Override
@@ -249,13 +248,13 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
             }
         });
 
-        bpm_heart.setText(seekBar_heart.getProgress() + " bpm");
+        bpm_heart.setText((seekBar_heart.getProgress()+20) + " bpm");
 
         this.seekBar_heart.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
-                bpm_heart.setText(progressValue + " bpm");
+                bpm_heart.setText((progressValue+20) + " bpm");
             }
 
             @Override
@@ -269,13 +268,13 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
             }
         });
 
-        bpm_resp.setText(seekBar_resp.getProgress() + " bpm");
+        bpm_resp.setText((seekBar_resp.getProgress()+5) + " bpm");
 
         this.seekBar_resp.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
-                bpm_resp.setText(progressValue + " bpm");
+                bpm_resp.setText((progressValue+5) + " bpm");
             }
 
             @Override
@@ -342,8 +341,8 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
                 m.put(getString(R.string.api_send_json_bloodVital_date), date_blood.getText().toString());
                 m.put(getString(R.string.api_send_json_bloodVital_time), time_blood.getText().toString());
 
-                m.put(getString(R.string.api_send_json_bloodVital_sys), seekBar_sys_blood.getProgress());
-                m.put(getString(R.string.api_send_json_bloodVital_dia), seekBar_dia_blood.getProgress());
+                m.put(getString(R.string.api_send_json_bloodVital_sys), (seekBar_sys_blood.getProgress()+65));
+                m.put(getString(R.string.api_send_json_bloodVital_dia), (seekBar_dia_blood.getProgress()+65));
 
                 requestTheRequest(mProgressbar_blood, getString(R.string.api_url_bloodVital),
                         new JSONObject(m));
@@ -371,7 +370,7 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
                 m.put(getString(R.string.api_send_json_heartVital_date), date_heart.getText().toString());
                 m.put(getString(R.string.api_send_json_heartVital_time), time_heart.getText().toString());
 
-                m.put(getString(R.string.api_send_json_heartVital_cel), seekBar_heart.getProgress());
+                m.put(getString(R.string.api_send_json_heartVital_cel), (seekBar_heart.getProgress()+20));
 
                 requestTheRequest(mProgressbar_heart, getString(R.string.api_url_heartVital),
                         new JSONObject(m));
@@ -399,7 +398,7 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
                 m.put(getString(R.string.api_send_json_respVital_date), date_resp.getText().toString());
                 m.put(getString(R.string.api_send_json_respVital_time), time_resp.getText().toString());
 
-                m.put(getString(R.string.api_send_json_respVital_cel), seekBar_resp.getProgress());
+                m.put(getString(R.string.api_send_json_respVital_cel), (seekBar_resp.getProgress()+5));
 
                 requestTheRequest(mProgressbar_resp, getString(R.string.api_url_respVital),
                         new JSONObject(m));
@@ -427,7 +426,7 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
                 m.put(getString(R.string.api_send_json_tempVital_date), date_temp.getText().toString());
                 m.put(getString(R.string.api_send_json_tempVital_time), time_temp.getText().toString());
 
-                m.put(getString(R.string.api_send_json_tempVital_cel), (float)seekBar_temp.getProgress()/10);
+                m.put(getString(R.string.api_send_json_tempVital_cel), (float)(seekBar_temp.getProgress()+350)/10);
 
                 requestTheRequest(mProgressbar_temp, getString(R.string.api_url_tempVital),
                         new JSONObject(m));
