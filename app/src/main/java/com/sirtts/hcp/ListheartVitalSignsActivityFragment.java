@@ -149,6 +149,7 @@ public class ListheartVitalSignsActivityFragment extends Fragment implements Vie
             Intent intent = new Intent(getContext(), blood_vital_graphActivity.class);
             intent.putStringArrayListExtra("graphDate", date_ArrayList);
             intent.putStringArrayListExtra("graphVal1", val1_ArrayList);
+            intent.putExtra("graphName1",getString(R.string.api_receive_json_vital_heartRate_list_arr_bpm));
             startActivity(intent);
         }
     }

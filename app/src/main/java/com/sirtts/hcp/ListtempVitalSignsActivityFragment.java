@@ -148,6 +148,7 @@ public class ListtempVitalSignsActivityFragment extends Fragment implements View
             Intent intent = new Intent(getContext(), blood_vital_graphActivity.class);
             intent.putStringArrayListExtra("graphDate", date_ArrayList);
             intent.putStringArrayListExtra("graphVal1", val1_ArrayList);
+            intent.putExtra("graphName1",getString(R.string.api_receive_json_vital_tempRate_list_arr_celsius));
             startActivity(intent);
         }
     }

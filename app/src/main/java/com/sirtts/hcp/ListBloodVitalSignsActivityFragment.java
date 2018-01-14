@@ -156,6 +156,8 @@ public class ListBloodVitalSignsActivityFragment extends Fragment implements Vie
             intent.putStringArrayListExtra("graphDate", date_ArrayList);
             intent.putStringArrayListExtra("graphVal1", sys_ArrayList);
             intent.putStringArrayListExtra("graphVal2", dia_ArrayList);
+            intent.putExtra("graphName1",getString(R.string.api_receive_json_vital_bloodPressure_list_arr_systolic));
+            intent.putExtra("graphName2",getString(R.string.api_receive_json_vital_bloodPressure_list_arr_diastolic));
             startActivity(intent);
         }
     }
