@@ -42,7 +42,7 @@ public class blood_vital_graphActivityFragment extends Fragment {
         ArrayList<String> val1_ArrayList = intent.getStringArrayListExtra("graphVal1");
         String graphName1 = intent.getStringExtra("graphName1");
 
-        Log.e("dateArr", date_ArrayList.toString());
+        Log.e("dateArr#@#@#", date_ArrayList.toString());
         Log.e("val1Arr", val1_ArrayList.toString());
 
         GraphView graph = (GraphView) rootView.findViewById(R.id.graph);

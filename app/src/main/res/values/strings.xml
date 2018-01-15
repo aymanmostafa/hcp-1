@@ -126,9 +126,11 @@
 
     <string name="api_receive_json_sugar_date">date</string>
     <string name="api_receive_json_sugar_time">time</string>
-    <string name="api_receive_json_sugar_mg">test result</string>
+    <string name="api_receive_json_sugar_mg">mg/dl</string>
 
     <string name="api_send_json_list_arr_userid">userid</string>
+    <string name="api_send_json_list_arr_startDate">startDate</string>
+    <string name="api_send_json_list_arr_endDate">endDate</string>
 
     <string name="api_send_json_period_userId">userid</string>
     <string name="api_send_json_period_startdate">start date</string>
