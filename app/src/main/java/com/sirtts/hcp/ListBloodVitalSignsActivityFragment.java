@@ -201,18 +201,18 @@ public class ListBloodVitalSignsActivityFragment extends Fragment implements Vie
                                         public void onResponse(JSONArray response) {
                                             try {
                                                 mProgressbar.setVisibility(View.INVISIBLE);
-                                                date_ArrayList.clear();
-                                                sys_ArrayList.clear();
-                                                dia_ArrayList.clear();
+                                                ArrayList<String> date_ArrayList_graph = new ArrayList<String>();
+                                                ArrayList<String> sys_ArrayList_graph = new ArrayList<String>();
+                                                ArrayList<String> dia_ArrayList_graph= new ArrayList<String>();
                                                 for (int i = 0; i < response.length(); i++) {
-                                                    date_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_vital_list_arr_date))));
-                                                    sys_ArrayList.add(String.valueOf(response.optJSONObject(i).optInt(getString(R.string.api_receive_json_vital_bloodPressure_list_arr_systolic))));
-                                                    dia_ArrayList.add(String.valueOf(response.optJSONObject(i).optInt(getString(R.string.api_receive_json_vital_bloodPressure_list_arr_diastolic))));
+                                                    date_ArrayList_graph.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_vital_list_arr_date))));
+                                                    sys_ArrayList_graph.add(String.valueOf(response.optJSONObject(i).optInt(getString(R.string.api_receive_json_vital_bloodPressure_list_arr_systolic))));
+                                                    dia_ArrayList_graph.add(String.valueOf(response.optJSONObject(i).optInt(getString(R.string.api_receive_json_vital_bloodPressure_list_arr_diastolic))));
                                                 }
                                                 Intent intent = new Intent(getContext(), blood_vital_graphActivity.class);
-                                                intent.putStringArrayListExtra("graphDate", date_ArrayList);
-                                                intent.putStringArrayListExtra("graphVal1", sys_ArrayList);
-                                                intent.putStringArrayListExtra("graphVal2", dia_ArrayList);
+                                                intent.putStringArrayListExtra("graphDate", date_ArrayList_graph);
+                                                intent.putStringArrayListExtra("graphVal1", sys_ArrayList_graph);
+                                                intent.putStringArrayListExtra("graphVal2", dia_ArrayList_graph);
                                                 intent.putExtra("graphName1", getString(R.string.api_receive_json_vital_bloodPressure_list_arr_systolic));
                                                 intent.putExtra("graphName2", getString(R.string.api_receive_json_vital_bloodPressure_list_arr_diastolic));
                                                 startActivity(intent);

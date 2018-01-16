@@ -197,17 +197,17 @@ public class ListrespVitalSignsActivityFragment extends Fragment implements View
                                         public void onResponse(JSONArray response) {
                                             try {
                                                 mProgressbar.setVisibility(View.INVISIBLE);
-                                                date_ArrayList.clear();
-                                                val1_ArrayList.clear();
+                                                ArrayList<String> date_ArrayList_graph = new ArrayList<String>();
+                                                ArrayList<String> val1_ArrayList_graph = new ArrayList<String>();
 
                                                 for (int i = 0; i < response.length(); i++) {
-                                                    date_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_vital_list_arr_date))));
-                                                    val1_ArrayList.add(String.valueOf(response.optJSONObject(i).optDouble(getString(R.string.api_receive_json_vital_RespRate_list_arr_bpm))));
+                                                    date_ArrayList_graph.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_vital_list_arr_date))));
+                                                    val1_ArrayList_graph.add(String.valueOf(response.optJSONObject(i).optDouble(getString(R.string.api_receive_json_vital_RespRate_list_arr_bpm))));
 
                                                 }
                                                 Intent intent = new Intent(getContext(), blood_vital_graphActivity.class);
-                                                intent.putStringArrayListExtra("graphDate", date_ArrayList);
-                                                intent.putStringArrayListExtra("graphVal1", val1_ArrayList);
+                                                intent.putStringArrayListExtra("graphDate", date_ArrayList_graph);
+                                                intent.putStringArrayListExtra("graphVal1", val1_ArrayList_graph);
                                                 intent.putExtra("graphName1",getString(R.string.api_receive_json_vital_RespRate_list_arr_bpm));
                                                 startActivity(intent);
                                             } catch (Exception e) {
