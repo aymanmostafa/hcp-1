@@ -37,10 +37,10 @@ public class ListBloodActivityFragment extends Fragment {
     private RequestQueue mQueue;
     ListView listview;
     VitalListAdapter adp;
-    ArrayList<String> date_ArrayList = new ArrayList<String>();
-    ArrayList<String> time_ArrayList = new ArrayList<String>();
-    ArrayList<String> val1_ArrayList = new ArrayList<String>();
-    ArrayList<Integer> id_ArrayList = new ArrayList<Integer>();
+    ArrayList<String> date_ArrayList;
+    ArrayList<String> time_ArrayList;
+    ArrayList<String> val1_ArrayList;
+    ArrayList<Integer> id_ArrayList;
     ProgressBar mProgressbar;
     int offset;
     boolean flag_loading;
@@ -58,6 +58,10 @@ public class ListBloodActivityFragment extends Fragment {
         listview = (ListView) rootView.findViewById(R.id.ListBlood_listView);
         mProgressbar = (ProgressBar) rootView.findViewById(R.id.ListBlood_progressBar);
 
+        date_ArrayList = new ArrayList<String>();
+        time_ArrayList = new ArrayList<String>();
+        val1_ArrayList = new ArrayList<String>();
+        id_ArrayList = new ArrayList<Integer>();
         offset = 0;
         flag_loading = false;
         sendVolley(true);
