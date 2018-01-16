@@ -62,7 +62,7 @@ public class ListperiodActivityFragment extends Fragment {
                     .getRequestQueue();
 
             JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.POST, getString(R.string.api_url_Period_list),
-                    sendData(sharedPre.getInt(getString(R.string.shared_userId),0)),
+                    sendData(sharedPre.getInt(getString(R.string.shared_userId),0),0,0),
                     new Response.Listener<JSONArray>() {
                         @Override
                         public void onResponse(JSONArray response) {
@@ -128,9 +128,11 @@ public class ListperiodActivityFragment extends Fragment {
         }
     }
 
-    public JSONArray sendData(int userid){
+    public JSONArray sendData(int userid, int limit, int offset){
         HashMap m = new HashMap();
         m.put(getString(R.string.api_send_json_list_arr_userid),userid);
+        m.put(getString(R.string.api_send_json_limit),limit);
+        m.put(getString(R.string.api_send_json_offset),offset);
         Log.e(REQUEST_TAG, "sendData: "+(new JSONObject(m)).toString());
         JSONArray x = new JSONArray();
         x.put(new JSONObject(m));

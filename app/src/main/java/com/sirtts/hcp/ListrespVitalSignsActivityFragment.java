@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ListView;
@@ -54,6 +55,8 @@ public class ListrespVitalSignsActivityFragment extends Fragment implements View
     DatePickerDialog datePickerDialog;
     String startDate,endDate;
     AlertDialog.Builder alertBuilder;
+    int offset;
+    boolean flag_loading;
     public static final String REQUEST_TAG = "ListRespVitalVolley";
 
 
@@ -75,55 +78,30 @@ public class ListrespVitalSignsActivityFragment extends Fragment implements View
         graph.setOnClickListener(this);
         graph.setVisibility(View.INVISIBLE);
 
-        if (isNetworkAvailable(getContext())) {
-            SharedPreferences sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
-            mQueue = VolleyRequestQueue.getInstance(getContext().getApplicationContext())
-                    .getRequestQueue();
+        offset = 0;
+        flag_loading = false;
+        sendVolley(true);
+        listview.setOnScrollListener(new AbsListView.OnScrollListener() {
 
-            JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.POST, getString(R.string.api_url_respVital_list),
-                    sendData(sharedPre.getInt(getString(R.string.shared_userId),0),false),
-                    new Response.Listener<JSONArray>() {
-                        @Override
-                        public void onResponse(JSONArray response) {
-                            try {
-                                mProgressbar.setVisibility(View.INVISIBLE);
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
 
-                                for(int i=0;i<response.length();i++){
-                                    date_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_vital_list_arr_date))));
-                                    time_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_vital_list_arr_time))));
-                                    val1_ArrayList.add(String.valueOf(response.optJSONObject(i).optInt(getString(R.string.api_receive_json_vital_RespRate_list_arr_bpm)))
-                                    );
-                                }
 
-                                adp = new VitalListAdapter(getContext(),date_ArrayList,time_ArrayList,val1_ArrayList,new ArrayList<Integer>());
-                                listview.setAdapter(adp);
-                                graph.setVisibility(View.VISIBLE);
+            }
 
-                            }
-                            catch(Exception e){
-                                mProgressbar.setVisibility(View.INVISIBLE);
-                                Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_SHORT).show();
-                            }
+            public void onScroll(AbsListView view, int firstVisibleItem,
+                                 int visibleItemCount, int totalItemCount) {
 
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError errork) {
-                            mProgressbar.setVisibility(View.INVISIBLE);
-                            Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-            jsonRequest.setTag(REQUEST_TAG);
-            jsonRequest.setRetryPolicy(new DefaultRetryPolicy(
-                    0,
-                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-            mQueue.add(jsonRequest);
-        }
-        else Toast.makeText(getActivity(), "Failed to Connect! Check your Connection", Toast.LENGTH_SHORT).show();
-
+                if(firstVisibleItem+visibleItemCount == totalItemCount && totalItemCount!=0)
+                {
+                    if(flag_loading == false)
+                    {
+                        flag_loading = true;
+                        offset +=10;
+                        sendVolley(false);
+                    }
+                }
+            }
+        });
 
         return rootView;
     }
@@ -146,9 +124,11 @@ public class ListrespVitalSignsActivityFragment extends Fragment implements View
         }
     }
 
-    public JSONArray sendData(int userid,boolean graph){
+    public JSONArray sendData(int userid,boolean graph, int limit, int offset){
         HashMap m = new HashMap();
         m.put(getString(R.string.api_send_json_vital_list_arr_userid),userid);
+        m.put(getString(R.string.api_send_json_limit),limit);
+        m.put(getString(R.string.api_send_json_offset),offset);
         if(graph){
             m.put(getString(R.string.api_send_json_list_arr_startDate),startDate);
             m.put(getString(R.string.api_send_json_list_arr_endDate),endDate);
@@ -211,7 +191,7 @@ public class ListrespVitalSignsActivityFragment extends Fragment implements View
                             mProgressbar.setVisibility(View.VISIBLE);
                             SharedPreferences sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
                             JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.POST, getString(R.string.api_url_respVital_list),
-                                    sendData(sharedPre.getInt(getString(R.string.shared_userId), 0),true),
+                                    sendData(sharedPre.getInt(getString(R.string.shared_userId), 0),true,0,0),
                                     new Response.Listener<JSONArray>() {
                                         @Override
                                         public void onResponse(JSONArray response) {
@@ -297,5 +277,58 @@ public class ListrespVitalSignsActivityFragment extends Fragment implements View
         String formattedDate = df.format(c.getTime());
 
         return formattedDate;
+    }
+    public void sendVolley(final boolean first){
+        flag_loading = false;
+        if (isNetworkAvailable(getContext())) {
+            SharedPreferences sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
+
+            mQueue = VolleyRequestQueue.getInstance(getContext().getApplicationContext())
+                    .getRequestQueue();
+
+            JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.POST, getString(R.string.api_url_respVital_list),
+                    sendData(sharedPre.getInt(getString(R.string.shared_userId),0),false,10, offset),
+                    new Response.Listener<JSONArray>() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            try {
+                                mProgressbar.setVisibility(View.INVISIBLE);
+
+                                for(int i=0;i<response.length();i++){
+                                    date_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_vital_list_arr_date))));
+                                    time_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_vital_list_arr_time))));
+                                    val1_ArrayList.add(String.valueOf(response.optJSONObject(i).optInt(getString(R.string.api_receive_json_vital_RespRate_list_arr_bpm)))
+                                    );
+                                }
+                                if(response.length() == 0) flag_loading = true;
+                                if(first) {adp = new VitalListAdapter(getContext(),date_ArrayList,time_ArrayList,val1_ArrayList,new ArrayList<Integer>());
+                                    listview.setAdapter(adp);
+                                    graph.setVisibility(View.VISIBLE);
+                                }
+                                else {
+                                    adp.notifyDataSetChanged();
+                                }
+                            }
+                            catch(Exception e){
+                                mProgressbar.setVisibility(View.INVISIBLE);
+                                Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError errork) {
+                            mProgressbar.setVisibility(View.INVISIBLE);
+                            Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+            jsonRequest.setTag(REQUEST_TAG);
+            jsonRequest.setRetryPolicy(new DefaultRetryPolicy(
+                    0,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            mQueue.add(jsonRequest);
+        }
+        else Toast.makeText(getActivity(), "Failed to Connect! Check your Connection", Toast.LENGTH_SHORT).show();
     }
 }
