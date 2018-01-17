@@ -195,7 +195,7 @@ public class ListtempVitalSignsActivityFragment extends Fragment implements View
                         mProgressbar.setVisibility(View.VISIBLE);
                         SharedPreferences sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
                         JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.POST, getString(R.string.api_url_tempVital_list),
-                                sendData(sharedPre.getInt(getString(R.string.shared_userId), 0),true,0,0),
+                                sendData(sharedPre.getInt(getString(R.string.shared_userId), 0),true,Integer.MAX_VALUE,0),
                                 new Response.Listener<JSONArray>() {
                                     @Override
                                     public void onResponse(JSONArray response) {

@@ -186,10 +186,10 @@ public class blood_vital_graphActivityFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
         graph.getViewport().setXAxisBoundsManual(true);
-
         graph.getGridLabelRenderer().setHumanRounding(false);
-
         graph.getViewport().setScalable(true);
         graph.getViewport().setScalableY(true);
         graph.getLegendRenderer().setVisible(true);
