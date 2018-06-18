@@ -95,9 +95,9 @@ public class loginActivityFragment extends Fragment implements View.OnClickListe
             startActivity(new Intent(getContext(), signupActivity.class));
         }
         else if(v == login){
-            if(username.getText().toString().equals("") || !android.util.Patterns.EMAIL_ADDRESS.matcher(username.getText().toString()).matches()){
+            if(username.getText().toString().equals("")){
                 username.requestFocus();
-                username.setError("Enter a Valid Email");
+                username.setError("Enter a Valid Username");
             }
             else if(password.getText().toString().equals("")){
                 password.requestFocus();
@@ -117,22 +117,20 @@ public class loginActivityFragment extends Fragment implements View.OnClickListe
                                 public void onResponse(JSONObject response) {
                                     try {
                                         mProgressbar.setVisibility(View.INVISIBLE);
-                                        Boolean userStatus = ((JSONObject) response).optBoolean(getString(R.string.api_receive_json_login_status));
-                                        int userId = ((JSONObject) response).optInt(getString(R.string.api_receive_json_login_userId));
-                                        String errorMsg = ((JSONObject) response).optString(getString(R.string.api_receive_json_login_errorMsg));
-                                        Boolean userFemale = ((JSONObject) response).optBoolean(getString(R.string.api_receive_json_login_female));
+                                        String token = ((JSONObject) response).optString(getString(R.string.api_receive_json_login_idToken));
+                                        String gender = ((JSONObject) response).optString(getString(R.string.api_receive_json_login_gender));
 
-                                        if (userStatus && userId > 0 && errorMsg.equals("")) {
+                                        if (token != null) {
                                             sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged),Context.MODE_PRIVATE);
                                             SharedPreferences.Editor editor = sharedPre.edit();
                                             editor.putBoolean(getString(R.string.shared_isUserLoged), true);
-                                            editor.putInt(getString(R.string.shared_userId), userId);
-                                            editor.putBoolean(getString(R.string.shared_female), userFemale);
+                                            editor.putString(getString(R.string.shared_userId), token);
+                                            editor.putString(getString(R.string.shared_gender), gender);
                                             editor.commit();
                                             startActivity(new Intent(getContext(), DashBoardActivity.class));
                                             getActivity().finish();
                                         } else {
-                                            error.setText(errorMsg);
+                                            error.setText("Unexpected Error happened!");
                                         }
 
                                     }
@@ -146,7 +144,7 @@ public class loginActivityFragment extends Fragment implements View.OnClickListe
                                 @Override
                                 public void onErrorResponse(VolleyError errork) {
                                     mProgressbar.setVisibility(View.INVISIBLE);
-                                    error.setText("Unexpected Error happened!");
+                                    error.setText("Bad Credentials!");
                                 }
                             });
 
@@ -164,9 +162,10 @@ public class loginActivityFragment extends Fragment implements View.OnClickListe
     }
 
     public JSONObject sendData(String username,String password){
-        HashMap<String,String> m = new HashMap<>();
-        m.put(getString(R.string.api_send_json_login_email),username);
+        HashMap m = new HashMap<>();
+        m.put(getString(R.string.api_send_json_login_username),username);
         m.put(getString(R.string.api_send_json_login_password),password);
+        m.put(getString(R.string.api_send_json_login_rememberMe),true);
         Log.e(REQUEST_TAG, "sendData: "+(new JSONObject(m)).toString());
         return new JSONObject(m);
     }

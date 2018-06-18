@@ -6,11 +6,11 @@
     <string name="title_activity_vital_signs">VitalSignsActivity</string>
     <string name="shared_isUserLoged">isUserloged</string>
     <string name="shared_userId">userId</string>
-    <string name="shared_female">female</string>
+    <string name="shared_gender">gender</string>
     ''
 
     <!--Development-->
-    <string name="api_url_login">http://hcp.westeurope.cloudapp.azure.com:5980/login</string>
+    <string name="api_url_login">http://10.0.2.2:9060/api/authenticate</string>
     <string name="api_header_error_key">x-hcportalapp-error</string>
     <string name="api_url_signup">http://10.0.2.2:9060/api/register</string>
     <string name="api_url_period">http://hcp.westeurope.cloudapp.azure.com:5980/menstrual_cycle/set</string>
@@ -58,13 +58,14 @@
     <!--<string name="api_url_respVital_list">http://hcp.cloudhub.io/respiratory_rate</string>-->
     <!--Production-->
 
-    <string name="api_send_json_login_email">email</string>
+    <string name="api_send_json_login_username">username</string>
     <string name="api_send_json_login_password">password</string>
+    <string name="api_send_json_login_rememberMe">rememberMe</string>
     <string name="api_receive_json_status">status</string>
     <string name="api_receive_json_login_status">status</string>
     <string name="api_receive_json_login_userId">userid</string>
-    <string name="api_receive_json_login_female">female</string>
-    <string name="api_receive_json_login_errorMsg">error message</string>
+    <string name="api_receive_json_login_gender">gender</string>
+    <string name="api_receive_json_login_idToken">id_token</string>
     <string name="api_receive_json_signup_status">status</string>
     <string name="api_send_json_signup_email">email</string>
     <string name="api_send_json_signup_password">password</string>

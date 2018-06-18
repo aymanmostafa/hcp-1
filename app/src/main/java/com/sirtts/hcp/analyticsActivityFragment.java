@@ -55,7 +55,7 @@ public class analyticsActivityFragment extends Fragment implements View.OnClickL
 
         sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged),
                 Context.MODE_PRIVATE);
-        if(sharedPre.getBoolean(getString(R.string.shared_female),false))
+        if(sharedPre.getString(getString(R.string.shared_gender),"").equals("FEMALE"))
             period.setVisibility(View.VISIBLE);
 
         return rootView;
