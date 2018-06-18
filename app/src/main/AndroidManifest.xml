@@ -35,22 +35,6 @@
             android:label="@string/title_activity_vital_signs"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".BloodVitalSignsActivity"
-            android:label="@string/title_activity_blood_vital_signs"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".TempVitalSignsActivity"
-            android:label="@string/title_activity_temp_vital_signs"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".HeartVitalSignsActivity"
-            android:label="@string/title_activity_heart_vital_signs"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".RespVitalSignsActivity"
-            android:label="@string/title_activity_resp_vital_signs"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".ListBloodVitalSignsActivity"
             android:label="@string/title_activity_list_blood_vital_signs"
             android:theme="@style/AppTheme.NoActionBar" />

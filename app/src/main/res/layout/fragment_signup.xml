@@ -21,61 +21,90 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/register_rel">
+        app:layout_constraintTop_toBottomOf="@id/register_rel"
+        app:layout_constraintVertical_bias="0.0">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/signup_errortvid"
-        android:layout_width="207dp"
-        android:layout_height="42dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="413dp"
-        android:textColor="@android:color/holo_red_dark"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.478"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+            <TextView
+                android:id="@+id/signup_errortvid"
+                android:layout_width="207dp"
+                android:layout_height="42dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:textColor="@android:color/holo_red_dark"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/signup_signupbtnid"
+                app:layout_constraintVertical_bias="0.0" />
 
-    <ProgressBar
-        android:id="@+id/signup_progressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="36dp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/signup_usernametxtid"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.911" />
+            <ProgressBar
+                android:id="@+id/signup_progressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="36dp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toTopOf="@+id/signup_usernametxtid"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
 
-    <EditText
-        android:id="@+id/signup_usernametxtid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="99dp"
-        android:ems="10"
-        android:hint="Email"
-        android:inputType="textPersonName"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            <EditText
+                android:id="@+id/signup_usernametxtid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="96dp"
+                android:ems="10"
+                android:hint="Username"
+                android:inputType="textPersonName"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/signup_emailtxtid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:hint="Email"
+                android:inputType="textPersonName"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/signup_usernametxtid" />
+
+            <EditText
+                android:id="@+id/signup_maritaltxtid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:ems="10"
+                android:hint="Marital Status"
+                android:inputType="textPersonName"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/signup_datebirthtxtid" />
 
             <EditText
                 android:id="@+id/signup_passwordtxtid"
@@ -90,22 +119,22 @@
                 app:layout_constraintHorizontal_bias="0.502"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/signup_usernametxtid" />
+                app:layout_constraintTop_toBottomOf="@+id/signup_emailtxtid" />
 
-    <EditText
-        android:id="@+id/signup_repasswordtxtid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="Confirmation"
-        android:inputType="textPassword"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signup_passwordtxtid" />
+            <EditText
+                android:id="@+id/signup_repasswordtxtid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:hint="Confirmation"
+                android:inputType="textPassword"
+                app:layout_constraintHorizontal_bias="0.502"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/signup_passwordtxtid" />
 
             <TextView
                 android:id="@+id/signup_datebirthtxtid"
@@ -124,54 +153,79 @@
                 app:layout_constraintTop_toBottomOf="@+id/signup_repasswordtxtid"
                 tools:layout_editor_absoluteX="95dp" />
 
-    <Button
-        android:id="@+id/signup_signupbtnid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="62dp"
-        android:text="Sign up"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signup_datebirthtxtid"
-        app:layout_constraintVertical_bias="0.0" />
+            <Button
+                android:id="@+id/signup_signupbtnid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Sign up"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/signup_doctorCheckrid"
+                app:layout_constraintVertical_bias="0.0" />
 
-    <RadioGroup
-        android:id="@+id/signup_gendergroup"
-        android:layout_width="213dp"
-        android:layout_height="38dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-        android:checkedButton="@+id/signup_maleradioid"
-        android:orientation="horizontal"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signup_datebirthtxtid">
+            <RadioGroup
+                android:id="@+id/signup_gendergroup"
+                android:layout_width="213dp"
+                android:layout_height="38dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                android:checkedButton="@+id/signup_maleradioid"
+                android:orientation="horizontal"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/signup_maritaltxtid">
 
-        <RadioButton
-            android:id="@+id/signup_maleradioid"
-            android:layout_width="93dp"
-            android:layout_height="30dp"
-            android:layout_weight="1"
-            android:text="Male"
-            tools:layout_editor_absoluteX="181dp"
-            tools:layout_editor_absoluteY="508dp" />
+                <RadioButton
+                    android:id="@+id/signup_maleradioid"
+                    android:layout_width="93dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:text="MALE"
+                    tools:layout_editor_absoluteX="181dp"
+                    tools:layout_editor_absoluteY="508dp" />
 
-        <RadioButton
-            android:id="@+id/signup_femaleradioid"
-            android:layout_width="93dp"
-            android:layout_height="30dp"
-            android:layout_weight="1"
-            android:text="Female"
-            tools:layout_editor_absoluteX="219dp"
-            tools:layout_editor_absoluteY="302dp" />
+                <RadioButton
+                    android:id="@+id/signup_femaleradioid"
+                    android:layout_width="93dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:text="FEMALE"
+                    tools:layout_editor_absoluteX="219dp"
+                    tools:layout_editor_absoluteY="302dp" />
 
-    </RadioGroup>
-</android.support.constraint.ConstraintLayout>
+            </RadioGroup>
+
+            <CheckBox
+                android:id="@+id/signup_doctorCheckrid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="I'm a doctor"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/signup_ethnSpinnerid"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <Spinner
+                android:id="@+id/signup_ethnSpinnerid"
+                android:layout_width="205dp"
+                android:layout_height="31dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/signup_gendergroup" />
+        </android.support.constraint.ConstraintLayout>
     </ScrollView>
 </android.support.constraint.ConstraintLayout>

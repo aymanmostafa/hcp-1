@@ -25,8 +25,8 @@ import java.util.Map;
 public class JSONArrayRequest extends JsonRequest<JSONArray> {
 
     public JSONArrayRequest(int method, String url, JSONObject jsonRequest,
-                             Response.Listener<JSONArray> listener,
-                             Response.ErrorListener errorListener) {
+                            Response.Listener<JSONArray> listener,
+                            Response.ErrorListener errorListener) {
         super(method, url, (jsonRequest == null) ? null : jsonRequest.toString(), listener, errorListener);
     }
 

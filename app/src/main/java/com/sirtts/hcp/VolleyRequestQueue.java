@@ -1,7 +1,4 @@
 package com.sirtts.hcp;
-/**
- * Created by ahmad on 8/9/2017.
- */
 
 import android.content.Context;
 
@@ -11,6 +8,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
+
 
 /**
  * Custom implementation of Volley Request Queue
