@@ -14,8 +14,8 @@
     <string name="api_header_error_key">x-hcportalapp-error</string>
     <string name="api_url_signup">http://10.0.2.2:9060/api/register</string>
     <string name="api_url_period">http://hcp.westeurope.cloudapp.azure.com:5980/menstrual_cycle/set</string>
-    <string name="api_url_sugar">http://hcp.westeurope.cloudapp.azure.com:5980/sugar_test/set</string>
-    <string name="api_url_sugar_list">http://hcp.westeurope.cloudapp.azure.com:5980/sugar_test</string>
+    <string name="api_url_sugar">http://10.0.2.2:9060/api/diabetes-sugar-tests</string>
+    <string name="api_url_sugar_list">http://10.0.2.2:9060/api/diabetes-sugar-tests/byUserid</string>
     <string name="api_url_Period_list">http://hcp.westeurope.cloudapp.azure.com:5980/menstrual_cycle</string>
     <string name="api_url_bloodVital">http://hcp.westeurope.cloudapp.azure.com:5980/blood_pressure/set</string>
     <string name="api_url_heartVital">http://hcp.westeurope.cloudapp.azure.com:5980/heart_rate/set</string>
@@ -61,6 +61,7 @@
     <string name="api_send_json_login_username">username</string>
     <string name="api_send_json_login_password">password</string>
     <string name="api_send_json_login_rememberMe">rememberMe</string>
+    <string name="api_receive_json_id">id</string>
     <string name="api_receive_json_status">status</string>
     <string name="api_receive_json_login_status">status</string>
     <string name="api_receive_json_login_userId">userid</string>
@@ -79,11 +80,14 @@
 
     <string name="api_send_json_signup_ethnicity">ethnicity</string>
 
+    <string name="api_send_json_auth_header">Authorization</string>
+
+
 
 
     <string name="api_send_json_vital_userId">userid</string>
     <string name="api_send_json_bloodVital_userId">userid</string>
-    <string name="api_send_json_bloodVital_date">date</string>
+    <string name="api_send_json_bloodVital_date">measurmentdate</string>
     <string name="api_send_json_bloodVital_time">time</string>
     <string name="api_send_json_bloodVital_sys">systolic</string>
     <string name="api_send_json_bloodVital_dia">diastolic</string>
@@ -110,10 +114,8 @@
     <string name="api_send_json_respVital_time">time</string>
     <string name="api_send_json_respVital_cel">bpm</string>
 
-    <string name="api_send_json_sugar_userId">userid</string>
-    <string name="api_send_json_sugar_date">date</string>
-    <string name="api_send_json_sugar_time">time</string>
-    <string name="api_send_json_sugar_mg">test result</string>
+    <string name="api_send_json_sugar_date">measurmentdate</string>
+    <string name="api_send_json_sugar_mg">result</string>
 
     <string name="api_send_json_dentist_userId">userid</string>
     <string name="api_send_json_dentist_Id">id</string>
@@ -127,7 +129,7 @@
 
     <string name="api_receive_json_sugar_date">date</string>
     <string name="api_receive_json_sugar_time">time</string>
-    <string name="api_receive_json_sugar_mg">mg/dl</string>
+    <string name="api_receive_json_sugar_mg">result</string>
 
     <string name="api_send_json_list_arr_userid">userid</string>
     <string name="api_send_json_list_arr_startDate">startDate</string>
@@ -140,8 +142,8 @@
     <string name="api_send_json_period_endtime">end time</string>
 
     <string name="api_send_json_vital_list_arr_userid">userid</string>
-    <string name="api_receive_json_vital_list_arr_date">date</string>
-    <string name="api_receive_json_vital_list_arr_time">time</string>
+    <string name="api_receive_json_vital_list_arr_date">measurmentdate</string>
+    <string name="api_receive_json_vital_list_arr_time">measurmentdate</string>
     <string name="api_receive_json_vital_bloodPressure_list_arr_systolic">systolic</string>
     <string name="api_receive_json_vital_bloodPressure_list_arr_diastolic">diastolic</string>
     <string name="api_receive_json_vital_heartRate_list_arr_bpm">bpm</string>

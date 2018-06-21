@@ -124,7 +124,7 @@ public class loginActivityFragment extends Fragment implements View.OnClickListe
                                             sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged),Context.MODE_PRIVATE);
                                             SharedPreferences.Editor editor = sharedPre.edit();
                                             editor.putBoolean(getString(R.string.shared_isUserLoged), true);
-                                            editor.putString(getString(R.string.shared_userId), token);
+                                            editor.putString(getString(R.string.api_receive_json_login_idToken), "Bearer " + token);
                                             editor.putString(getString(R.string.shared_gender), gender);
                                             editor.commit();
                                             startActivity(new Intent(getContext(), DashBoardActivity.class));

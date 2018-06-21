@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -34,6 +35,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -142,7 +144,10 @@ public class SugarActivityFragment extends Fragment implements View.OnClickListe
                         @Override
                         public void onDateSet(DatePicker view, int year,
                                               int monthOfYear, int dayOfMonth) {
-                            date.setText(year +"-" + (monthOfYear + 1) + "-" +dayOfMonth);
+                            String month = "", day = "";
+                            if(monthOfYear + 1 < 10) month = "0";
+                            if(dayOfMonth < 10) day = "0";
+                            date.setText(year +"-"+ month + (monthOfYear + 1) + "-"+day +dayOfMonth);
                         }
                     }, mYear, mMonth, mDay);
             datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
@@ -158,7 +163,7 @@ public class SugarActivityFragment extends Fragment implements View.OnClickListe
                 public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                     time.setText( selectedHour + ":" + selectedMinute);
                 }
-            }, hour, minute, false);
+            }, hour, minute, true);
             mTimePicker.setTitle("Select Time");
             mTimePicker.show();
         }
@@ -182,20 +187,14 @@ public class SugarActivityFragment extends Fragment implements View.OnClickListe
                     mProgressbar.setVisibility(View.VISIBLE);
 
                     JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, getString(R.string.api_url_sugar),
-                            sendData(sharedPre.getInt(getString(R.string.shared_userId),0), date.getText().toString(),time.getText().toString(),
+                            sendData(date.getText().toString(),time.getText().toString(),
                                     (seekBar.getProgress()+20)),
                             new Response.Listener<JSONObject>() {
                                 @Override
                                 public void onResponse(JSONObject response) {
                                     try {
                                         mProgressbar.setVisibility(View.INVISIBLE);
-                                        Boolean userStatus = ((JSONObject) response).optBoolean(getString(R.string.api_receive_json_status));
 
-                                        if (userStatus) {
-                                              Toast.makeText(getActivity(), "Data Saved!", Toast.LENGTH_LONG).show();
-                                        } else {
-                                            error.setText("Unexpected Error happened!");
-                                        }
                                     }
                                     catch(Exception e){
                                         mProgressbar.setVisibility(View.INVISIBLE);
@@ -209,7 +208,16 @@ public class SugarActivityFragment extends Fragment implements View.OnClickListe
                                     mProgressbar.setVisibility(View.INVISIBLE);
                                     error.setText("Unexpected Error happened!");
                                 }
-                            });
+                            }){
+                        //Send the token with the request
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            HashMap<String, String> headers = new HashMap<String,String>();
+                            headers.put(getString(R.string.api_send_json_auth_header),
+                                    sharedPre.getString(getString(R.string.api_receive_json_login_idToken),""));
+                            return headers;
+                        }
+                    };
 
                     jsonRequest.setTag(REQUEST_TAG);
                     jsonRequest.setRetryPolicy(new DefaultRetryPolicy(
@@ -234,11 +242,9 @@ public class SugarActivityFragment extends Fragment implements View.OnClickListe
         }
     }
 
-    public JSONObject sendData(int userid,String date,String time,int bpm){
+    public JSONObject sendData(String date,String time,int bpm){
         HashMap m = new HashMap();
-        m.put(getString(R.string.api_send_json_sugar_userId),userid);
-        m.put(getString(R.string.api_send_json_sugar_date),date);
-        m.put(getString(R.string.api_send_json_sugar_time),time);
+        m.put(getString(R.string.api_send_json_sugar_date),date+"T"+time+":00");
         m.put(getString(R.string.api_send_json_sugar_mg),bpm);
         Log.e(REQUEST_TAG, "sendData:"+(new JSONObject(m)).toString());
         return new JSONObject(m);

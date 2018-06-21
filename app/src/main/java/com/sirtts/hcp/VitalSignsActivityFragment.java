@@ -337,9 +337,7 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
 
                 HashMap m = new HashMap();
 
-                m.put(getString(R.string.api_send_json_vital_userId), sharedPre.getInt(getString(R.string.shared_userId), 0));
-                m.put(getString(R.string.api_send_json_bloodVital_date), date_blood.getText().toString());
-                m.put(getString(R.string.api_send_json_bloodVital_time), time_blood.getText().toString());
+                m.put(getString(R.string.api_send_json_bloodVital_date), date_blood.getText().toString()+"T"+time_blood.getText().toString()+":00");
 
                 m.put(getString(R.string.api_send_json_bloodVital_sys), (seekBar_sys_blood.getProgress()+65));
                 m.put(getString(R.string.api_send_json_bloodVital_dia), (seekBar_dia_blood.getProgress()+65));
@@ -589,7 +587,10 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
                     @Override
                     public void onDateSet(DatePicker view, int year,
                                           int monthOfYear, int dayOfMonth) {
-                        date.setText(year +"-" + (monthOfYear + 1) + "-" +dayOfMonth);
+                        String month = "", day = "";
+                        if(monthOfYear + 1 < 10) month = "0";
+                        if(dayOfMonth < 10) day = "0";
+                        date.setText(year +"-"+ month + (monthOfYear + 1) + "-"+day +dayOfMonth);
                     }
                 }, mYear, mMonth, mDay);
         datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
@@ -606,7 +607,7 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                 time.setText( selectedHour + ":" + selectedMinute);
             }
-        }, hour, minute, false);
+        }, hour, minute, true);
         mTimePicker.setTitle("Select Time");
         mTimePicker.show();
     }
