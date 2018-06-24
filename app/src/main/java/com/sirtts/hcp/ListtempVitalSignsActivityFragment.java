@@ -25,6 +25,7 @@ import android.widget.Toast;
 /**
  * A placeholder fragment containing a simple view.
  */
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -43,6 +44,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class ListtempVitalSignsActivityFragment extends Fragment implements View.OnClickListener {
@@ -100,7 +102,7 @@ public class ListtempVitalSignsActivityFragment extends Fragment implements View
                     if(flag_loading == false)
                     {
                         flag_loading = true;
-                        offset +=10;
+                        offset ++;
                         sendVolley(false);
                     }
                 }
@@ -285,13 +287,13 @@ public class ListtempVitalSignsActivityFragment extends Fragment implements View
     public void sendVolley(final boolean first){
         flag_loading = false;
         if (isNetworkAvailable(getContext())) {
-            SharedPreferences sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
+            final SharedPreferences sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
 
             mQueue = VolleyRequestQueue.getInstance(getContext().getApplicationContext())
                     .getRequestQueue();
 
-            JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.POST, getString(R.string.api_url_tempVital_list),
-                    sendData(sharedPre.getInt(getString(R.string.shared_userId),0),false,10, offset),
+            JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.GET, getString(R.string.api_url_tempVital_list)+"?page="+offset,
+                    new JSONArray(),
                     new Response.Listener<JSONArray>() {
                         @Override
                         public void onResponse(JSONArray response) {
@@ -299,13 +301,12 @@ public class ListtempVitalSignsActivityFragment extends Fragment implements View
                                 mProgressbar.setVisibility(View.INVISIBLE);
 
                                 for(int i=0;i<response.length();i++){
-                                    date_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_vital_list_arr_date))));
-                                    time_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_vital_list_arr_time))));
-                                    val1_ArrayList.add(String.valueOf(response.optJSONObject(i).optInt(getString(R.string.api_receive_json_vital_tempRate_list_arr_celsius)))
-                                    );
+                                    date_ArrayList.add("");
+                                    time_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_vital_list_arr_time))).replace('T',' '));
+                                    val1_ArrayList.add(String.valueOf(response.optJSONObject(i).optInt(getString(R.string.api_send_json_tempVital_cel))));
                                 }
                                 if(response.length() == 0) flag_loading = true;
-                                if(first) {adp = new VitalListAdapter(getContext(),date_ArrayList,time_ArrayList,val1_ArrayList,new ArrayList<Integer>());
+                                if(first) {adp = new VitalListAdapter(getContext(),date_ArrayList,time_ArrayList,val1_ArrayList,new ArrayList<String>());
                                     listview.setAdapter(adp);
                                     graph.setVisibility(View.VISIBLE);
                                 }
@@ -325,7 +326,15 @@ public class ListtempVitalSignsActivityFragment extends Fragment implements View
                             mProgressbar.setVisibility(View.INVISIBLE);
                             Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_SHORT).show();
                         }
-                    });
+                    }){//Send the token with the request
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<String,String>();
+                    headers.put(getString(R.string.api_send_json_auth_header),
+                            sharedPre.getString(getString(R.string.api_receive_json_login_idToken),""));
+                    return headers;
+                }
+            };
             jsonRequest.setTag(REQUEST_TAG);
             jsonRequest.setRetryPolicy(new DefaultRetryPolicy(
                     0,
@@ -335,5 +344,4 @@ public class ListtempVitalSignsActivityFragment extends Fragment implements View
         }
         else Toast.makeText(getActivity(), "Failed to Connect! Check your Connection", Toast.LENGTH_SHORT).show();
     }
-
 }

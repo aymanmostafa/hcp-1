@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -36,6 +37,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -123,7 +125,10 @@ public class PeriodActivityFragment extends Fragment implements View.OnClickList
                         @Override
                         public void onDateSet(DatePicker view, int year,
                                               int monthOfYear, int dayOfMonth) {
-                            startdate.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                            String month = "", day = "";
+                            if(monthOfYear + 1 < 10) month = "0";
+                            if(dayOfMonth < 10) day = "0";
+                            startdate.setText(year +"-"+ month + (monthOfYear + 1) + "-"+day +dayOfMonth);
                         }
                     }, mYear, mMonth, mDay);
             datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
@@ -139,7 +144,10 @@ public class PeriodActivityFragment extends Fragment implements View.OnClickList
                         @Override
                         public void onDateSet(DatePicker view, int year,
                                               int monthOfYear, int dayOfMonth) {
-                            enddate.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                            String month = "", day = "";
+                            if(monthOfYear + 1 < 10) month = "0";
+                            if(dayOfMonth < 10) day = "0";
+                            enddate.setText(year +"-"+ month + (monthOfYear + 1) + "-"+day +dayOfMonth);
                         }
                     }, mYear, mMonth, mDay);
             datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
@@ -154,7 +162,7 @@ public class PeriodActivityFragment extends Fragment implements View.OnClickList
                 public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                     starttime.setText(selectedHour + ":" + selectedMinute);
                 }
-            }, hour, minute, false);
+            }, hour, minute, true);
             mTimePicker.setTitle("Select Time");
             mTimePicker.show();
         } else if (v == endtime) {
@@ -167,7 +175,7 @@ public class PeriodActivityFragment extends Fragment implements View.OnClickList
                 public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                     endtime.setText(selectedHour + ":" + selectedMinute);
                 }
-            }, hour, minute, false);
+            }, hour, minute, true);
             mTimePicker.setTitle("Select Time");
             mTimePicker.show();
         } else if (v == save) {
@@ -202,23 +210,15 @@ public class PeriodActivityFragment extends Fragment implements View.OnClickList
 
                     JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST,
                             getString(R.string.api_url_period),
-                            sendData(sharedPre.getInt(getString(R.string.shared_userId), 0),
-                                    startdate.getText().toString(), starttime.getText().toString(),
+                            sendData(startdate.getText().toString(), starttime.getText().toString(),
                                     enddate.getText().toString(), endtime.getText().toString()),
                             new Response.Listener<JSONObject>() {
                                 @Override
                                 public void onResponse(JSONObject response) {
                                     try {
                                         mProgressbar.setVisibility(View.INVISIBLE);
-                                        Boolean userStatus = ((JSONObject) response).
-                                                optBoolean(getString(R.string.api_receive_json_status));
-
-                                        if (userStatus) {
                                             Toast.makeText(getActivity(), "Data Saved!",
                                                     Toast.LENGTH_LONG).show();
-                                        } else {
-                                            error.setText("Unexpected Error happened!");
-                                        }
                                     } catch (Exception e) {
                                         mProgressbar.setVisibility(View.INVISIBLE);
                                         error.setText("Unexpected Error happened!");
@@ -231,7 +231,15 @@ public class PeriodActivityFragment extends Fragment implements View.OnClickList
                                     mProgressbar.setVisibility(View.INVISIBLE);
                                     error.setText("Unexpected Error happened!");
                                 }
-                            });
+                            }){ //Send the token with the request
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        HashMap<String, String> headers = new HashMap<String,String>();
+                        headers.put(getString(R.string.api_send_json_auth_header),
+                                sharedPre.getString(getString(R.string.api_receive_json_login_idToken),""));
+                        return headers;
+                    }
+                };
                     jsonRequest.setTag(REQUEST_TAG);
                     jsonRequest.setRetryPolicy(new DefaultRetryPolicy(
                             0,
@@ -257,14 +265,11 @@ public class PeriodActivityFragment extends Fragment implements View.OnClickList
         }
     }
 
-    public JSONObject sendData(int userid, String startdate, String starttime,
+    public JSONObject sendData(String startdate, String starttime,
                                String enddate, String endtime) {
         HashMap m = new HashMap();
-        m.put(getString(R.string.api_send_json_period_userId), userid);
-        m.put(getString(R.string.api_send_json_period_startdate), startdate);
-        m.put(getString(R.string.api_send_json_period_starttime), starttime);
-        m.put(getString(R.string.api_send_json_period_enddate), enddate);
-        m.put(getString(R.string.api_send_json_period_endtime), endtime);
+        m.put(getString(R.string.api_send_json_period_startdate), startdate+"T"+starttime+":00");
+        m.put(getString(R.string.api_send_json_period_enddate), enddate+"T"+endtime+":00");
         Log.e("saveperiodVoll", "sendData:" + (new JSONObject(m)).toString());
         return new JSONObject(m);
     }

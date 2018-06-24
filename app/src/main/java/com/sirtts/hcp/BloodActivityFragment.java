@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -37,6 +38,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -93,13 +95,24 @@ public class BloodActivityFragment extends Fragment implements View.OnClickListe
 
         setHiddenFields(View.INVISIBLE);
 
+        sharedPref = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
+
         if (isNetworkAvailable(getContext())) {
 
             mQueue = VolleyRequestQueue.getInstance(getContext().getApplicationContext())
                     .getRequestQueue();
             final JSONArrayRequest jsonRequest = new JSONArrayRequest(Request.Method
                     .GET, getString(R.string.api_url_blood_columns),
-                    new JSONObject(), this, this);
+                    new JSONObject(), this, this){
+                //Send the token with the request
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<String,String>();
+                    headers.put(getString(R.string.api_send_json_auth_header),
+                            sharedPref.getString(getString(R.string.api_receive_json_login_idToken),""));
+                    return headers;
+                }
+            };
             jsonRequest.setTag(REQUEST_TAG_View);
             jsonRequest.setRetryPolicy(new DefaultRetryPolicy(
                     0,
@@ -149,7 +162,7 @@ public class BloodActivityFragment extends Fragment implements View.OnClickListe
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT,1.0f));
 
-                tempTv.setText(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_blood_fields))));
+                tempTv.setText(String.valueOf(response.optString(i)));
                 tempEt.setText("");
                 tempTv.setTypeface(null, Typeface.BOLD);
 
@@ -210,7 +223,10 @@ public class BloodActivityFragment extends Fragment implements View.OnClickListe
                         @Override
                         public void onDateSet(DatePicker view, int year,
                                               int monthOfYear, int dayOfMonth) {
-                            date.setText(year +"-" + (monthOfYear + 1) + "-" +dayOfMonth);
+                            String month = "", day = "";
+                            if(monthOfYear + 1 < 10) month = "0";
+                            if(dayOfMonth < 10) day = "0";
+                            date.setText(year +"-"+ month + (monthOfYear + 1) + "-"+day +dayOfMonth);
                         }
                     }, mYear, mMonth, mDay);
             datePicker.getDatePicker().setMaxDate(new Date().getTime());
@@ -226,7 +242,7 @@ public class BloodActivityFragment extends Fragment implements View.OnClickListe
                 public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                     time.setText( selectedHour + ":" + selectedMinute);
                 }
-            }, hour, minute, false);
+            }, hour, minute, true);
             mTimePicker.setTitle("Select Time");
             mTimePicker.show();
         }
@@ -242,24 +258,16 @@ public class BloodActivityFragment extends Fragment implements View.OnClickListe
                 if (!isNetworkAvailable(getContext()))
                     Toast.makeText(getActivity(), "Failed to Connect! Check your Connection", Toast.LENGTH_SHORT).show();
                 else {
-                    sharedPref = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
-
                     mProgressbar.setVisibility(View.VISIBLE);
                     JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, getString(R.string.api_url_blood_set),
-                            sendData(sharedPref.getInt(getString(R.string.shared_userId),0), date.getText().toString(),time.getText().toString(),
+                            sendData(date.getText().toString(),time.getText().toString(),
                                     mainListLayout),
                             new Response.Listener<JSONObject>() {
                                 @Override
                                 public void onResponse(JSONObject response) {
                                     try {
                                         mProgressbar.setVisibility(View.INVISIBLE);
-                                        Boolean userStatus = response.optBoolean(getString(R.string.api_receive_json_status));
-
-                                        if (userStatus) {
-                                            Toast.makeText(getActivity(), "Data Saved!", Toast.LENGTH_LONG).show();
-                                        } else {
-                                            error.setText("Unexpected Error happened!");
-                                        }
+                                        Toast.makeText(getActivity(), "Data Saved!", Toast.LENGTH_LONG).show();
                                     }
                                     catch(Exception e){
                                         mProgressbar.setVisibility(View.INVISIBLE);
@@ -273,7 +281,16 @@ public class BloodActivityFragment extends Fragment implements View.OnClickListe
                                     mProgressbar.setVisibility(View.INVISIBLE);
                                     error.setText("Unexpected Error happened!");
                                 }
-                            });
+                            }){
+                        //Send the token with the request
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            HashMap<String, String> headers = new HashMap<String,String>();
+                            headers.put(getString(R.string.api_send_json_auth_header),
+                                    sharedPref.getString(getString(R.string.api_receive_json_login_idToken),""));
+                            return headers;
+                        }
+                    };
 
 
                     jsonRequest.setTag(REQUEST_TAG_Save);
@@ -298,11 +315,9 @@ public class BloodActivityFragment extends Fragment implements View.OnClickListe
         }
     }
 
-    public JSONObject sendData(int userid, String date, String time, LinearLayout ll){
+    public JSONObject sendData(String date, String time, LinearLayout ll){
         HashMap m = new HashMap();
-        m.put(getString(R.string.api_send_json_blood_userId),userid);
-        m.put(getString(R.string.api_send_json_blood_date),date);
-        m.put(getString(R.string.api_send_json_blood_time),time);
+        m.put(getString(R.string.api_send_json_blood_date),date+"T"+time+":00");
         final int childCount = ll.getChildCount();
         int childChildCount;
         LinearLayout vll ;
@@ -323,7 +338,7 @@ public class BloodActivityFragment extends Fragment implements View.OnClickListe
                     key.append(((TextView) v).getText().toString());
                 }
             }
-            if(!value.toString().equals("")) m.put(key.toString(),value.toString());
+            if(!value.toString().equals("")) m.put(key.toString(),Double.valueOf(value.toString()));
         }
         Log.e("Send blood Data", "sendData:"+(new JSONObject(m)).toString());
         return new JSONObject(m);

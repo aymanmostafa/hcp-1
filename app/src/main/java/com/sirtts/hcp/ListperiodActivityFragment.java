@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -29,6 +30,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -80,7 +82,7 @@ public class ListperiodActivityFragment extends Fragment {
                     if(flag_loading == false)
                     {
                         flag_loading = true;
-                        offset +=10;
+                        offset ++;
                         sendVolley(false);
                     }
                 }
@@ -108,16 +110,6 @@ public class ListperiodActivityFragment extends Fragment {
         }
     }
 
-    public JSONArray sendData(int userid, int limit, int offset){
-        HashMap m = new HashMap();
-        m.put(getString(R.string.api_send_json_list_arr_userid),userid);
-        m.put(getString(R.string.api_send_json_limit),limit);
-        m.put(getString(R.string.api_send_json_offset),offset);
-        Log.e(REQUEST_TAG, "sendData: "+(new JSONObject(m)).toString());
-        JSONArray x = new JSONArray();
-        x.put(new JSONObject(m));
-        return x;
-    }
 
     public boolean isNetworkAvailable(final Context context) {
         final ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
@@ -127,13 +119,13 @@ public class ListperiodActivityFragment extends Fragment {
     public void sendVolley(final boolean first){
         flag_loading = false;
         if (isNetworkAvailable(getContext())) {
-            SharedPreferences sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
+            final SharedPreferences sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
 
             mQueue = VolleyRequestQueue.getInstance(getContext().getApplicationContext())
                     .getRequestQueue();
 
-            JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.POST, getString(R.string.api_url_Period_list),
-                    sendData(sharedPre.getInt(getString(R.string.shared_userId),0),10, offset),
+            JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.GET, getString(R.string.api_url_Period_list)+"?page="+offset,
+                    new JSONArray(),
                     new Response.Listener<JSONArray>() {
                         @Override
                         public void onResponse(JSONArray response) {
@@ -142,9 +134,9 @@ public class ListperiodActivityFragment extends Fragment {
                                 DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                                 for(int i=0;i<response.length();i++){
                                     start_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_send_json_period_startdate)))
-                                            +"  "+   String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_send_json_period_starttime))).substring(0,5));
+                                            .replace('T',' '));
                                     end_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_send_json_period_enddate)))
-                                            +"  "+   String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_send_json_period_endtime))).substring(0,5));
+                                            .replace('T',' '));
 
                                     duration_ArrayList.add("         "+String.valueOf(TimeUnit.MILLISECONDS.toDays((dateFormat.parse(String.valueOf(response.optJSONObject(i).
                                             optString(getString(R.string.api_send_json_period_enddate))))).getTime() -
@@ -152,7 +144,7 @@ public class ListperiodActivityFragment extends Fragment {
                                 }
                                 if(response.length() == 0) flag_loading = true;
                                 if(first) {
-                                    adp = new VitalListAdapter(getContext(),duration_ArrayList,end_ArrayList,start_ArrayList,new ArrayList<Integer>());
+                                    adp = new VitalListAdapter(getContext(),duration_ArrayList,end_ArrayList,start_ArrayList,new ArrayList<String>());
                                     listview.setAdapter(adp);
                                 }
                                 else {
@@ -171,7 +163,15 @@ public class ListperiodActivityFragment extends Fragment {
                             mProgressbar.setVisibility(View.INVISIBLE);
                             Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_SHORT).show();
                         }
-                    });
+                    }){//Send the token with the request
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<String,String>();
+                    headers.put(getString(R.string.api_send_json_auth_header),
+                            sharedPre.getString(getString(R.string.api_receive_json_login_idToken),""));
+                    return headers;
+                }
+            };
             jsonRequest.setTag(REQUEST_TAG);
             jsonRequest.setRetryPolicy(new DefaultRetryPolicy(
                     0,

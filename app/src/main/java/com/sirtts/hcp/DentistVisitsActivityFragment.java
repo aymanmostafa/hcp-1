@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -39,6 +40,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -94,6 +96,8 @@ public class DentistVisitsActivityFragment extends Fragment implements View.OnCl
         date.setText(getCurrentDateAndTime("yyyy-MM-dd"));
         time.setText(getCurrentDateAndTime("HH:mm"));
 
+        nextView.setHint("");
+
         date.setOnClickListener(this);
         time.setOnClickListener(this);
 
@@ -109,8 +113,8 @@ public class DentistVisitsActivityFragment extends Fragment implements View.OnCl
             mQueue = VolleyRequestQueue.getInstance(getContext().getApplicationContext())
                     .getRequestQueue();
             JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method
-                    .POST, getString(R.string.api_url_dentist_columns),
-                    sendDataNew(sharedPref.getInt(getString(R.string.shared_userId),0)),
+                    .GET, getString(R.string.api_url_dentist_columns),
+                    new JSONArray(),
                     new Response.Listener<JSONArray>() {
                         @Override
                         public void onResponse(JSONArray response) {
@@ -119,7 +123,8 @@ public class DentistVisitsActivityFragment extends Fragment implements View.OnCl
                                 setHiddenFields(View.VISIBLE);
                                 Log.e("qqqqqqqqq",response.toString());
                                 for(int i=0;i<response.length();i++){
-                                    if(!response.optJSONObject(i).optString(getString(R.string.api_receive_json_dentist_fields)).equals("null")) {
+
+                                    if(response.optJSONObject(i) == null) {
                                         tempLayout = new LinearLayout(getContext());
                                         tempEt = new CheckBox(getContext());
                                         tempTv = new TextView(getContext());
@@ -140,7 +145,7 @@ public class DentistVisitsActivityFragment extends Fragment implements View.OnCl
                                                 LinearLayout.LayoutParams.MATCH_PARENT,
                                                 LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f));
 
-                                        tempTv.setText(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_dentist_fields))));
+                                        tempTv.setText(response.optString(i).toString());
                                         tempTv.setTypeface(null, Typeface.BOLD);
 
                                         tempLayout.addView(tempTv);
@@ -148,9 +153,11 @@ public class DentistVisitsActivityFragment extends Fragment implements View.OnCl
 
                                         mainListLayout.addView(tempLayout);
                                     }
-                                    else if(!response.optJSONObject(i).optString(getString(R.string.api_receive_json_dentist_date)).equals("null")) {
-                                        nextView.setText("Next Visit:    " + response.optJSONObject(i).optString(getString(R.string.api_receive_json_dentist_date)));
+                                    else{
+                                        nextView.setHint(response.optJSONObject(i).optString(getString(R.string.api_send_json_dentist_Id)));
+                                        nextView.setText("Next Visit:    "+response.optJSONObject(i).optString(getString(R.string.api_send_json_dentist_date)).substring(0,10));
                                     }
+
                                 }
                             }
                             catch(Exception e){
@@ -165,7 +172,17 @@ public class DentistVisitsActivityFragment extends Fragment implements View.OnCl
                             mProgressbar.setVisibility(View.INVISIBLE);
                             Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_SHORT).show();
                         }
-                    });
+                    }){
+                //Send the token with the request
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<String, String>();
+                    headers.put(getString(R.string.api_send_json_auth_header),
+                            sharedPref.getString(getString(R.string.api_receive_json_login_idToken), ""));
+                    return headers;
+                }
+            };
+
             jsonRequest.setTag(REQUEST_TAG_View);
             jsonRequest.setRetryPolicy(new DefaultRetryPolicy(
                     0,
@@ -231,7 +248,10 @@ public class DentistVisitsActivityFragment extends Fragment implements View.OnCl
                         @Override
                         public void onDateSet(DatePicker view, int year,
                                               int monthOfYear, int dayOfMonth) {
-                            date.setText(year +"-" + (monthOfYear + 1) + "-" +dayOfMonth);
+                            String month = "", day = "";
+                            if(monthOfYear + 1 < 10) month = "0";
+                            if(dayOfMonth < 10) day = "0";
+                            date.setText(year +"-"+ month + (monthOfYear + 1) + "-"+day +dayOfMonth);
                         }
                     }, mYear, mMonth, mDay);
             datePicker.getDatePicker().setMaxDate(new Date().getTime());
@@ -247,7 +267,7 @@ public class DentistVisitsActivityFragment extends Fragment implements View.OnCl
                 public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                     time.setText( selectedHour + ":" + selectedMinute);
                 }
-            }, hour, minute, false);
+            }, hour, minute, true);
             mTimePicker.setTitle("Select Time");
             mTimePicker.show();
         }
@@ -267,23 +287,23 @@ public class DentistVisitsActivityFragment extends Fragment implements View.OnCl
                             else {
                                 sharedPref = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
 
+                                String month = "", day = "";
+                                if(monthOfYear + 1 < 10) month = "0";
+                                if(dayOfMonth < 10) day = "0";
+
+                                final String m = month;
+                                final String d = day;
                                 nextProgressbar.setVisibility(View.VISIBLE);
-                                JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, getString(R.string.api_url_dentist_update_next_visit),
-                                        sendDataForNextVisit(sharedPref.getInt(getString(R.string.shared_userId),0),
-                                                year +"-" + (monthOfYear + 1) + "-" +dayOfMonth),
+                                JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.PUT, getString(R.string.api_url_dentist_update_next_visit),
+                                        sendDataForNextVisit(year +"-"+ month + (monthOfYear + 1) + "-"+day +dayOfMonth,nextView.getHint().toString()),
                                         new Response.Listener<JSONObject>() {
                                             @Override
                                             public void onResponse(JSONObject response) {
                                                 try {
                                                     nextProgressbar.setVisibility(View.INVISIBLE);
-                                                    Boolean userStatus = response.optBoolean(getString(R.string.api_receive_json_status));
+                                                    Toast.makeText(getActivity(), "Data Updated!", Toast.LENGTH_LONG).show();
+                                                    nextView.setText("Next Visit:    "+year +"-"+ m + (monthOfYear + 1) + "-"+d +dayOfMonth);
 
-                                                    if (userStatus) {
-                                                        Toast.makeText(getActivity(), "Data Updated!", Toast.LENGTH_LONG).show();
-                                                        nextView.setText("Next Visit:    "+year +"-" + (monthOfYear + 1) + "-" +dayOfMonth);
-                                                    } else {
-                                                        Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_SHORT).show();
-                                                    }
                                                 }
                                                 catch(Exception e){
                                                     nextProgressbar.setVisibility(View.INVISIBLE);Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_SHORT).show();
@@ -295,7 +315,16 @@ public class DentistVisitsActivityFragment extends Fragment implements View.OnCl
                                             public void onErrorResponse(VolleyError errork) {
                                                 nextProgressbar.setVisibility(View.INVISIBLE);Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_SHORT).show();
                                             }
-                                        });
+                                        }){
+                                    //Send the token with the request
+                                    @Override
+                                    public Map<String, String> getHeaders() throws AuthFailureError {
+                                        HashMap<String, String> headers = new HashMap<String,String>();
+                                        headers.put(getString(R.string.api_send_json_auth_header),
+                                                sharedPref.getString(getString(R.string.api_receive_json_login_idToken),""));
+                                        return headers;
+                                    }
+                                };
 
 
                                 jsonRequest.setTag(REQUEST_TAG_Save_next);
@@ -326,20 +355,14 @@ public class DentistVisitsActivityFragment extends Fragment implements View.OnCl
 
                     mProgressbar.setVisibility(View.VISIBLE);
                     JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, getString(R.string.api_url_dentist_set),
-                            sendData(sharedPref.getInt(getString(R.string.shared_userId),0), date.getText().toString(),time.getText().toString(),
+                            sendData(date.getText().toString(),time.getText().toString(),
                                     notes.getText().toString(), mainListLayout),
                             new Response.Listener<JSONObject>() {
                                 @Override
                                 public void onResponse(JSONObject response) {
                                     try {
                                         mProgressbar.setVisibility(View.INVISIBLE);
-                                        Boolean userStatus = response.optBoolean(getString(R.string.api_receive_json_status));
-
-                                        if (userStatus) {
                                             Toast.makeText(getActivity(), "Data Saved!", Toast.LENGTH_LONG).show();
-                                        } else {
-                                            Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_SHORT).show();
-                                        }
                                     }
                                     catch(Exception e){
                                         mProgressbar.setVisibility(View.INVISIBLE);
@@ -352,7 +375,16 @@ public class DentistVisitsActivityFragment extends Fragment implements View.OnCl
                                 public void onErrorResponse(VolleyError errork) {
                                     mProgressbar.setVisibility(View.INVISIBLE);
                                     Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_SHORT).show();                                }
-                            });
+                            }){
+                        //Send the token with the request
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            HashMap<String, String> headers = new HashMap<String,String>();
+                            headers.put(getString(R.string.api_send_json_auth_header),
+                                    sharedPref.getString(getString(R.string.api_receive_json_login_idToken),""));
+                            return headers;
+                        }
+                    };
 
 
                     jsonRequest.setTag(REQUEST_TAG_Save);
@@ -377,52 +409,40 @@ public class DentistVisitsActivityFragment extends Fragment implements View.OnCl
         }
     }
 
-    public JSONObject sendData(int userid, String date, String time,String notes, LinearLayout ll){
+    public JSONObject sendData(String date, String time,String notes, LinearLayout ll){
         HashMap m = new HashMap();
-        m.put(getString(R.string.api_send_json_dentist_userId),userid);
-        m.put(getString(R.string.api_send_json_dentist_date),date);
-        m.put(getString(R.string.api_send_json_dentist_time),time);
+        m.put(getString(R.string.api_send_json_dentist_date),date+"T"+time+":00");
         m.put(getString(R.string.api_send_json_dentist_notes),notes);
         final int childCount = ll.getChildCount();
         int childChildCount;
         LinearLayout vll ;
         View v;
         StringBuilder key = new StringBuilder();
-        StringBuilder value = new StringBuilder();
+        Boolean value = false;
         for(int i=0; i< childCount ; i++){
             vll = (LinearLayout) ll.getChildAt(i);
             childChildCount = vll.getChildCount();
             for(int k =0;k< childChildCount ; k++){
                 v = vll.getChildAt(k);
                 if(v instanceof CheckBox) {
-                    value.setLength(0);
-                    value.append((((CheckBox) v).isChecked())? 1:0);
+                    value = ((CheckBox) v).isChecked();
                 }
                 else if(v instanceof TextView) {
                     key.setLength(0);
                     key.append(((TextView) v).getText().toString());
                 }
             }
-            if(!value.toString().equals("")) m.put(key.toString(),value.toString());
+            if(!value.toString().equals("")) m.put(key.toString(),value);
         }
         Log.e("Send dentist Data", "sendData:"+(new JSONObject(m)).toString());
         return new JSONObject(m);
     }
 
-    public JSONObject sendDataForNextVisit(int userid,String date){
+    public JSONObject sendDataForNextVisit(String date,String id){
         HashMap m = new HashMap();
-        m.put(getString(R.string.api_send_json_dentist_userId),userid);
-        if(!date.isEmpty()) m.put(getString(R.string.api_send_json_dentist_date),date);
+        if(!date.isEmpty()) m.put(getString(R.string.api_send_json_dentist_date),date+"T00:00:00");
+        if(!id.isEmpty())  m.put(getString(R.string.api_send_json_dentist_Id),id);
         Log.e("SaveNextDentistVolley", "sendData:"+(new JSONObject(m)).toString());
         return new JSONObject(m);
-    }
-
-    public JSONArray sendDataNew(int userid){
-        HashMap m = new HashMap();
-        m.put(getString(R.string.api_send_json_dentist_userId),userid);
-        JSONArray x = new JSONArray();
-        x.put(new JSONObject(m));
-        Log.e("Send dentist Data", "sendData: "+x.toString());
-        return x;
     }
 }

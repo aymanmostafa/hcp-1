@@ -69,29 +69,16 @@
         app:layout_constraintRight_toLeftOf="@+id/textView4_dentist"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView4_dentist"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
-        android:text="Time"
-        android:textColor="@android:color/background_dark"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/textView5_dentist"
-        android:layout_marginRight="76dp" />
-
-    <TextView
-        android:id="@+id/textView5_dentist"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="85dp"
-        android:layout_marginTop="1dp"
-        android:text="Date"
-        android:textColor="@android:color/background_dark"
-        android:textStyle="bold"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/textView4_dentist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="120dp"
+                android:text="Date"
+                android:textColor="@android:color/background_dark"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Button
                 android:id="@+id/heartvital_graphbtn"

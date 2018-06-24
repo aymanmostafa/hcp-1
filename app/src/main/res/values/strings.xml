@@ -10,32 +10,32 @@
     ''
 
     <!--Development-->
-    <string name="api_url_login">http://10.0.2.2:9060/api/authenticate</string>
+    <string name="api_url_login">http://10.0.2.2:8080/api/authenticate</string>
     <string name="api_header_error_key">x-hcportalapp-error</string>
-    <string name="api_url_signup">http://10.0.2.2:9060/api/register</string>
-    <string name="api_url_period">http://hcp.westeurope.cloudapp.azure.com:5980/menstrual_cycle/set</string>
-    <string name="api_url_sugar">http://10.0.2.2:9060/api/diabetes-sugar-tests</string>
-    <string name="api_url_sugar_list">http://10.0.2.2:9060/api/diabetes-sugar-tests/byUserid</string>
-    <string name="api_url_Period_list">http://hcp.westeurope.cloudapp.azure.com:5980/menstrual_cycle</string>
-    <string name="api_url_bloodVital">http://hcp.westeurope.cloudapp.azure.com:5980/blood_pressure/set</string>
-    <string name="api_url_heartVital">http://hcp.westeurope.cloudapp.azure.com:5980/heart_rate/set</string>
-    <string name="api_url_tempVital">http://hcp.westeurope.cloudapp.azure.com:5980/body_temperature/set</string>
-    <string name="api_url_respVital">http://hcp.westeurope.cloudapp.azure.com:5980/respiratory_rate/set</string>
-    <string name="api_url_spo2Vital">http://hcp.westeurope.cloudapp.azure.com:5980/spo2/set</string>
-    <string name="api_url_bloodVital_list">http://hcp.westeurope.cloudapp.azure.com:5980/blood_pressure</string>
-    <string name="api_url_heartVital_list">http://hcp.westeurope.cloudapp.azure.com:5980/heart_rate</string>
-    <string name="api_url_tempVital_list">http://hcp.westeurope.cloudapp.azure.com:5980/body_temperature</string>
-    <string name="api_url_respVital_list">http://hcp.westeurope.cloudapp.azure.com:5980/respiratory_rate</string>
-    <string name="api_url_spo2Vital_list">http://hcp.westeurope.cloudapp.azure.com:5980/spo2</string>
-    <string name="api_url_blood_columns">http://hcp.westeurope.cloudapp.azure.com:5980/blood_test/fields</string>
-    <string name="api_url_blood_list">http://hcp.westeurope.cloudapp.azure.com:5980/blood_test/all</string>
-    <string name="api_url_blood_get">http://hcp.westeurope.cloudapp.azure.com:5980/blood_test</string>
-    <string name="api_url_blood_set">http://hcp.westeurope.cloudapp.azure.com:5980/blood_test/set</string>
-    <string name="api_url_dentist_columns">http://hcp.westeurope.cloudapp.azure.com:5980/dentist_visit/fields</string>
-    <string name="api_url_dentist_list">http://hcp.westeurope.cloudapp.azure.com:5980/dentist_visit/all</string>
-    <string name="api_url_dentist_get">http://hcp.westeurope.cloudapp.azure.com:5980/dentist_visit</string>
-    <string name="api_url_dentist_set">http://hcp.westeurope.cloudapp.azure.com:5980/dentist_visit/set</string>
-    <string name="api_url_dentist_update_next_visit">http://hcp.westeurope.cloudapp.azure.com:5980/dentist_visit/update_next_visit</string>
+    <string name="api_url_signup">http://10.0.2.2:8080/api/register</string>
+    <string name="api_url_period">http://10.0.2.2:8080/api/menstrual-cycles</string>
+    <string name="api_url_sugar">http://10.0.2.2:8080/api/diabetes-sugar-tests</string>
+    <string name="api_url_sugar_list">http://10.0.2.2:8080/api/diabetes-sugar-tests/byUserid</string>
+    <string name="api_url_Period_list">http://10.0.2.2:8080/api/menstrual-cycles/byUserid</string>
+    <string name="api_url_bloodVital">http://10.0.2.2:8080/api/vs-blood-pressures</string>
+    <string name="api_url_heartVital">http://10.0.2.2:8080/api/vs-heart-rates</string>
+    <string name="api_url_tempVital">http://10.0.2.2:8080/api/vs-body-temperatures</string>
+    <string name="api_url_respVital">http://10.0.2.2:8080/api/vs-respiratory-rates</string>
+    <string name="api_url_spo2Vital">http://10.0.2.2:8080/api/vs-spo-2-s</string>
+    <string name="api_url_bloodVital_list">http://10.0.2.2:8080/api/vs-blood-pressures/byUserid</string>
+    <string name="api_url_heartVital_list">http://10.0.2.2:8080/api/vs-heart-rates/byUserid</string>
+    <string name="api_url_tempVital_list">http://10.0.2.2:8080/api/vs-body-temperatures/byUserid</string>
+    <string name="api_url_respVital_list">http://10.0.2.2:8080/api/vs-respiratory-rates/byUserid</string>
+    <string name="api_url_spo2Vital_list">http://10.0.2.2:8080/api/vs-spo-2-s/byUserid</string>
+    <string name="api_url_blood_columns">http://10.0.2.2:8080/api/blood-tests/columns</string>
+    <string name="api_url_blood_list">http://10.0.2.2:8080/api/blood-tests/byUserid</string>
+    <string name="api_url_blood_get">http://10.0.2.2:8080/api/blood-tests/</string>
+    <string name="api_url_blood_set">http://10.0.2.2:8080/api/blood-tests</string>
+    <string name="api_url_dentist_columns">http://10.0.2.2:8080/api/dentist-visits/columns</string>
+    <string name="api_url_dentist_list">http://10.0.2.2:8080/api/dentist-visits/byUserid</string>
+    <string name="api_url_dentist_get">http://10.0.2.2:8080/api/dentist-visits/</string>
+    <string name="api_url_dentist_set">http://10.0.2.2:8080/api/dentist-visits</string>
+    <string name="api_url_dentist_update_next_visit">http://10.0.2.2:8080/api/dentist-next-visits</string>
 
 
     <!--Development-->
@@ -96,21 +96,21 @@
     <string name="api_send_json_limit">limit</string>
 
     <string name="api_send_json_tempVital_userId">userid</string>
-    <string name="api_send_json_tempVital_date">date</string>
+    <string name="api_send_json_tempVital_date">measurmentdate</string>
     <string name="api_send_json_tempVital_time">time</string>
     <string name="api_send_json_tempVital_cel">celsius</string>
 
     <string name="api_send_json_heartVital_userId">userid</string>
-    <string name="api_send_json_heartVital_date">date</string>
+    <string name="api_send_json_heartVital_date">measurmentdate</string>
     <string name="api_send_json_heartVital_time">time</string>
     <string name="api_send_json_heartVital_cel">bpm</string>
 
-    <string name="api_send_json_spo2Vital_date">date</string>
+    <string name="api_send_json_spo2Vital_date">measurmentdate</string>
     <string name="api_send_json_spo2Vital_time">time</string>
     <string name="api_send_json_spo2Vital_cel">percent</string>
 
     <string name="api_send_json_respVital_userId">userid</string>
-    <string name="api_send_json_respVital_date">date</string>
+    <string name="api_send_json_respVital_date">measurmentdate</string>
     <string name="api_send_json_respVital_time">time</string>
     <string name="api_send_json_respVital_cel">bpm</string>
 
@@ -119,12 +119,12 @@
 
     <string name="api_send_json_dentist_userId">userid</string>
     <string name="api_send_json_dentist_Id">id</string>
-    <string name="api_send_json_dentist_date">date</string>
+    <string name="api_send_json_dentist_date">measurmentdate</string>
     <string name="api_send_json_dentist_time">time</string>
     <string name="api_send_json_dentist_notes">notes</string>
 
     <string name="api_receive_json_dentist_fields">COLUMN_NAME</string>
-    <string name="api_receive_json_dentist_date">date</string>
+    <string name="api_receive_json_dentist_date">measurmentdate</string>
     <string name="api_receive_json_dentist_time">time</string>
 
     <string name="api_receive_json_sugar_date">date</string>
@@ -136,9 +136,9 @@
     <string name="api_send_json_list_arr_endDate">endDate</string>
 
     <string name="api_send_json_period_userId">userid</string>
-    <string name="api_send_json_period_startdate">start date</string>
+    <string name="api_send_json_period_startdate">startDate</string>
     <string name="api_send_json_period_starttime">start time</string>
-    <string name="api_send_json_period_enddate">end date</string>
+    <string name="api_send_json_period_enddate">endDate</string>
     <string name="api_send_json_period_endtime">end time</string>
 
     <string name="api_send_json_vital_list_arr_userid">userid</string>
@@ -154,13 +154,13 @@
 
     <string name="api_receive_json_blood_fields">COLUMN_NAME</string>
     <string name="api_send_json_blood_userId">userid</string>
-    <string name="api_send_json_blood_date">date</string>
+    <string name="api_send_json_blood_date">measurmentdate</string>
     <string name="api_send_json_blood_time">time</string>
     <string name="api_send_json_blood_Id">id</string>
 
 
     <string name="api_receive_json_blood_list_userId">userid</string>
-    <string name="api_receive_json_blood_list_date">date</string>
+    <string name="api_receive_json_blood_list_date">measurmentdate</string>
     <string name="api_receive_json_blood_list_time">time</string>
     <string name="api_receive_json_blood_list_id">id</string>
 

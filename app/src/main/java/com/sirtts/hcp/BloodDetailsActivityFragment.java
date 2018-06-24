@@ -22,12 +22,14 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -37,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -67,15 +70,16 @@ public class BloodDetailsActivityFragment extends Fragment {
             mQueue = VolleyRequestQueue.getInstance(getContext().getApplicationContext())
                     .getRequestQueue();
 
-            JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.POST, getString(R.string.api_url_blood_get),
-                    sendData(i.getIntExtra("bloodID",0)),
-                    new Response.Listener<JSONArray>() {
+            String url = getString(R.string.api_url_blood_get)+i.getStringExtra("bloodID");
+            final SharedPreferences sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
+            JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET,url ,
+                    new JSONObject(),
+                    new Response.Listener<JSONObject>() {
                         @Override
-                        public void onResponse(JSONArray response) {
+                        public void onResponse(JSONObject response) {
                             try {
                                 mProgressbar.setVisibility(View.INVISIBLE);
-                                JSONObject responseObj = response.getJSONObject(0);
-                                for(int i=0;i<responseObj.names().length();i++){
+                                for(int i=0;i<response.names().length();i++){
                                     tempLayout = new LinearLayout(getContext());
                                     tempEt = new EditText(getContext());
                                     tempTv = new TextView(getContext());
@@ -96,17 +100,19 @@ public class BloodDetailsActivityFragment extends Fragment {
                                             LinearLayout.LayoutParams.MATCH_PARENT,
                                             LinearLayout.LayoutParams.WRAP_CONTENT,1.0f));
 
-                                    tempTv.setText(String.valueOf(responseObj.names().get(i).toString()));
-                                    Double value = responseObj.optDouble(responseObj.names().get(i).toString());
-                                    if(!Double.isNaN(value)) tempEt.setText(value.toString());
-                                    tempTv.setTypeface(null, Typeface.BOLD);
+                                    tempTv.setText(String.valueOf(response.names().get(i).toString()));
+                                    Double value = response.optDouble(response.names().get(i).toString());
+                                    if(!Double.isNaN(value)) {
+                                        tempEt.setText(value.toString());
+                                        tempTv.setTypeface(null, Typeface.BOLD);
 
-                                    tempEt.setFocusable(false);
+                                        tempEt.setFocusable(false);
 
-                                    tempLayout.addView(tempTv);
-                                    tempLayout.addView(tempEt);
+                                        tempLayout.addView(tempTv);
+                                        tempLayout.addView(tempEt);
 
-                                    mainListLayout.addView(tempLayout);
+                                        mainListLayout.addView(tempLayout);
+                                    }
                                 }
                             }
                             catch(Exception e){
@@ -121,7 +127,16 @@ public class BloodDetailsActivityFragment extends Fragment {
                             mProgressbar.setVisibility(View.INVISIBLE);
                             Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_SHORT).show();
                         }
-                    });
+                    }) {
+                //Send the token with the request
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<String, String>();
+                    headers.put(getString(R.string.api_send_json_auth_header),
+                            sharedPre.getString(getString(R.string.api_receive_json_login_idToken), ""));
+                    return headers;
+                }
+            };
 
 
             jsonRequest.setTag(REQUEST_TAG_View);
@@ -149,14 +164,5 @@ public class BloodDetailsActivityFragment extends Fragment {
     public boolean isNetworkAvailable(final Context context) {
         final ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
         return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
-    }
-
-    public JSONArray sendData(int id){
-        HashMap m = new HashMap();
-        m.put(getString(R.string.api_send_json_blood_Id),id);
-        JSONArray x = new JSONArray();
-        x.put(new JSONObject(m));
-        Log.e("Send blood Data", "sendData: "+x.toString());
-        return x;
     }
 }

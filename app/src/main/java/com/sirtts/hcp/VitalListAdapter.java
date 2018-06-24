@@ -17,7 +17,7 @@ public class VitalListAdapter extends BaseAdapter {
     ArrayList<String> date;
     ArrayList<String> time;
     ArrayList<String> val1;
-    ArrayList<Integer> id;
+    ArrayList<String> id;
 
 
     public VitalListAdapter(
@@ -25,7 +25,7 @@ public class VitalListAdapter extends BaseAdapter {
             ArrayList<String> date,
             ArrayList<String> time,
             ArrayList<String> val1,
-            ArrayList<Integer> id
+            ArrayList<String> id
     )
     {
 
@@ -41,7 +41,7 @@ public class VitalListAdapter extends BaseAdapter {
         return date.size();
     }
 
-    public Integer getItem(int position) {
+    public String getItem(int position) {
         // TODO Auto-generated method stub
         return id.get(position);
     }

@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -28,6 +29,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -40,7 +42,7 @@ public class ListBloodActivityFragment extends Fragment {
     ArrayList<String> date_ArrayList;
     ArrayList<String> time_ArrayList;
     ArrayList<String> val1_ArrayList;
-    ArrayList<Integer> id_ArrayList;
+    ArrayList<String> id_ArrayList;
     ProgressBar mProgressbar;
     int offset;
     boolean flag_loading;
@@ -61,7 +63,7 @@ public class ListBloodActivityFragment extends Fragment {
         date_ArrayList = new ArrayList<String>();
         time_ArrayList = new ArrayList<String>();
         val1_ArrayList = new ArrayList<String>();
-        id_ArrayList = new ArrayList<Integer>();
+        id_ArrayList = new ArrayList<String>();
         offset = 0;
         flag_loading = false;
         sendVolley(true);
@@ -69,9 +71,9 @@ public class ListBloodActivityFragment extends Fragment {
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 
-                 Integer x = (Integer) parent.getItemAtPosition(position);
+                 String x =  parent.getItemAtPosition(position).toString();
                  Intent intent = new Intent(getContext(), BloodDetailsActivity.class);
-                 intent.putExtra("bloodID", x.intValue());
+                 intent.putExtra("bloodID", x);
                  startActivity(intent);
             }
         });
@@ -90,7 +92,7 @@ public class ListBloodActivityFragment extends Fragment {
                     if(flag_loading == false)
                     {
                         flag_loading = true;
-                        offset +=10;
+                        offset ++;
                         sendVolley(false);
                     }
                 }
@@ -119,16 +121,6 @@ public class ListBloodActivityFragment extends Fragment {
         }
     }
 
-    public JSONArray sendData(int userid,int limit, int offset){
-        HashMap m = new HashMap();
-        m.put(getString(R.string.api_send_json_limit),limit);
-        m.put(getString(R.string.api_send_json_offset),offset);
-        m.put(getString(R.string.api_receive_json_blood_list_userId),userid);
-        Log.e(REQUEST_TAG, "sendData: "+(new JSONObject(m)).toString());
-        JSONArray x = new JSONArray();
-        x.put(new JSONObject(m));
-        return x;
-    }
 
     public boolean isNetworkAvailable(final Context context) {
         final ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
@@ -137,13 +129,13 @@ public class ListBloodActivityFragment extends Fragment {
     public void sendVolley(final boolean first){
         flag_loading = false;
         if (isNetworkAvailable(getContext())) {
-            SharedPreferences sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
+            final SharedPreferences sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
 
             mQueue = VolleyRequestQueue.getInstance(getContext().getApplicationContext())
                     .getRequestQueue();
 
-            JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.POST, getString(R.string.api_url_blood_list),
-                    sendData(sharedPre.getInt(getString(R.string.shared_userId),0),10, offset),
+            JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.GET, getString(R.string.api_url_blood_list)+"?page="+offset,
+                    new JSONArray(),
                     new Response.Listener<JSONArray>() {
                         @Override
                         public void onResponse(JSONArray response) {
@@ -151,10 +143,10 @@ public class ListBloodActivityFragment extends Fragment {
                                 mProgressbar.setVisibility(View.INVISIBLE);
 
                                 for(int i=0;i<response.length();i++){
-                                    date_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_blood_list_date))));
-                                    time_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_blood_list_time))));
+                                    date_ArrayList.add("");
+                                    time_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_blood_list_date))).replace('T',' '));
                                     val1_ArrayList.add("Click to View");
-                                    id_ArrayList.add(response.optJSONObject(i).optInt(getString(R.string.api_receive_json_blood_list_id)));
+                                    id_ArrayList.add(response.optJSONObject(i).optString(getString(R.string.api_receive_json_blood_list_id)));
                                 }
                                 if(response.length() == 0) flag_loading = true;
                                 if(first) {adp = new VitalListAdapter(getContext(),date_ArrayList,time_ArrayList,val1_ArrayList,id_ArrayList);
@@ -176,7 +168,16 @@ public class ListBloodActivityFragment extends Fragment {
                             mProgressbar.setVisibility(View.INVISIBLE);
                             Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_SHORT).show();
                         }
-                    });
+                    }){
+                //Send the token with the request
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<String,String>();
+                    headers.put(getString(R.string.api_send_json_auth_header),
+                            sharedPre.getString(getString(R.string.api_receive_json_login_idToken),""));
+                    return headers;
+                }
+            };
             jsonRequest.setTag(REQUEST_TAG);
             jsonRequest.setRetryPolicy(new DefaultRetryPolicy(
                     0,

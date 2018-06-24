@@ -303,7 +303,7 @@ public class ListsugarActivityFragment extends Fragment implements View.OnClickL
                                     val1_ArrayList.add(String.valueOf(response.optJSONObject(i).optDouble(getString(R.string.api_receive_json_sugar_mg))));
                                 }
                                 if(response.length() == 0) flag_loading = true;
-                                if(first) {adp = new VitalListAdapter(getContext(),date_ArrayList,time_ArrayList,val1_ArrayList,new ArrayList<Integer>());
+                                if(first) {adp = new VitalListAdapter(getContext(),date_ArrayList,time_ArrayList,val1_ArrayList,new ArrayList<String>());
                                     listview.setAdapter(adp);
                                     graph.setVisibility(View.VISIBLE);
                                 }

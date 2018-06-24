@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -38,6 +39,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -364,9 +366,7 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
 
                 HashMap m = new HashMap();
 
-                m.put(getString(R.string.api_send_json_vital_userId), sharedPre.getInt(getString(R.string.shared_userId), 0));
-                m.put(getString(R.string.api_send_json_heartVital_date), date_heart.getText().toString());
-                m.put(getString(R.string.api_send_json_heartVital_time), time_heart.getText().toString());
+                m.put(getString(R.string.api_send_json_heartVital_date), date_heart.getText().toString()+"T"+time_heart.getText().toString()+":00");
 
                 m.put(getString(R.string.api_send_json_heartVital_cel), (seekBar_heart.getProgress()+20));
 
@@ -392,10 +392,7 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
 
                 HashMap m = new HashMap();
 
-                m.put(getString(R.string.api_send_json_vital_userId), sharedPre.getInt(getString(R.string.shared_userId), 0));
-                m.put(getString(R.string.api_send_json_respVital_date), date_resp.getText().toString());
-                m.put(getString(R.string.api_send_json_respVital_time), time_resp.getText().toString());
-
+                m.put(getString(R.string.api_send_json_respVital_date), date_resp.getText().toString()+"T"+time_resp.getText().toString()+":00");
                 m.put(getString(R.string.api_send_json_respVital_cel), (seekBar_resp.getProgress()+5));
 
                 requestTheRequest(mProgressbar_resp, getString(R.string.api_url_respVital),
@@ -420,10 +417,7 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
 
                 HashMap m = new HashMap();
 
-                m.put(getString(R.string.api_send_json_vital_userId), sharedPre.getInt(getString(R.string.shared_userId), 0));
-                m.put(getString(R.string.api_send_json_tempVital_date), date_temp.getText().toString());
-                m.put(getString(R.string.api_send_json_tempVital_time), time_temp.getText().toString());
-
+                m.put(getString(R.string.api_send_json_tempVital_date), date_temp.getText().toString()+"T"+time_temp.getText().toString()+":00");
                 m.put(getString(R.string.api_send_json_tempVital_cel), (float)(seekBar_temp.getProgress()+350)/10);
 
                 requestTheRequest(mProgressbar_temp, getString(R.string.api_url_tempVital),
@@ -448,10 +442,7 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
 
                 HashMap m = new HashMap();
 
-                m.put(getString(R.string.api_send_json_vital_userId), sharedPre.getInt(getString(R.string.shared_userId), 0));
-                m.put(getString(R.string.api_send_json_spo2Vital_date), date_spo2.getText().toString());
-                m.put(getString(R.string.api_send_json_spo2Vital_time), time_spo2.getText().toString());
-
+                m.put(getString(R.string.api_send_json_spo2Vital_date), date_spo2.getText().toString()+"T"+time_spo2.getText().toString()+":00");
                 m.put(getString(R.string.api_send_json_spo2Vital_cel), seekBar_spo2.getProgress());
 
                 requestTheRequest(mProgressbar_spo2, getString(R.string.api_url_spo2Vital),
@@ -623,14 +614,7 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
                     public void onResponse(JSONObject response) {
                         try {
                             mProgressbar.setVisibility(View.INVISIBLE);
-                            Boolean userStatus = ((JSONObject) response).optBoolean(getString(R.string.api_receive_json_status));
-
-                            if (userStatus) {
-                                Toast.makeText(getActivity(), "Data Saved!", Toast.LENGTH_LONG).show();
-                            } else {
-                                Toast.makeText(getActivity(), "Unexpected Error happened!",
-                                        Toast.LENGTH_LONG).show();
-                            }
+                            Toast.makeText(getActivity(), "Data Saved!", Toast.LENGTH_LONG).show();
                         }
                         catch(Exception e){
                             mProgressbar.setVisibility(View.INVISIBLE);
@@ -646,7 +630,16 @@ public class VitalSignsActivityFragment extends Fragment  implements View.OnClic
                         Toast.makeText(getActivity(), "Unexpected Error happened!",
                                 Toast.LENGTH_LONG).show();
                     }
-                });
+                }){
+            //Send the token with the request
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String,String>();
+                headers.put(getString(R.string.api_send_json_auth_header),
+                        sharedPre.getString(getString(R.string.api_receive_json_login_idToken),""));
+                return headers;
+            }
+        };
 
         jsonRequest.setTag(REQUEST_TAG);
         jsonRequest.setRetryPolicy(new DefaultRetryPolicy(
