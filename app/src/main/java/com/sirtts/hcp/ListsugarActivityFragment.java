@@ -126,26 +126,6 @@ public class ListsugarActivityFragment extends Fragment implements View.OnClickL
             mQueue.cancelAll(REQUEST_TAG);
         }
     }
-
-    public JSONArray sendData(int userid,boolean graph, int limit, int offset){
-        HashMap m = new HashMap();
-        m.put(getString(R.string.api_send_json_vital_list_arr_userid),userid);
-        m.put(getString(R.string.api_send_json_limit),limit);
-        m.put(getString(R.string.api_send_json_offset),offset);
-        if(graph){
-            m.put(getString(R.string.api_send_json_list_arr_startDate),startDate);
-            m.put(getString(R.string.api_send_json_list_arr_endDate),endDate);
-        }
-        else{
-            m.put(getString(R.string.api_send_json_list_arr_startDate),"");
-            m.put(getString(R.string.api_send_json_list_arr_endDate),"9999-99-99");
-        }
-        Log.e(REQUEST_TAG, "sendData: "+(new JSONObject(m)).toString());
-        JSONArray x = new JSONArray();
-        x.put(new JSONObject(m));
-        return x;
-    }
-
     public boolean isNetworkAvailable(final Context context) {
         final ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
         return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
@@ -192,9 +172,11 @@ public class ListsugarActivityFragment extends Fragment implements View.OnClickL
                     if(duration < 95 && duration > -1){
                         if (isNetworkAvailable(getContext())) {
                             mProgressbar.setVisibility(View.VISIBLE);
-                            SharedPreferences sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
-                            JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.POST, getString(R.string.api_url_sugar_list),
-                                    sendData(sharedPre.getInt(getString(R.string.shared_userId), 0),true,Integer.MAX_VALUE,0),
+                            String url = getString(R.string.api_url_sugar_list)+ "?"+
+                                    getString(R.string.api_send_json_list_arr_startDate)+startDate
+                                    +"&"+getString(R.string.api_send_json_list_arr_endDate)+endDate+"&size=10000";
+                            final SharedPreferences sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
+                            JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.GET, url,new JSONArray(),
                                     new Response.Listener<JSONArray>() {
                                         @Override
                                         public void onResponse(JSONArray response) {
@@ -225,7 +207,16 @@ public class ListsugarActivityFragment extends Fragment implements View.OnClickL
                                             mProgressbar.setVisibility(View.INVISIBLE);
                                             Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_SHORT).show();
                                         }
-                                    });
+                                    }){//Send the token with the request
+                                @Override
+                                public Map<String, String> getHeaders() throws AuthFailureError {
+                                    HashMap<String, String> headers = new HashMap<String,String>();
+                                    headers.put(getString(R.string.api_send_json_auth_header),
+                                            sharedPre.getString(getString(R.string.api_receive_json_login_idToken),""));
+                                    return headers;
+                                }
+                            };
+
 
                             jsonRequest.setTag("fdfdf");
                             jsonRequest.setRetryPolicy(new DefaultRetryPolicy(

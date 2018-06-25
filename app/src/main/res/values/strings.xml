@@ -127,7 +127,7 @@
     <string name="api_receive_json_dentist_date">measurmentdate</string>
     <string name="api_receive_json_dentist_time">time</string>
 
-    <string name="api_receive_json_sugar_date">date</string>
+    <string name="api_receive_json_sugar_date">measurmentdate</string>
     <string name="api_receive_json_sugar_time">time</string>
     <string name="api_receive_json_sugar_mg">result</string>
 

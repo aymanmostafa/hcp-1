@@ -98,7 +98,7 @@ public class ListrespVitalSignsActivityFragment extends Fragment implements View
                     if(flag_loading == false)
                     {
                         flag_loading = true;
-                        offset +=10;
+                        offset ++;
                         sendVolley(false);
                     }
                 }
@@ -124,25 +124,6 @@ public class ListrespVitalSignsActivityFragment extends Fragment implements View
         if (mQueue != null) {
             mQueue.cancelAll(REQUEST_TAG);
         }
-    }
-
-    public JSONArray sendData(int userid,boolean graph, int limit, int offset){
-        HashMap m = new HashMap();
-        m.put(getString(R.string.api_send_json_vital_list_arr_userid),userid);
-        m.put(getString(R.string.api_send_json_limit),limit);
-        m.put(getString(R.string.api_send_json_offset),offset);
-        if(graph){
-            m.put(getString(R.string.api_send_json_list_arr_startDate),startDate);
-            m.put(getString(R.string.api_send_json_list_arr_endDate),endDate);
-        }
-        else {
-            m.put(getString(R.string.api_send_json_list_arr_startDate), "");
-            m.put(getString(R.string.api_send_json_list_arr_endDate), "9999-99-99");
-        }
-        Log.e(REQUEST_TAG, "sendData: "+(new JSONObject(m)).toString());
-        JSONArray x = new JSONArray();
-        x.put(new JSONObject(m));
-        return x;
     }
 
     public boolean isNetworkAvailable(final Context context) {
@@ -191,9 +172,11 @@ public class ListrespVitalSignsActivityFragment extends Fragment implements View
                     if(duration < 95 && duration > -1){
                         if (isNetworkAvailable(getContext())) {
                             mProgressbar.setVisibility(View.VISIBLE);
-                            SharedPreferences sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
-                            JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.POST, getString(R.string.api_url_respVital_list),
-                                    sendData(sharedPre.getInt(getString(R.string.shared_userId), 0),true,Integer.MAX_VALUE,0),
+                            String url = getString(R.string.api_url_respVital_list)+ "?"+
+                                    getString(R.string.api_send_json_list_arr_startDate)+startDate
+                                    +"&"+getString(R.string.api_send_json_list_arr_endDate)+endDate+"&size=10000";
+                            final SharedPreferences sharedPre = getActivity().getSharedPreferences(getString(R.string.shared_isUserLoged), Context.MODE_PRIVATE);
+                            JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.GET, url,new JSONArray(),
                                     new Response.Listener<JSONArray>() {
                                         @Override
                                         public void onResponse(JSONArray response) {
@@ -224,7 +207,15 @@ public class ListrespVitalSignsActivityFragment extends Fragment implements View
                                             mProgressbar.setVisibility(View.INVISIBLE);
                                             Toast.makeText(getActivity(), "Unexpected Error happened!", Toast.LENGTH_SHORT).show();
                                         }
-                                    });
+                                    }){//Send the token with the request
+                                @Override
+                                public Map<String, String> getHeaders() throws AuthFailureError {
+                                    HashMap<String, String> headers = new HashMap<String,String>();
+                                    headers.put(getString(R.string.api_send_json_auth_header),
+                                            sharedPre.getString(getString(R.string.api_receive_json_login_idToken),""));
+                                    return headers;
+                                }
+                            };
 
                             jsonRequest.setTag(REQUEST_TAG);
                             jsonRequest.setRetryPolicy(new DefaultRetryPolicy(
@@ -299,7 +290,7 @@ public class ListrespVitalSignsActivityFragment extends Fragment implements View
                                 for(int i=0;i<response.length();i++){
                                     date_ArrayList.add("");
                                     time_ArrayList.add(String.valueOf(response.optJSONObject(i).optString(getString(R.string.api_receive_json_vital_list_arr_time))).replace('T',' '));
-                                    val1_ArrayList.add(String.valueOf(response.optJSONObject(i).optInt(getString(R.string.api_send_json_respVital_cel))));
+                                    val1_ArrayList.add(String.valueOf(response.optJSONObject(i).optDouble(getString(R.string.api_send_json_respVital_cel))));
                                 }
                                 if(response.length() == 0) flag_loading = true;
                                 if(first) {adp = new VitalListAdapter(getContext(),date_ArrayList,time_ArrayList,val1_ArrayList,new ArrayList<String>());

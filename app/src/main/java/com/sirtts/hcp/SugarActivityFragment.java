@@ -194,7 +194,8 @@ public class SugarActivityFragment extends Fragment implements View.OnClickListe
                                 public void onResponse(JSONObject response) {
                                     try {
                                         mProgressbar.setVisibility(View.INVISIBLE);
-
+                                        Toast.makeText(getActivity(), "Data Saved!",
+                                                Toast.LENGTH_LONG).show();
                                     }
                                     catch(Exception e){
                                         mProgressbar.setVisibility(View.INVISIBLE);
