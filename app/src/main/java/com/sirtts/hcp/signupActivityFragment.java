@@ -210,7 +210,7 @@ public class signupActivityFragment extends Fragment implements View.OnClickList
             public void run() {
                 if(statusCode== 201) {
                     mProgressbar.setVisibility(View.INVISIBLE);
-                    Toast.makeText(getActivity(), "Congratulations! Check your Email for activation", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Congratulations! Log in now!", Toast.LENGTH_LONG).show();
                     getActivity().onBackPressed();
                 }
                 else{
